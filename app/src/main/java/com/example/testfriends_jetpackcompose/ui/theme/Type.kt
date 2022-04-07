@@ -26,12 +26,40 @@ val Typography = Typography(
         color = Color.White,
         textAlign = TextAlign.Center
     ),
+
+    body2 = TextStyle(
+        fontFamily = QuickSand,
+        fontWeight = FontWeight.Normal,
+        fontSize = 20.sp,
+        lineHeight = 12.sp,
+        color = Color.White,
+        textAlign = TextAlign.Center
+    ),
     h1 = TextStyle(
         fontFamily = QuickSand,
         fontWeight = FontWeight.Bold,
+        fontSize = 40.sp
+    ),
+
+    h2  = TextStyle(
+        fontFamily = QuickSand,
+        fontWeight = FontWeight.Bold,
+        lineHeight = 17.sp,
         fontSize = 30.sp
     ),
+    h3 = TextStyle(
+        fontFamily = QuickSand,
+        fontWeight = FontWeight.Bold,
+        fontSize = 25.sp
+    ),
+
     h4  = TextStyle(
+        fontFamily = QuickSand,
+        fontWeight = FontWeight.Bold,
+        lineHeight = 17.sp,
+        fontSize = 20.sp
+    ),
+    h5 = TextStyle(
         fontFamily = QuickSand,
         fontWeight = FontWeight.Bold,
         lineHeight = 17.sp,

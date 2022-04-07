@@ -23,12 +23,14 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -43,6 +45,7 @@ import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.ResultTest
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
+import com.example.testfriends_jetpackcompose.util.backgrounds
 import com.example.testfriends_jetpackcompose.util.backgrounds.Companion.linearGradientBrush
 import com.example.testfriends_jetpackcompose.viewmodel.ResultsViewModel
 
@@ -210,7 +213,7 @@ fun ItemResult() {
             .height(100.dp)
             .padding(6.dp)
             .clip(RoundedCornerShape(5.dp))
-            .background(backgroundWhite)
+            .background(backgrounds.linearGradientBrush)
     ) {
 
         Image(
@@ -225,12 +228,18 @@ fun ItemResult() {
             painter = painterResource(id = R.drawable.avatar),
             contentDescription = "",
         )
-        Column(modifier = Modifier.weight(3f)) {
+        Column(
+            verticalArrangement= Arrangement.SpaceEvenly,
+            modifier = Modifier.height(70.dp).weight(3f)) {
 
+            Text(text = "Abdellah khalid",color= Black.copy(0.9f), style = MaterialTheme.typography.h3)
+            Text(text = "5/20", color= Color.LightGray,style = MaterialTheme.typography.body1)
         }
         Box(
+            contentAlignment= Alignment.Center,
             modifier = Modifier
-                .weight(2f)
+                .fillMaxHeight()
+                .padding(5.dp)
         ) {
             CustomComponent(
                 canvasSize = 80.dp,
