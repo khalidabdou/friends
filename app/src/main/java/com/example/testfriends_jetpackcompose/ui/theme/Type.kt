@@ -35,7 +35,7 @@ val Typography = Typography(
         fontFamily = QuickSand,
         fontWeight = FontWeight.Bold,
         lineHeight = 17.sp,
-        fontSize = 24.sp
+        fontSize = 18.sp
     ),
 
 

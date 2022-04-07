@@ -8,15 +8,20 @@ import java.io.IOException
 class Constant {
 
     companion object {
+
+
+        val ALREADY_SIGN="address is already in use by another account"
+
+
         val questionList =
             listOf(
-                Question(0, "qqq", "answer", "", "", "", "", R.drawable.knowledge,R.drawable.maths,R.drawable.kno,R.drawable.colors,),
-                Question(1, "aaa", "", "", "", "", "", R.drawable.knowledge,R.drawable.maths,R.drawable.kno,R.drawable.colors,),
-                Question(2, "sss", "", "", "", "", "", R.drawable.knowledge,R.drawable.maths,R.drawable.kno,R.drawable.colors,),
-                Question(3, "ddd", "", "", "", "", "", R.drawable.knowledge,R.drawable.maths,R.drawable.kno,R.drawable.colors,),
-                Question(4, "dsf", "", "", "", "", "", R.drawable.knowledge,R.drawable.maths,R.drawable.kno,R.drawable.colors,),
-                Question(5, "df", "", "", "", "", "", R.drawable.knowledge,R.drawable.maths,R.drawable.kno,R.drawable.colors,),
-                Question(6, "df", "", "", "", "", "", R.drawable.knowledge,R.drawable.maths,R.drawable.kno,R.drawable.colors,),
+                Question(0, "qqq", "", 0,"", "", "", "", R.drawable.knowledge,R.drawable.maths,R.drawable.kno,R.drawable.colors,),
+                Question(1, "aaa", "", 0,"", "", "", "", R.drawable.knowledge,R.drawable.maths,R.drawable.kno,R.drawable.colors,),
+                Question(2, "sss", "", 0,"", "", "", "", R.drawable.knowledge,R.drawable.maths,R.drawable.kno,R.drawable.colors,),
+                Question(3, "ddd", "", 0,"", "", "", "", R.drawable.knowledge,R.drawable.maths,R.drawable.kno,R.drawable.colors,),
+                Question(4, "dsf", "", 0,"", "", "", "", R.drawable.knowledge,R.drawable.maths,R.drawable.kno,R.drawable.colors,),
+                Question(5, "df", "", 0,"", "", "", "", R.drawable.knowledge,R.drawable.maths,R.drawable.kno,R.drawable.colors,),
+                Question(6, "df", "", 0,"", "", "", "", R.drawable.knowledge,R.drawable.maths,R.drawable.kno,R.drawable.colors,),
             )
 
         fun getJsonDataFromAsset(context: Context, fileName: String): String? {

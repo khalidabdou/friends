@@ -1,6 +1,6 @@
 package com.example.testfriends_jetpackcompose.screen
 
-import androidx.compose.animation.*
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,8 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -26,6 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.testfriends_jetpackcompose.R
+import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.util.backgrounds.Companion.linearGradientBrush
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 
@@ -37,27 +36,50 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
     var question = viewModel.question
     var visible by remember { mutableStateOf(true) }
 
-    Image(
-        painter = painterResource(id = R.drawable.back),
-        contentDescription = "", modifier = Modifier.fillMaxSize(),
-        contentScale = ContentScale.Crop
-    )
+
+    fun setRealAnswer(answer: String, img: Int) {
+        viewModel.setAnswer(answer = answer, img)
+        if (viewModel.incrementIndex()) {
+            navHostController.navigate("Share_screen")
+        }
+    }
+
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(backgroundWhite),
         verticalArrangement = Arrangement.Center
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(150.dp)
-                .padding(10.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(linearGradientBrush),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(style = MaterialTheme.typography.body1, text = viewModel.questions[index].question)  
+        Box() {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+                    .padding(10.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(linearGradientBrush),
+                Alignment.Center
+
+            ) {
+                Text(
+                    text = viewModel.questions[index].question,
+                    style = MaterialTheme.typography.body1,
+                )
+            }
+            Box(
+                modifier = Modifier.size(40.dp)
+                .clip(CircleShape).background(Color.White).align(Alignment.TopEnd),
+                Alignment.Center
+
+            ) {
+                Text(
+                    text = "${index+1}/${question.size}",
+                    color = Color.Black,
+                )
+            }
+
         }
+
 
         Row(
             modifier = Modifier
@@ -70,22 +92,17 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
                 R.drawable.kno,
                 answer = viewModel.questions[index].answer1,
                 realAnswer = question[index].realAnswer,
-                visible = visible,
-                onClickAnswer = { answer ->
-                    viewModel.setAnswer(answer = answer)
-                    viewModel.incrementIndex()
-
-                })
+                visible = visible
+            ) { answer, realAnswerImg -> setRealAnswer(answer, realAnswerImg) }
             Spacer(modifier = Modifier.width(20.dp))
             CardAnswer(
                 R.drawable.colors,
                 answer = viewModel.questions[index].answer2,
                 realAnswer = question[index].realAnswer,
-                visible = visible,
-                onClickAnswer = { answer ->
-                    viewModel.setAnswer(answer = answer)
-                    viewModel.incrementIndex()
-                })
+                visible = visible
+            ) { answer, img ->
+                setRealAnswer(answer = answer, img = img)
+            }
         }
         Spacer(modifier = Modifier.height(20.dp))
         Row(
@@ -98,22 +115,19 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
                 R.drawable.knowledge,
                 answer = viewModel.questions[index].answer3,
                 realAnswer = question[index].realAnswer,
-                visible = visible,
-                onClickAnswer = { answer ->
-                    viewModel.setAnswer(answer = answer)
-                    viewModel.incrementIndex()
-
-                })
+                visible = visible
+            ) { answer, img ->
+                setRealAnswer(answer = answer, img = img)
+            }
             Spacer(modifier = Modifier.width(20.dp))
             CardAnswer(
                 R.drawable.maths,
                 answer = viewModel.questions[index].answer4,
                 realAnswer = question[index].realAnswer,
-                visible = visible,
-                onClickAnswer = { answer ->
-                    viewModel.setAnswer(answer = answer)
-                    viewModel.incrementIndex()
-                })
+                visible = visible
+            ) { answer, img ->
+                setRealAnswer(answer = answer, img = img)
+            }
         }
         Spacer(modifier = Modifier.height(20.dp))
         Row(
@@ -147,9 +161,11 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
                     .clip(CircleShape)
                     .background(MaterialTheme.colors.primary)
                     .clickable {
-                        if (viewModel.incrementIndex()) {
-                            navHostController.navigate("Share_screen")
-                        }
+                        Log.d("Answer", question[index].realAnswer + " index$index")
+                        if (question[index].realAnswer != "")
+                            if (viewModel.incrementIndex()) {
+                                navHostController.navigate("Share_screen")
+                            }
                     }
             ) {
                 Icon(
@@ -167,62 +183,47 @@ fun CardAnswer(
     answer: String,
     realAnswer: String,
     visible: Boolean,
-    onClickAnswer: (String) -> Unit
+    onClickAnswer: (String, Int) -> Unit
 ) {
-    val density = LocalDensity.current
-    AnimatedVisibility(
-        visible = visible,
-        enter = slideInVertically {
-            // Slide in from 40 dp from the top.
-            with(density) { -40.dp.roundToPx() }
-        } + expandVertically(
-            // Expand from the top.
-            expandFrom = Alignment.Top
-        ) + fadeIn(
-            // Fade in with the initial alpha of 0.3f.
-            initialAlpha = 0.3f
-        ),
-        exit = slideOutVertically() + shrinkVertically() + fadeOut()
+
+    Column(
+        modifier = Modifier
     ) {
-        Column(
+        Box(
             modifier = Modifier
+                .width(150.dp)
+                .height(150.dp)
+                .clip(RoundedCornerShape(5.dp))
+                //.background(Color.Gray.copy(0.2f))
+                .background(
+                    if (answer == realAnswer) MaterialTheme.colors.primary else Color.Gray.copy(
+                        0.2f
+                    )
+                )
+                .clickable {
+                    onClickAnswer(answer, img)
+                }
         ) {
-            Box(
+
+            Image(
+                alignment = Alignment.Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = 10.dp, bottom = 60.dp),
+                painter = painterResource(id = img),
+                contentDescription = "",
+            )
+            Text(
+                style = MaterialTheme.typography.body1,
+                text = answer,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
                     .width(150.dp)
                     .height(150.dp)
-                    .clip(RoundedCornerShape(5.dp))
-                    //.background(Color.Gray.copy(0.2f))
-                    .background(
-                        if (answer == realAnswer) MaterialTheme.colors.primary else Color.Gray.copy(
-                            0.2f
-                        )
-                    )
-                    .clickable {
-                        onClickAnswer(answer)
-                    }
-            ) {
+                    .wrapContentHeight(Alignment.Bottom)
+                    .background(linearGradientBrush)
+            )
 
-                Image(
-                    alignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(top = 10.dp, bottom = 60.dp),
-                    painter = painterResource(id = img),
-                    contentDescription = "",
-                )
-                Text(
-                    style = MaterialTheme.typography.body1,
-                    text = answer,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .width(150.dp)
-                        .height(150.dp)
-                        .wrapContentHeight(Alignment.Bottom)
-                        .background(linearGradientBrush)
-                )
-
-            }
         }
     }
 

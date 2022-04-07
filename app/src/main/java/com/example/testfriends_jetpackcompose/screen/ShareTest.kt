@@ -73,18 +73,16 @@ fun ItemAnswer(question: Question) {
                     .weight(4f)
                     .padding(top = 5.dp, start = 5.dp), lineHeight = 15.sp
             )
-
-
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxSize()
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.knowledge),
+                    painter = painterResource(id = question.realAnswerImg),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(5.dp),
+                        .padding(8.dp),
                     alignment = Alignment.Center,
                     contentDescription = "",
                 )

@@ -10,6 +10,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.testfriends_jetpackcompose.screen.*
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
+import com.example.testfriends_jetpackcompose.viewmodel.ResultsViewModel
 
 
 @ExperimentalAnimationApi
@@ -18,7 +19,8 @@ import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 fun SetupNavGraph(
     navController: NavHostController,
     startDestination: String,
-    viewModel: CreateTestViewModel
+    viewModel: CreateTestViewModel,
+
 ) {
     NavHost(
         navController = navController,
@@ -27,8 +29,12 @@ fun SetupNavGraph(
         composable(route = Screen.Welcome.route) {
             WelcomeScreen(navController = navController)
         }
+        composable(route = Screen.LoginScreen.route) {
+            LoginScreen(navController = navController)
+        }
+
         composable(route = Screen.Home.route) {
-            HomeScreen(navController = navController)
+            HomeScreen(navController = navController,)
         }
         composable(route = Screen.Create.route) {
             TestMain(navHostController = navController, viewModel = viewModel)

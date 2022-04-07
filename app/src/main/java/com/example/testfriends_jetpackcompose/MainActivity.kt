@@ -4,18 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.compose.rememberNavController
 import com.example.testfriends_jetpackcompose.navigation.SetupNavGraph
 import com.example.testfriends_jetpackcompose.ui.theme.TestFriends_JetPackComposeTheme
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
+import com.example.testfriends_jetpackcompose.viewmodel.ResultsViewModel
 import com.example.testfriends_jetpackcompose.viewmodel.SplashViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,7 +39,8 @@ class MainActivity : ComponentActivity() {
                 val screen by splashViewModel.startDestination
                 val navController = rememberNavController()
                 val viewModel: CreateTestViewModel = CreateTestViewModel(LocalContext.current)
-                SetupNavGraph(navController = navController, startDestination = screen,viewModel)
+
+                SetupNavGraph(navController = navController, startDestination = screen, viewModel)
             }
         }
     }

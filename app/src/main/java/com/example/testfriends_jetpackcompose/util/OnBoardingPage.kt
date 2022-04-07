@@ -10,9 +10,9 @@ sealed class OnBoardingPage(
     val description: String
 ) {
     object First : OnBoardingPage(
-        image = R.drawable.ic_launcher_background,
-        title = "Meeting",
-        description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
+        image = R.drawable.create,
+        title = "Create Test",
+        description = "Create test by answering real answers for your self and share link with friends and wait Fo"
     )
 
     object Second : OnBoardingPage(

@@ -4,6 +4,7 @@ data class Question(
     val id: Int,
     val question: String,
     var realAnswer: String,
+    var realAnswerImg: Int,
     val answer1: String,
     val answer2: String,
     val answer3: String,

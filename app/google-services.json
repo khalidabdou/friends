@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "348441400043",
+    "project_id": "testfriend-c7e65",
+    "storage_bucket": "testfriend-c7e65.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:348441400043:android:9f45e4f53959e2c7c7e4ae",
+        "android_client_info": {
+          "package_name": "com.app.testfriends"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "348441400043-jldrvvgk7oh9tisa6l9jlp7e3qrtkp26.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.testfriends",
+            "certificate_hash": "67adfcb1e368e0571cde8b56d2210dc7fc3d7288"
+          }
+        },
+        {
+          "client_id": "348441400043-uosudot1kl41vvna5nim731g3j632b5o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSnhK_Zfjwq4FCAh7MOEZAc3mHcLvpNvI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "348441400043-uosudot1kl41vvna5nim731g3j632b5o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

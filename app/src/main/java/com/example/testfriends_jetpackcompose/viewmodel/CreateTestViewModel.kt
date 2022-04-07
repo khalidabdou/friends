@@ -36,8 +36,9 @@ class CreateTestViewModel(val context: Context) : ViewModel() {
         if (index > 0) index--
     }
 
-    fun setAnswer(answer: String) {
+    fun setAnswer(answer: String,img:Int) {
         question[index].realAnswer = answer
+        question[index].realAnswerImg = img
     }
 
 }
