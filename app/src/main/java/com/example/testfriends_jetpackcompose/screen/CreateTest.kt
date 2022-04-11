@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
+import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.backgrounds.Companion.linearGradientBrush
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 
@@ -57,7 +58,7 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
                     .height(150.dp)
                     .padding(10.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(linearGradientBrush),
+                    .background(darkGray),
                 Alignment.Center
 
             ) {
@@ -221,7 +222,7 @@ fun CardAnswer(
                     .width(150.dp)
                     .height(150.dp)
                     .wrapContentHeight(Alignment.Bottom)
-                    .background(linearGradientBrush)
+                    .background(darkGray)
             )
 
         }

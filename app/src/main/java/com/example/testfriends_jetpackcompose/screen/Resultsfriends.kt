@@ -24,6 +24,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Gray
+import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -45,6 +46,7 @@ import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.ResultTest
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
+import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.backgrounds
 import com.example.testfriends_jetpackcompose.util.backgrounds.Companion.linearGradientBrush
 import com.example.testfriends_jetpackcompose.viewmodel.ResultsViewModel
@@ -55,7 +57,7 @@ fun ResultsFriends() {
     val viewModelResult: ResultsViewModel = viewModel()
     LazyColumn(
         Modifier
-            .background(White)
+            .background(backgroundWhite)
             .fillMaxSize()
     ) {
         items(5) {
@@ -213,7 +215,7 @@ fun ItemResult() {
             .height(100.dp)
             .padding(6.dp)
             .clip(RoundedCornerShape(5.dp))
-            .background(backgrounds.linearGradientBrush)
+            .background(White)
     ) {
 
         Image(
@@ -232,8 +234,8 @@ fun ItemResult() {
             verticalArrangement= Arrangement.SpaceEvenly,
             modifier = Modifier.height(70.dp).weight(3f)) {
 
-            Text(text = "Abdellah khalid",color= Black.copy(0.9f), style = MaterialTheme.typography.h3)
-            Text(text = "5/20", color= Color.LightGray,style = MaterialTheme.typography.body1)
+            Text(text = "Abdellah khalid",color= Black.copy(0.8f), style = MaterialTheme.typography.h3)
+            Text(text = "5/20", color= Color.Gray,style = MaterialTheme.typography.body1)
         }
         Box(
             contentAlignment= Alignment.Center,
@@ -244,8 +246,8 @@ fun ItemResult() {
             CustomComponent(
                 canvasSize = 80.dp,
                 indicatorValue = 50,
-                backgroundIndicatorStrokeWidth = 30f,
-                foregroundIndicatorStrokeWidth = 20f, smallText = ""
+                backgroundIndicatorStrokeWidth = 25f,
+                foregroundIndicatorStrokeWidth = 25f, smallText = ""
             )
         }
 
@@ -256,7 +258,7 @@ fun ItemResult() {
 @Preview
 @Composable
 fun ItemPrev() {
-    //ItemResult()
+    ItemResult()
 }
 
 @Preview
@@ -278,17 +280,17 @@ fun CustomComponent(
     canvasSize: Dp = 300.dp,
     indicatorValue: Int = 0,
     maxIndicatorValue: Int = 100,
-    backgroundIndicatorColor: Color = White,//MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
+    backgroundIndicatorColor: Color = backgroundWhite,//MaterialTheme.colors.onSurface.copy(alpha = 0.1f),
     backgroundIndicatorStrokeWidth: Float = 100f,
-    foregroundIndicatorColor: Color = MaterialTheme.colors.primary,
+    foregroundIndicatorColor: Color = darkGray,
     foregroundIndicatorStrokeWidth: Float = 100f,
 //    indicatorStrokeCap: StrokeCap = StrokeCap.Round,
     bigTextFontSize: TextUnit = MaterialTheme.typography.body1.fontSize,
-    bigTextColor: Color = MaterialTheme.colors.onSurface,
-    bigTextSuffix: String = "GB",
+    bigTextColor: Color = darkGray,
+    bigTextSuffix: String = "%",
     smallText: String = "Remaining",
     smallTextFontSize: TextUnit = MaterialTheme.typography.body1.fontSize,
-    smallTextColor: Color = MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
+    smallTextColor: Color = darkGray.copy(alpha = 0.3f)
 ) {
     var allowedIndicatorValue by remember {
         mutableStateOf(maxIndicatorValue)

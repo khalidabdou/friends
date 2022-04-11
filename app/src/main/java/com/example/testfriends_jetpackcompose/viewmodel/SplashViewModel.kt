@@ -29,7 +29,7 @@ class SplashViewModel @Inject constructor(
                 if (user == "") {
                     _startDestination.value = Screen.Welcome.route
                 } else {
-                    _startDestination.value = Screen.Home.route
+                    _startDestination.value = Screen.FinalScreen.route
                 }
             }
             _isLoading.value = false

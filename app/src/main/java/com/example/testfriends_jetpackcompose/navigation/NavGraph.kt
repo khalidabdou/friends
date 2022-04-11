@@ -45,5 +45,9 @@ fun SetupNavGraph(
         composable(route = Screen.ShareTest.route) {
             ShareTest(viewModel=viewModel)
         }
+
+        composable(route = Screen.FinalScreen.route) {
+            FinalScreen()
+        }
     }
 }

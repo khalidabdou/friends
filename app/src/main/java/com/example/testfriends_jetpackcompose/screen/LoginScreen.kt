@@ -11,11 +11,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -25,12 +29,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
+import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.viewmodel.LoginViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -100,22 +106,31 @@ fun LoginScreen(navController: NavController) {
                 text = email.value,
                 onChange = {
                     email.value = it
-                })
+                },modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(Color.White),textStyle = MaterialTheme.typography.h4,)
             Spacer(modifier = Modifier.height(22.dp))
             MyTextField(
                 placeholder = "password",
                 isPassword = true,
                 text = password.value,
+                textStyle = MaterialTheme.typography.h4,
                 onChange = {
                     password.value = it
-                })
+                },modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(Color.White),)
         }
 
         //Spacer(modifier = Modifier.height(22.dp))
         MyButton(
             text = "Create an account",
             icon = null,
-            background = Color.Black,
+            background = darkGray,
             contentColor = Color.White,
             onClickButton = {
                 authState.handleSignUp()
@@ -138,7 +153,7 @@ fun LoginScreen(navController: NavController) {
                 text = "Continue with Google",
                 icon = R.drawable.google,
                 background = Color.White,
-                contentColor = Color.Black,
+                contentColor = darkGray,
                 onClickButton = {
                     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                         .requestIdToken(token)
@@ -153,7 +168,7 @@ fun LoginScreen(navController: NavController) {
                 text = "Continue with facebook",
                 icon = R.drawable.facebook,
                 background = Color.White,
-                contentColor = Color.Black,
+                contentColor = darkGray,
                 onClickButton = {}
             )
             Spacer(modifier = Modifier.height(22.dp))
@@ -161,7 +176,7 @@ fun LoginScreen(navController: NavController) {
                 text = "Continue with Apple",
                 icon = R.drawable.apple,
                 background = Color.White,
-                contentColor = Color.Black,
+                contentColor = darkGray,
                 onClickButton = {}
             )
         }
@@ -170,15 +185,20 @@ fun LoginScreen(navController: NavController) {
 
 @Composable
 fun MyTextField(
+    modifier: Modifier,
     text: String? = "",
+    textStyle:TextStyle,
     placeholder: String,
     isPassword: Boolean,
     onChange: (String) -> Unit,
 ) {
     //var textContent by rememberSaveable { mutableStateOf("") }
     TextField(
-        textStyle = MaterialTheme.typography.h4,
+        textStyle = textStyle,
         value = text!!,
+        trailingIcon = {
+            Icon(imageVector = Icons.Default.Search, contentDescription = "", tint = darkGray)
+        },
         placeholder = {
             Text(
                 text = placeholder,
@@ -192,12 +212,9 @@ fun MyTextField(
             //textContent = it
 
         },
+
         visualTransformation = if (!isPassword) VisualTransformation.None else PasswordVisualTransformation(),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .background(Color.White),
+        modifier = modifier,
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
@@ -217,6 +234,7 @@ fun MyButton(
     onClickButton: () -> Unit
 ) {
     Button(
+
         onClick = { onClickButton() },
         modifier = Modifier
             .fillMaxWidth()
@@ -228,15 +246,19 @@ fun MyButton(
         ),
 
         ) {
+
         if (icon != null) {
+            Spacer(Modifier.width(50.dp))
             Icon(
                 painter = painterResource(id = icon),
                 contentDescription = "",
                 modifier = Modifier.size(ButtonDefaults.IconSize)
             )
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-        }
-        Text(text, style = MaterialTheme.typography.h4, color = contentColor)
+            Text(text, style = MaterialTheme.typography.h4, color = contentColor)
+            Spacer(Modifier.weight(1f))
+        }else Text(text, style = MaterialTheme.typography.h4, color = contentColor)
+
     }
 }
 
@@ -248,7 +270,7 @@ fun MyText(text: String, style: TextStyle) {
         modifier = Modifier
             .fillMaxWidth(),
         style = style,
-        color = Color.Black,
+        color = darkGray,
         textAlign = TextAlign.Center
     )
 }
