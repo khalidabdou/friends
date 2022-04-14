@@ -9,7 +9,7 @@ class Constant {
 
     companion object {
 
-
+        val BASE_URL="https://testfriendss.herokuapp.com/api/"
         val ALREADY_SIGN="address is already in use by another account"
 
 

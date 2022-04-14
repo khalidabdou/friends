@@ -9,9 +9,12 @@ import com.example.testfriends_jetpackcompose.data.Question
 import com.example.testfriends_jetpackcompose.util.Constant
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 
-
-class CreateTestViewModel(val context: Context) : ViewModel() {
+@HiltViewModel
+class CreateTestViewModel @Inject constructor(@ApplicationContext val context: Context) : ViewModel() {
     val questionFromJson = Constant.getJsonDataFromAsset(context = context, "question.json")
     val gson = Gson()
     val listPersonType = object : TypeToken<List<Question>>() {}.type

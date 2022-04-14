@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.User
@@ -44,7 +45,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
-
+import java.security.acl.Owner
 
 
 @Composable
@@ -54,6 +55,8 @@ fun LoginScreen(navController: NavController) {
 
     val context = LocalContext.current
     val token = stringResource(R.string.default_web_client_id)
+    authState.getUserSafe()
+
 
     // Equivalent of onActivityResult
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
@@ -64,8 +67,9 @@ fun LoginScreen(navController: NavController) {
             val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
             //viewModel.signWithCredential(credential)
             Log.d("USERLOG",account.displayName)
-            var user:User= User( 0,  account.displayName!!,  account.idToken!!,  account.email!!, account.photoUrl!!.toString())
-            authState.saveUser(user.toString())
+            //var user:User= User( id = 0, username= account.displayName!!,token=  account.idToken!!, email= account.email!!, img=account.photoUrl!!.toString())
+            var user:User= User( id = 0, username= "sf",token=  "sfsa", email= "saf", img="sfdsa")
+            authState.saveUser(user)
         } catch (e: ApiException) {
             Log.w("TAG", "Google sign in failed", e)
         }
@@ -97,7 +101,7 @@ fun LoginScreen(navController: NavController) {
     ) {
 
         //Spacer(modifier = Modifier.height(60.dp))
-        MyText(text = "Create an account", style = MaterialTheme.typography.h1)
+        MyText(text = authState.userNetworkResult.value!!.message.toString(), style = MaterialTheme.typography.h1)
         //Spacer(modifier = Modifier.height(60.dp))
         Column(modifier = Modifier.fillMaxWidth()) {
             MyTextField(
