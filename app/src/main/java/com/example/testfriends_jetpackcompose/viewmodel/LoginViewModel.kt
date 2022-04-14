@@ -16,6 +16,7 @@ import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.util.Utils.Companion.isEmailValid
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -100,8 +101,8 @@ class LoginViewModel @Inject constructor(
     fun saveUser(user: User) {
         //val user: User = User(0, "00000", email.value, 0)
         viewModelScope.launch {
-            var rseponse = remoteRepo.insetUser(user = user)
-            Log.d("Response",user.toString())
+             remoteRepo.insetUser(user = user)
+            Log.d("userReq",user.toString())
             //repository.saveUser(user = user)
         }
     }
@@ -115,13 +116,16 @@ class LoginViewModel @Inject constructor(
 
 
      fun getUserSafe() {
-
-
             try {
-                val response = remoteRepo.getUser()
-                userNetworkResult.value = handle(response)
-                //Log.d("Tag_quote","handle quotes")
+                viewModelScope.launch(Dispatchers.IO){
+                    val response =    remoteRepo.getUser()
+                    Log.d("Tag_quote",response.toString())
+                }
+
+                //userNetworkResult.value = handle(response)
+
             } catch (ex: Exception) {
+                Log.d("Tag_quote",ex.toString())
                 userNetworkResult.value = NetworkResults.Error(ex.message)
             }
 

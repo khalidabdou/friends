@@ -24,7 +24,7 @@ import javax.net.ssl.*
 
 @Module
 @InstallIn(SingletonComponent::class)
-object NetworkModule {
+object   NetworkModule {
 
     @Singleton
     @Provides

@@ -9,7 +9,7 @@ class Remote @Inject constructor(
 ){
    suspend fun insertUser(user: User)=api.insertUser(user)
 
-    fun getUser():Response<String> {
+    suspend fun getUser():User {
         return api.getUser()
     }
 

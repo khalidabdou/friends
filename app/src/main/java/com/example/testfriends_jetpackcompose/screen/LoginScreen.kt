@@ -57,7 +57,6 @@ fun LoginScreen(navController: NavController) {
     val token = stringResource(R.string.default_web_client_id)
     authState.getUserSafe()
 
-
     // Equivalent of onActivityResult
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
 
@@ -101,7 +100,7 @@ fun LoginScreen(navController: NavController) {
     ) {
 
         //Spacer(modifier = Modifier.height(60.dp))
-        MyText(text = authState.userNetworkResult.value!!.message.toString(), style = MaterialTheme.typography.h1)
+        MyText(text = "Create an account", style = MaterialTheme.typography.h1)
         //Spacer(modifier = Modifier.height(60.dp))
         Column(modifier = Modifier.fillMaxWidth()) {
             MyTextField(
