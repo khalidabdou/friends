@@ -1,5 +1,6 @@
 package com.example.testfriends_jetpackcompose.screen
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,30 +10,30 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.Question
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.questionList
 import com.example.testfriends_jetpackcompose.util.backgrounds.Companion.linearGradientBrush
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
+import com.example.testfriends_jetpackcompose.viewmodel.ResultsViewModel
 
 
 @Composable
 fun ShareTest(viewModel: CreateTestViewModel) {
+
     Image(
         painter = painterResource(id = R.drawable.back),
         contentDescription = "", modifier = Modifier.fillMaxSize(),
@@ -45,10 +46,11 @@ fun ShareTest(viewModel: CreateTestViewModel) {
             }
         }
 
-        ShareBox()
+        ShareBox(onShare = {
+            Log.d("updateMyQuestions","begin")
+            viewModel.updateMyQuestions(id = 12, questions = "zxcvbnmdfghjfghcvbgh")
+        })
     }
-
-
 }
 
 @Composable
@@ -154,11 +156,11 @@ fun item() {
 @Preview
 @Composable
 fun ShareBoxPrv() {
-    ShareBox()
+    //ShareBox()
 }
 
 @Composable
-fun ShareBox() {
+fun ShareBox(onShare:()->Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -193,15 +195,22 @@ fun ShareBox() {
                     textStyle = MaterialTheme.typography.h4
                 )
                 Spacer(modifier = Modifier.height(5.dp))
-                Row(horizontalArrangement = Arrangement.End, modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    horizontalArrangement = Arrangement.End,
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Button(
-                        onClick = {},
+                        onClick = {
+                                  onShare()
+                        },
                         contentPadding = PaddingValues(
                             start = 20.dp,
                             top = 12.dp,
                             end = 20.dp,
-                            bottom = 12.dp),
-                        colors = ButtonDefaults.buttonColors( contentColor = Color.White)
+                            bottom = 12.dp
+                        ),
+                        colors = ButtonDefaults.buttonColors(contentColor = Color.White)
 
                     ) {
                         // Inner content including an icon and a text label
@@ -214,9 +223,11 @@ fun ShareBox() {
                         Text("Share")
                     }
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    BoxButton(icon = R.drawable.link,42)
+                    BoxButton(icon = R.drawable.link, 42,
+                        onClick = {
+                            onShare()
+                        })
                 }
-
 
 
             }

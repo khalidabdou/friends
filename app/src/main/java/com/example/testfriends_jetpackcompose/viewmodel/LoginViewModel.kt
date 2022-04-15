@@ -7,24 +7,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.DataStoreRepository
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.repository.LoginRepo
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ALREADY_SIGN
 import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.util.Utils.Companion.isEmailValid
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.Response
-import java.io.IOException
 import javax.inject.Inject
 
 
@@ -38,19 +32,18 @@ class LoginViewModel @Inject constructor(
     var password = mutableStateOf("")
     var isAuth = mutableStateOf(false)
     var userState = mutableStateOf<User?>(null)
-    var userNetworkResult: MutableLiveData<NetworkResults<String>> = MutableLiveData()
+    var userNetworkResult: MutableLiveData<NetworkResults<User>> = MutableLiveData()
 
 
     init {
-        getUserSafe()
         viewModelScope.launch {
             repository.readUserInfo().collect { user ->
                 if (user == "")
                     return@collect
                 Log.d("auth_user", user)
                 val userAuth = Utils.convertToUser(user)
-                //email.value = userAuth.username
-                userState.value=userAuth
+                email.value = userAuth.username
+                userState.value = userAuth
                 isAuth.value = true
             }
         }
@@ -100,10 +93,24 @@ class LoginViewModel @Inject constructor(
 
     fun saveUser(user: User) {
         //val user: User = User(0, "00000", email.value, 0)
-        viewModelScope.launch {
-             remoteRepo.insetUser(user = user)
-            Log.d("userReq",user.toString())
-            //repository.saveUser(user = user)
+        try {
+            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    Log.w("Token", "Fetching FCM registration token failed", task.exception)
+                    return@OnCompleteListener
+                }
+                // Get new FCM registration token
+                user.token = task.result
+                viewModelScope.launch(Dispatchers.IO) {
+                    var response = remoteRepo.insetUser(user = user)
+                    Log.d("userReq", response.body().toString())
+                    repository.saveUser(user = user.toString())
+                }
+            })
+
+
+        } catch (ex: Exception) {
+            Log.d("Tokenfirebase", ex.toString())
         }
     }
 
@@ -114,25 +121,26 @@ class LoginViewModel @Inject constructor(
     }
 
 
+    fun getUserSafe() {
 
-     fun getUserSafe() {
-            try {
-                viewModelScope.launch(Dispatchers.IO){
-                    val response =    remoteRepo.getUser()
-                    Log.d("Tag_quote",response.toString())
-                }
-
-                //userNetworkResult.value = handle(response)
-
-            } catch (ex: Exception) {
-                Log.d("Tag_quote",ex.toString())
-                userNetworkResult.value = NetworkResults.Error(ex.message)
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                val response = remoteRepo.getUser()
+                //Log.d("Tag_quote", response.toString())
+                //userNetworkResult.value=NetworkResults.Success("")
             }
+
+            //userNetworkResult.value = handle(response)
+
+        } catch (ex: Exception) {
+            Log.d("Tag_quote", ex.toString())
+            userNetworkResult.value = NetworkResults.Error(ex.message)
+        }
 
     }
 
     private fun handle(response: Response<String>): NetworkResults<String> {
-        Log.d("resultsapi",response.toString())
+        Log.d("resultsapi", response.toString())
         when {
             response.message().toString()
                 .contains("Timeout") -> return NetworkResults.Error("Timeout")
@@ -145,7 +153,7 @@ class LoginViewModel @Inject constructor(
                 return NetworkResults.Success(quotes!!)
             }
             else -> {
-                Log.d("Error",response.message(),)
+                Log.d("Error", response.message())
                 return NetworkResults.Error(response.message())
             }
         }
@@ -153,34 +161,6 @@ class LoginViewModel @Inject constructor(
 }
 
 
-
-
-enum class ApiStatus{
-    SUCCESS,
-    ERROR,
-    LOADING
-}
-
-sealed class ApiResult <out T> (val status: ApiStatus, val data: T?, val message:String?) {
-
-    data class Success<out R>(val _data: R?): ApiResult<R>(
-        status = ApiStatus.SUCCESS,
-        data = _data,
-        message = null
-    )
-
-    data class Error(val exception: String): ApiResult<Nothing>(
-        status = ApiStatus.ERROR,
-        data = null,
-        message = exception
-    )
-
-    data class Loading<out R>(val _data: R?, val isLoading: Boolean): ApiResult<R>(
-        status = ApiStatus.LOADING,
-        data = _data,
-        message = null
-    )
-}
 
 sealed class AuthState {
     object Idle : AuthState()

@@ -55,8 +55,7 @@ fun LoginScreen(navController: NavController) {
 
     val context = LocalContext.current
     val token = stringResource(R.string.default_web_client_id)
-    authState.getUserSafe()
-
+    //authState.getUserSafe()
     // Equivalent of onActivityResult
     val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
 
@@ -65,9 +64,9 @@ fun LoginScreen(navController: NavController) {
             val account = task.getResult(ApiException::class.java)!!
             val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
             //viewModel.signWithCredential(credential)
-            Log.d("USERLOG",account.displayName)
-            //var user:User= User( id = 0, username= account.displayName!!,token=  account.idToken!!, email= account.email!!, img=account.photoUrl!!.toString())
-            var user:User= User( id = 0, username= "sf",token=  "sfsa", email= "saf", img="sfdsa")
+            Log.d("USERLOG",account.displayName!!)
+
+            var user= User( id = 0, username= account.displayName!!,token=  "", email= account.email!!, img=account.photoUrl!!.toString())
             authState.saveUser(user)
         } catch (e: ApiException) {
             Log.w("TAG", "Google sign in failed", e)

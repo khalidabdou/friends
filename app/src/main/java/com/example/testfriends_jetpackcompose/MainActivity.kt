@@ -7,6 +7,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.testfriends_jetpackcompose.navigation.Screen
@@ -25,22 +26,21 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-
-    //var splashViewModel: SplashViewModel by viewModel()
+    @Inject
+    lateinit var splashViewModel: SplashViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        installSplashScreen().setKeepOnScreenCondition {
-//            !splashViewModel.isLoading.value
-//        }
+        installSplashScreen().setKeepOnScreenCondition {
+            !splashViewModel.isLoading.value
+        }
 
         setContent {
             TestFriends_JetPackComposeTheme {
                 //val screen by splashViewModel.startDestination
                 val navController = rememberNavController()
-                val viewModel: CreateTestViewModel = CreateTestViewModel(LocalContext.current)
-
-                SetupNavGraph(navController = navController, startDestination = Screen.Welcome.route, viewModel)
+                val viewModel: CreateTestViewModel = hiltViewModel()
+                SetupNavGraph(navController = navController, startDestination = splashViewModel.startDestination.value, viewModel)
             }
         }
     }

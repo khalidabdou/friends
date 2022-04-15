@@ -9,7 +9,7 @@ data class User(
     @SerializedName("username")
     val username: String,
     val email: String,
-    val token: String,
+    var token: String,
     val img: String
 ) {
 

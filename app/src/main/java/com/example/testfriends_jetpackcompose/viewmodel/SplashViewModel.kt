@@ -1,5 +1,6 @@
 package com.example.testfriends_jetpackcompose.viewmodel
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -11,9 +12,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
+import kotlin.math.log
 
 
-@HiltViewModel
 class SplashViewModel @Inject constructor(
     private val repository: DataStoreRepository
 ) : ViewModel() {
@@ -30,8 +31,9 @@ class SplashViewModel @Inject constructor(
                 if (user == "") {
                     _startDestination.value = Screen.Welcome.route
                 } else {
-                    _startDestination.value = Screen.FinalScreen.route
+                    _startDestination.value = Screen.Home.route
                 }
+                Log.d("login",user)
             }
             _isLoading.value = false
         }

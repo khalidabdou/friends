@@ -120,9 +120,9 @@ fun ItemResult(item: ResultTest) {
                         horizontalArrangement = Arrangement.End,
 
                         ) {
-                        BoxButton(icon = R.drawable.share, 30)
+                        BoxButton(icon = R.drawable.share, 30, onClick = {})
                         Spacer(modifier = Modifier.width(4.dp))
-                        BoxButton(icon = R.drawable.download, 30)
+                        BoxButton(icon = R.drawable.download, 30, onClick = {})
 
                     }
                 }
@@ -188,14 +188,16 @@ fun ButtonCard(iconButton: ImageVector, color: Color, text: String) {
 }
 
 @Composable
-fun BoxButton(icon: Int, height: Int) {
+fun BoxButton(icon: Int, height: Int,onClick: () ->Unit) {
     Box(
         modifier = Modifier
             .width(40.dp)
             .height(height.dp)
             .clip(RoundedCornerShape(5.dp))
             .background(Color.White)
-            .clickable { }
+            .clickable {
+                onClick
+            }
     ) {
         Image(
             painter = painterResource(id = icon),
@@ -271,7 +273,7 @@ fun ListPrev() {
 @Preview
 @Composable
 fun BoxButtonPrev() {
-    BoxButton(icon = R.drawable.share, 30)
+    BoxButton(icon = R.drawable.share, 30, onClick = {})
 }
 
 

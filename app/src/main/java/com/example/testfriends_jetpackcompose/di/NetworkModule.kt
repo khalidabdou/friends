@@ -20,11 +20,21 @@ import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 import javax.net.ssl.*
+import com.google.gson.GsonBuilder
+
+import com.google.gson.Gson
+
+
+
 
 
 @Module
 @InstallIn(SingletonComponent::class)
 object   NetworkModule {
+
+    var gson = GsonBuilder()
+        .setLenient()
+        .create()
 
     @Singleton
     @Provides
@@ -51,7 +61,7 @@ object   NetworkModule {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(getUnsafeOkHttpClient())
-            .addConverterFactory(gsonConverterFactory)
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
 

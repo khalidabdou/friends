@@ -2,6 +2,7 @@ package com.example.testfriends_jetpackcompose.di
 
 import android.content.Context
 import com.example.testfriends_jetpackcompose.data.DataStoreRepository
+import dagger.Component
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,4 +21,6 @@ object MainModel {
     fun provideDataStoreRepository(
         @ApplicationContext context: Context
     ) = DataStoreRepository(context = context)
+
+
 }
