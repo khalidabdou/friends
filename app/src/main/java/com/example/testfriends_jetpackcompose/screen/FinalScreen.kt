@@ -16,13 +16,18 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
+import com.example.testfriends_jetpackcompose.util.Utils
+import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 
 
 @Composable
-fun FinalScreen() {
+fun FinalScreen(navHostController: NavHostController, viewModel: CreateTestViewModel) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(backgroundColor = Color.White, onClick = {
@@ -35,6 +40,13 @@ fun FinalScreen() {
             }
         }
     ) {
+        var myAnswers = ""
+        for (item in viewModel.question) {
+            myAnswers += item.realAnswer + ","
+        }
+        val results = Utils.compareResults(SENDER!!.myQuestions, myAnswers)
+        viewModel.createResults(SENDER!!.id, ME!!.id, myAnswers, SENDER!!.token)
+
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -75,7 +87,8 @@ fun FinalScreen() {
                 ) {
                     CustomComponent(
                         canvasSize = 80.dp,
-                        indicatorValue = 87,
+                        indicatorValue = results,
+                        maxIndicatorValue = 100,
                         backgroundIndicatorStrokeWidth = 25f,
                         foregroundIndicatorStrokeWidth = 25f, smallText = ""
                     )

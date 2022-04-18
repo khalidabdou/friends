@@ -8,13 +8,18 @@ data class User(
     val id: Int,
     @SerializedName("username")
     val username: String,
+    @SerializedName("email")
     val email: String,
+    @SerializedName("token")
     var token: String,
-    val img: String
+    @SerializedName("image")
+    val image: String,
+    @SerializedName("myQuetions")
+    val myQuestions: String
 ) {
 
     override fun toString(): String {
-        return """{"id": $id , "username" : "$username" , "email" : "$email" , "token" : "$token" , "img" : "$img" }"""
+        return """{"id": $id , "username" : "$username" , "email" : "$email" , "token" : "$token" , "img" : "$image" }"""
     }
 }
 

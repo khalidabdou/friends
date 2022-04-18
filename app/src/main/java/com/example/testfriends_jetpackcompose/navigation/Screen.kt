@@ -6,7 +6,8 @@ sealed class Screen (val route :String) {
     object Create : Screen(route = "Create_screen")
     object Results :Screen(route = "Results_screen")
     object ShareTest :Screen(route = "Share_screen")
-    object LoginScreen :Screen(route = "Login_screen")
-    object FinalScreen :Screen(route = "Final_screen")
+    object LoginScreen : Screen(route = "Login_screen")
+    object StartScreen : Screen(route = "Start_screen")
+    object FinalScreen : Screen(route = "Final_screen")
 
 }

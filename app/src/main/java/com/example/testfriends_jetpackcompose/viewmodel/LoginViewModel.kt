@@ -125,7 +125,7 @@ class LoginViewModel @Inject constructor(
 
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                val response = remoteRepo.getUser()
+                val response = remoteRepo.getUser(12)
                 //Log.d("Tag_quote", response.toString())
                 //userNetworkResult.value=NetworkResults.Success("")
             }

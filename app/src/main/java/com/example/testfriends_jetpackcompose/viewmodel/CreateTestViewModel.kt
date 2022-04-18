@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.testfriends_jetpackcompose.data.ListResults
 import com.example.testfriends_jetpackcompose.data.Question
 import com.example.testfriends_jetpackcompose.repository.ResultsRepo
 import com.example.testfriends_jetpackcompose.util.Constant
@@ -17,6 +18,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 @HiltViewModel
 class CreateTestViewModel @Inject constructor(
@@ -29,6 +31,8 @@ class CreateTestViewModel @Inject constructor(
     val gson = Gson()
     val listPersonType = object : TypeToken<List<Question>>() {}.type
     var questions: List<Question> = gson.fromJson(questionFromJson, listPersonType)
+
+    var resultsList = mutableStateOf<ListResults?>(null)
     //private val questions = MutableStateFlow<question>
 
     //var questions by mutableStateOf(_questions)
@@ -54,10 +58,33 @@ class CreateTestViewModel @Inject constructor(
         question[index].realAnswerImg = img
     }
 
-    fun updateMyQuestions(id: Int, questions: String) = viewModelScope.launch(Dispatchers.IO) {
+    fun updateMyQuestions(id: Int) = viewModelScope.launch(Dispatchers.IO) {
         //Log.d("updateMyQuestions","begin")
-        val response=resultRepo.updateMyQuestions(id, questions)
-        Log.d("updateMyQuestions",response.body().toString())
+        var stringQuetions = ""
+        question.forEach {
+            stringQuetions += it.realAnswer + ","
+        }
+
+        Log.d("question", stringQuetions)
+        val response = resultRepo.updateMyQuestions(id, stringQuetions)
+        Log.d("updateMyQuestions", response.body().toString())
+    }
+
+    fun createResults(sender: Int, receiver: Int, answers: String, token: String) =
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.d("updateMyQuestions", token)
+            resultRepo.createResults(sender, receiver, answers, token)
+        }
+
+
+    fun getResults() = viewModelScope.launch(Dispatchers.IO) {
+        val results = resultRepo.getResults(38)
+        if (results.isSuccessful) {
+            Log.d("results", results.body().toString())
+            resultsList.value = results.body()
+        } else
+            Log.d("results", results.message())
+
     }
 
 }

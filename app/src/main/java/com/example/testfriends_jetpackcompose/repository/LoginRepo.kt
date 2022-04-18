@@ -12,6 +12,6 @@ class LoginRepo @Inject constructor(private val remote: Remote) {
        return remote.insertUser(user)
     }
 
-    suspend fun getUser(): User = remote.getUser()
+    suspend fun getUser(id: Int): Response<User> = remote.getUser(id)
 
 }

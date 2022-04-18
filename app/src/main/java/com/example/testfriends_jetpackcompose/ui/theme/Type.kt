@@ -65,6 +65,12 @@ val Typography = Typography(
         lineHeight = 17.sp,
         fontSize = 18.sp
     ),
+    h6 = TextStyle(
+        fontFamily = QuickSand,
+        fontWeight = FontWeight.Bold,
+        lineHeight = 17.sp,
+        fontSize = 16.sp
+    ),
 
 
     /* Other default text styles to override

@@ -1,25 +1,23 @@
 package com.example.testfriends_jetpackcompose.screen
 
-import android.annotation.SuppressLint
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,10 +27,8 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.User
@@ -42,10 +38,7 @@ import com.example.testfriends_jetpackcompose.viewmodel.LoginViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.GoogleAuthProvider
-import kotlinx.coroutines.launch
-import java.security.acl.Owner
 
 
 @Composable
@@ -57,22 +50,29 @@ fun LoginScreen(navController: NavController) {
     val token = stringResource(R.string.default_web_client_id)
     //authState.getUserSafe()
     // Equivalent of onActivityResult
-    val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
 
-        try {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
-            val account = task.getResult(ApiException::class.java)!!
-            val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
-            //viewModel.signWithCredential(credential)
-            Log.d("USERLOG",account.displayName!!)
+            try {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+                val account = task.getResult(ApiException::class.java)!!
+                val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
+                //viewModel.signWithCredential(credential)
+                Log.d("USERLOG", account.displayName!!)
 
-            var user= User( id = 0, username= account.displayName!!,token=  "", email= account.email!!, img=account.photoUrl!!.toString())
-            authState.saveUser(user)
-        } catch (e: ApiException) {
-            Log.w("TAG", "Google sign in failed", e)
+                var user = User(
+                    id = 0,
+                    username = account.displayName!!,
+                    token = "",
+                    email = account.email!!,
+                    image = account.photoUrl.toString(),
+                    myQuestions = ""
+                )
+                authState.saveUser(user)
+            } catch (e: ApiException) {
+                Log.w("TAG", "Google sign in failed", e)
+            }
         }
-    }
-
 
 
     var email = authState.email
@@ -108,11 +108,14 @@ fun LoginScreen(navController: NavController) {
                 text = email.value,
                 onChange = {
                     email.value = it
-                },modifier = Modifier
+                },
+                modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(Color.White),textStyle = MaterialTheme.typography.h4,)
+                    .background(Color.White),
+                textStyle = MaterialTheme.typography.h4, onSearch = {}
+            )
             Spacer(modifier = Modifier.height(22.dp))
             MyTextField(
                 placeholder = "password",
@@ -121,11 +124,12 @@ fun LoginScreen(navController: NavController) {
                 textStyle = MaterialTheme.typography.h4,
                 onChange = {
                     password.value = it
-                },modifier = Modifier
+                }, modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(Color.White),)
+                    .background(Color.White), onSearch = {}
+            )
         }
 
         //Spacer(modifier = Modifier.height(22.dp))
@@ -189,17 +193,25 @@ fun LoginScreen(navController: NavController) {
 fun MyTextField(
     modifier: Modifier,
     text: String? = "",
-    textStyle:TextStyle,
+    textStyle: TextStyle,
     placeholder: String,
     isPassword: Boolean,
     onChange: (String) -> Unit,
+    onSearch: () -> Unit?,
 ) {
     //var textContent by rememberSaveable { mutableStateOf("") }
     TextField(
         textStyle = textStyle,
         value = text!!,
         trailingIcon = {
-            Icon(imageVector = Icons.Default.Search, contentDescription = "", tint = darkGray)
+            Icon(
+                imageVector = Icons.Default.Search,
+                contentDescription = "",
+                tint = darkGray,
+                modifier = Modifier.clickable {
+                    Log.d("question", "cl")
+                    onSearch()
+                })
         },
         placeholder = {
             Text(
@@ -259,7 +271,7 @@ fun MyButton(
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
             Text(text, style = MaterialTheme.typography.h4, color = contentColor)
             Spacer(Modifier.weight(1f))
-        }else Text(text, style = MaterialTheme.typography.h4, color = contentColor)
+        } else Text(text, style = MaterialTheme.typography.h4, color = contentColor)
 
     }
 }

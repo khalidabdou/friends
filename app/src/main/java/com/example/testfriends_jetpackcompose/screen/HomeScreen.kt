@@ -9,13 +9,14 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
@@ -30,22 +31,39 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.User
-import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
 import com.example.testfriends_jetpackcompose.util.backgrounds.Companion.linearGradientBrush
+import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
+import com.example.testfriends_jetpackcompose.viewmodel.NetworkResults
 import com.example.testfriends_jetpackcompose.viewmodel.ResultsViewModel
 
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun HomeScreen(navController: NavHostController, createTestViewModel: CreateTestViewModel) {
 
-    val viewModel: ResultsViewModel = hiltViewModel()
-    var user = viewModel.userAuth
+    val viewModelresults: ResultsViewModel = hiltViewModel()
+    var user = viewModelresults.userAuth
+    val openDialog = remember { mutableStateOf(false) }
+    ME = user.value
+    Log.d("userme", user.toString())
+
     Scaffold(
-
-        topBar = { AppBar(user.value) },
+        topBar = {
+            AppBar(
+                user.value,
+                viewModelresults.search.value,
+                search = { viewModelresults.setSearchText(it) },
+                onSearchClick = {
+                    viewModelresults.challenge(it)
+                    openDialog.value = true
+                },
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(backgroundColor = White, onClick = {
+                SENDER = null
                 navController.navigate("Create_screen")
             }) {
                 Image(
@@ -56,16 +74,46 @@ fun HomeScreen(navController: NavHostController) {
             }
         }
     ) {
-        ResultsFriends()
+        if (createTestViewModel.resultsList.value != null)
+            ResultsFriends(createTestViewModel.resultsList.value!!)
+        if (openDialog.value) {
+            when (viewModelresults.challenge.value) {
+                is NetworkResults.Error -> {
+                    ChallengeDialog(
+                        user = null,
+                        onClick = { openDialog.value = it },
+                        onConfirm = {})
+                }
+                is NetworkResults.Success -> {
+                    SENDER = viewModelresults.challenge.value.data
+                    ChallengeDialog(
+                        user = viewModelresults.challenge.value.data,
+                        onClick = { openDialog.value = it },
+                        onConfirm = {
+                            if (it) navController.navigate("Create_screen")
+                        }
+                    )
+                }
+                is NetworkResults.Loading -> {
+                    ChallengeDialog(user = null, onClick = {
+                        if (it == null)
+                            openDialog.value = false
+                    }, onConfirm = {})
+                }
+            }
+
+
+        }
     }
 }
 
 @Composable
-fun AppBar(user: User) {
+fun AppBar(user: User, textSearch: String, search: (String) -> Unit, onSearchClick: (Int) -> Unit) {
 
-    Box(   modifier = Modifier
-        .fillMaxWidth()
-        ,) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth(),
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -105,30 +153,43 @@ fun AppBar(user: User) {
                             .padding(10.dp)
                             .clip(
                                 CircleShape
-                            )
-                        ,
+                            ),
                         contentScale = ContentScale.Crop,
-                        painter = rememberAsyncImagePainter(user.img),
+                        painter = rememberAsyncImagePainter(user.image),
                         contentDescription = ""
                     )
                 }
 
             }
         }
-        Box(modifier = Modifier
-            .height(170.dp)
-            .padding(10.dp)) {
-            Row(verticalAlignment = Alignment.Bottom, modifier = Modifier.align(Alignment.BottomStart)) {
+        Box(
+            modifier = Modifier
+                .height(170.dp)
+                .padding(10.dp)
+        ) {
+            Row(
+                verticalAlignment = Alignment.Bottom,
+                modifier = Modifier.align(Alignment.BottomStart)
+            ) {
                 MyTextField(
                     placeholder = "friend code ",
+                    text = textSearch,
                     textStyle = MaterialTheme.typography.h6,
                     isPassword = false,
-                    onChange = {},
+                    onChange = { search(it) },
                     modifier = Modifier
                         .weight(3f)
                         .height(50.dp)
                         .clip(RoundedCornerShape(5.dp))
                         .padding(vertical = 0.dp),
+                    onSearch = {
+                        try {
+                            onSearchClick(textSearch.toInt())
+                        } catch (ex: Exception) {
+                        }
+
+
+                    }
                 )
             }
         }
@@ -174,8 +235,8 @@ fun MyCard(icon: Int, title: String, description: String, onClick: () -> Unit) {
 
                 )
             }
-            Box() {
-                Column() {
+            Box {
+                Column {
                     Text(
                         modifier = Modifier
                             .padding(top = 10.dp, start = 10.dp),
@@ -197,7 +258,7 @@ fun MyCard(icon: Int, title: String, description: String, onClick: () -> Unit) {
 
 @Composable
 fun CopyId() {
-    Row() {
+    Row {
         Text(
             text = "JHN2D5",
             textAlign = TextAlign.Start, color = Gray,
@@ -212,9 +273,12 @@ fun CopyId() {
         )
     }
 }
+
+
 @Preview
 @Composable
 fun prevs() {
-    var user = User(id = 0, username = "abdellah", email = "@egample.com", token = "", img = "")
-    AppBar(user)
+    var user =
+        User(id = 0, username = "abdellah", email = "@egample.com", token = "", image = "", "")
+    //AppBar(user)
 }

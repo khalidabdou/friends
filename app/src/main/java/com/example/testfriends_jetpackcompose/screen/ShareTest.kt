@@ -21,14 +21,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.Question
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.questionList
 import com.example.testfriends_jetpackcompose.util.backgrounds.Companion.linearGradientBrush
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
-import com.example.testfriends_jetpackcompose.viewmodel.ResultsViewModel
 
 
 @Composable
@@ -39,7 +37,7 @@ fun ShareTest(viewModel: CreateTestViewModel) {
         contentDescription = "", modifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.Crop
     )
-    Column() {
+    Column {
         LazyColumn(modifier = Modifier.weight(5f)) {
             items(viewModel.questions.size) {
                 ItemAnswer(viewModel.question[it])
@@ -47,8 +45,8 @@ fun ShareTest(viewModel: CreateTestViewModel) {
         }
 
         ShareBox(onShare = {
-            Log.d("updateMyQuestions","begin")
-            viewModel.updateMyQuestions(id = 12, questions = "zxcvbnmdfghjfghcvbgh")
+            Log.d("updateMyQuestions", "begin")
+            viewModel.updateMyQuestions(id = ME!!.id)
         })
     }
 }
@@ -179,7 +177,7 @@ fun ShareBox(onShare:()->Unit) {
             ) {
                 Image(painter = painterResource(id = R.drawable.avatar), contentDescription = "")
             }
-            Column() {
+            Column {
                 TextField(
                     value = "A Verizon is the perfect device for taking Wi-Fi access with you. More robust than your smartphone's mobile hotspot, a Jetpack can connect multiple",
                     maxLines = 5,

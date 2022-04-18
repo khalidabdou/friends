@@ -17,31 +17,37 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.rememberAsyncImagePainter
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
-import com.example.testfriends_jetpackcompose.util.backgrounds.Companion.linearGradientBrush
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 
 
 @Composable
 fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewModel) {
 
+
     var index = viewModel.index
     var question = viewModel.question
     var visible by remember { mutableStateOf(true) }
 
+    viewModel.getResults()
 
     fun setRealAnswer(answer: String, img: Int) {
         viewModel.setAnswer(answer = answer, img)
         if (viewModel.incrementIndex()) {
-            navHostController.navigate("Share_screen")
+            if (SENDER == null)
+                navHostController.navigate("Share_screen")
+            else navHostController.navigate("Final_screen")
         }
     }
 
@@ -51,7 +57,38 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
             .background(backgroundWhite),
         verticalArrangement = Arrangement.Center
     ) {
-        Box() {
+        if (SENDER != null)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+                    .padding(20.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(
+                        Color.White
+                    )
+            ) {
+                Spacer(modifier = Modifier.width(10.dp))
+                Image(
+                    modifier = Modifier
+                        .size(50.dp)
+                        .clip(
+                            CircleShape
+                        ),
+                    contentScale = ContentScale.Crop,
+                    painter = rememberAsyncImagePainter(SENDER!!.image),
+                    contentDescription = ""
+                )
+                Spacer(modifier = Modifier.width(5.dp))
+                Text(
+                    text = "answer for ${SENDER!!.username} questions ",
+                    style = MaterialTheme.typography.body1,
+                    color = darkGray
+                )
+
+            }
+        Box {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -68,13 +105,16 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
                 )
             }
             Box(
-                modifier = Modifier.size(40.dp)
-                .clip(CircleShape).background(Color.White).align(Alignment.TopEnd),
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape)
+                    .background(Color.White)
+                    .align(Alignment.TopEnd),
                 Alignment.Center
 
             ) {
                 Text(
-                    text = "${index+1}/${question.size}",
+                    text = "${index + 1}/${question.size}",
                     color = Color.Black,
                 )
             }
@@ -165,7 +205,9 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
                         Log.d("Answer", question[index].realAnswer + " index$index")
                         if (question[index].realAnswer != "")
                             if (viewModel.incrementIndex()) {
-                                navHostController.navigate("Share_screen")
+                                if (SENDER == null)
+                                    navHostController.navigate("Share_screen")
+                                else navHostController.navigate("Final_screen")
                             }
                     }
             ) {

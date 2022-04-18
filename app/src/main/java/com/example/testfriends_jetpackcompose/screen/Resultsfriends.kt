@@ -23,15 +23,12 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.Gray
-import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.VerticalAlignmentLine
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -41,27 +38,28 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.testfriends_jetpackcompose.R
+import com.example.testfriends_jetpackcompose.data.ListResults
 import com.example.testfriends_jetpackcompose.data.ResultTest
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
-import com.example.testfriends_jetpackcompose.util.backgrounds
+import com.example.testfriends_jetpackcompose.util.Constant
+import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.util.backgrounds.Companion.linearGradientBrush
-import com.example.testfriends_jetpackcompose.viewmodel.ResultsViewModel
 
 @Composable
-fun ResultsFriends() {
+fun ResultsFriends(resultTest: ListResults) {
 
-    val viewModelResult: ResultsViewModel = viewModel()
+
     LazyColumn(
         Modifier
             .background(backgroundWhite)
             .fillMaxSize()
     ) {
-        items(5) {
-            ItemResult()
+
+        items(resultTest.listResults.size) {
+            ItemResults(resultTest.listResults[it])
         }
     }
 }
@@ -90,13 +88,13 @@ fun ItemResult(item: ResultTest) {
                 .background(linearGradientBrush)
 
         ) {
-            Column() {
+            Column {
                 Row(
                     horizontalArrangement = Arrangement.SpaceAround,
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    User(item.Sender)
-                    User(item.Receiver)
+                    //User(item.Sender)
+                    //User(item.Receiver)
                 }
                 if (expanded) {
                     Box(
@@ -141,7 +139,7 @@ fun ItemResult(item: ResultTest) {
             Text(
                 modifier = Modifier.align(Alignment.Center),
                 style = TextStyle(fontSize = 16.sp),
-                text = item.result,
+                text = item.ReceiverName,
                 color = Black.copy(0.7f)
             )
         }
@@ -188,7 +186,7 @@ fun ButtonCard(iconButton: ImageVector, color: Color, text: String) {
 }
 
 @Composable
-fun BoxButton(icon: Int, height: Int,onClick: () ->Unit) {
+fun BoxButton(icon: Int, height: Int, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .width(40.dp)
@@ -210,7 +208,7 @@ fun BoxButton(icon: Int, height: Int,onClick: () ->Unit) {
 }
 
 @Composable
-fun ItemResult() {
+fun ItemResults(item: ResultTest) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -233,40 +231,45 @@ fun ItemResult() {
             contentDescription = "",
         )
         Column(
-            verticalArrangement= Arrangement.SpaceEvenly,
-            modifier = Modifier.height(70.dp).weight(3f)) {
+            verticalArrangement = Arrangement.SpaceEvenly,
+            modifier = Modifier
+                .height(70.dp)
+                .weight(3f)
+        ) {
 
-            Text(text = "Abdellah khalid",color= Black.copy(0.8f), style = MaterialTheme.typography.h3)
-            Text(text = "5/20", color= Color.Gray,style = MaterialTheme.typography.body1)
+            Text(
+                text = "${item.ReceiverName}",
+                color = Black.copy(0.8f),
+                style = MaterialTheme.typography.h3
+            )
+            Text(text = "5/20", color = Color.Gray, style = MaterialTheme.typography.body1)
         }
         Box(
-            contentAlignment= Alignment.Center,
+            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(5.dp)
         ) {
             CustomComponent(
                 canvasSize = 80.dp,
-                indicatorValue = 50,
+                indicatorValue = Utils.compareResults(item.answers, Constant.ME!!.myQuestions),
                 backgroundIndicatorStrokeWidth = 25f,
                 foregroundIndicatorStrokeWidth = 25f, smallText = ""
             )
         }
-
-
     }
 }
 
 @Preview
 @Composable
 fun ItemPrev() {
-    ItemResult()
+    //ItemResult()
 }
 
 @Preview
 @Composable
 fun ListPrev() {
-    ResultsFriends()
+    //ResultsFriends()
 }
 
 
