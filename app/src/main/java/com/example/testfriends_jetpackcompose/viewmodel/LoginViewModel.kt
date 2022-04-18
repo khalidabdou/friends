@@ -15,6 +15,8 @@ import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.util.Utils.Companion.isEmailValid
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
@@ -33,6 +35,8 @@ class LoginViewModel @Inject constructor(
     var isAuth = mutableStateOf(false)
     var userState = mutableStateOf<User?>(null)
     var userNetworkResult: MutableLiveData<NetworkResults<User>> = MutableLiveData()
+
+    private var auth: FirebaseAuth= Firebase.auth
 
 
     init {
@@ -56,12 +60,8 @@ class LoginViewModel @Inject constructor(
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email.value, password.value)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    // Sign in success, update UI with the signed-in user's information
                     Log.d(TAG, "signInWithEmail:success $task")
-                    //val user = auth.currentUser
-                    //updateUI(user)
                 } else {
-                    // If sign in fails, display a message to the user.
                     Log.w(TAG, "signInWithEmail:failure", task.exception)
                 }
             }
@@ -72,14 +72,14 @@ class LoginViewModel @Inject constructor(
             _authState.value = AuthState.AuthError("Invalid email")
             return
         }
-
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(
             email.value, password.value
         ).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 Log.i(TAG, "Email signup is successful")
                 _authState.value = AuthState.Success
-                //saveUser()
+
+                //saveUser(user = )
             } else {
                 task.exception?.let {
                     Log.i(TAG, "Email signup failed with error ${it.localizedMessage}")
@@ -117,7 +117,6 @@ class LoginViewModel @Inject constructor(
     fun getUser() {
         var userInfo = repository.readUserInfo()
         Log.d("Auth_user", userInfo.toString())
-
     }
 
 

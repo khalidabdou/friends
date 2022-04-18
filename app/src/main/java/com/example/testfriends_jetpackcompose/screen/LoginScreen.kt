@@ -38,6 +38,7 @@ import com.example.testfriends_jetpackcompose.viewmodel.LoginViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
 
@@ -48,6 +49,8 @@ fun LoginScreen(navController: NavController) {
 
     val context = LocalContext.current
     val token = stringResource(R.string.default_web_client_id)
+
+
     //authState.getUserSafe()
     // Equivalent of onActivityResult
     val launcher =
