@@ -5,7 +5,9 @@ import com.google.gson.annotations.SerializedName
 
 data class User(
     @SerializedName("id")
-    val id: Int,
+    var id: Int,
+    @SerializedName("inviteId")
+    var inviteId: String? = "",
     @SerializedName("username")
     val username: String,
     @SerializedName("email")
@@ -14,12 +16,7 @@ data class User(
     var token: String,
     @SerializedName("image")
     val image: String,
-    @SerializedName("myQuetions")
-    val myQuestions: String
-) {
-
-    override fun toString(): String {
-        return """{"id": $id , "username" : "$username" , "email" : "$email" , "token" : "$token" , "img" : "$image" }"""
-    }
-}
+    @SerializedName("myQuestions", alternate = ["myQuetions"])
+    var myQuestions: String
+)
 

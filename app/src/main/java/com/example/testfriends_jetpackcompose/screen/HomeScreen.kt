@@ -3,9 +3,7 @@ package com.example.testfriends_jetpackcompose.screen
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -13,28 +11,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.BlurredEdgeTreatment
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import coil.compose.rememberAsyncImagePainter
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
-import com.example.testfriends_jetpackcompose.util.backgrounds.Companion.linearGradientBrush
+import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 import com.example.testfriends_jetpackcompose.viewmodel.NetworkResults
 import com.example.testfriends_jetpackcompose.viewmodel.ResultsViewModel
@@ -49,7 +40,11 @@ fun HomeScreen(navController: NavHostController, createTestViewModel: CreateTest
     ME = user.value
     Log.d("userme", user.toString())
 
+    createTestViewModel.getResults()
+    var scaffoldState = rememberScaffoldState()
+
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
             AppBar(
                 user.value,
@@ -76,6 +71,8 @@ fun HomeScreen(navController: NavHostController, createTestViewModel: CreateTest
     ) {
         if (createTestViewModel.resultsList.value != null)
             ResultsFriends(createTestViewModel.resultsList.value!!)
+
+
         if (openDialog.value) {
             when (viewModelresults.challenge.value) {
                 is NetworkResults.Error -> {
@@ -108,7 +105,12 @@ fun HomeScreen(navController: NavHostController, createTestViewModel: CreateTest
 }
 
 @Composable
-fun AppBar(user: User, textSearch: String, search: (String) -> Unit, onSearchClick: (Int) -> Unit) {
+fun AppBar(
+    user: User,
+    textSearch: String,
+    search: (String) -> Unit,
+    onSearchClick: (String) -> Unit
+) {
 
     Box(
         modifier = Modifier
@@ -128,7 +130,9 @@ fun AppBar(user: User, textSearch: String, search: (String) -> Unit, onSearchCli
             ) {
 
                 Row(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(10.dp),
                     verticalAlignment = Alignment.CenterVertically,
 
                     ) {
@@ -142,22 +146,11 @@ fun AppBar(user: User, textSearch: String, search: (String) -> Unit, onSearchCli
                             textAlign = TextAlign.Start, color = White.copy(0.6f),
                             style = MaterialTheme.typography.h2
                         )
-                        CopyId()
+                        CopyId(Utils.generateId(user.username) + user.id.toString())
                         Spacer(modifier = Modifier.height(10.dp))
 
                     }
-
-                    Image(
-                        modifier = Modifier
-                            .size(70.dp)
-                            .padding(10.dp)
-                            .clip(
-                                CircleShape
-                            ),
-                        contentScale = ContentScale.Crop,
-                        painter = rememberAsyncImagePainter(user.image),
-                        contentDescription = ""
-                    )
+                    Avatar(null, textColor = darkGray)
                 }
 
             }
@@ -184,7 +177,7 @@ fun AppBar(user: User, textSearch: String, search: (String) -> Unit, onSearchCli
                         .padding(vertical = 0.dp),
                     onSearch = {
                         try {
-                            onSearchClick(textSearch.toInt())
+                            onSearchClick(textSearch)
                         } catch (ex: Exception) {
                         }
 
@@ -199,68 +192,10 @@ fun AppBar(user: User, textSearch: String, search: (String) -> Unit, onSearchCli
 }
 
 @Composable
-fun MyCard(icon: Int, title: String, description: String, onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .blur(5.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
-            .height(100.dp)
-            .padding(10.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .background(linearGradientBrush)
-            .clickable {
-                onClick()
-                Log.d("changeIndex", "000")
-            },
-
-
-        ) {
-        Row(modifier = Modifier.fillMaxSize()) {
-            Box(
-                modifier = Modifier
-                    .width(50.dp)
-                    .height(50.dp)
-                    .align(alignment = Alignment.CenterVertically)
-                    .padding(start = 5.dp)
-                    .clip(RoundedCornerShape(5.dp))
-                    .background(White.copy(0.5f))
-
-            ) {
-                Image(
-                    painter = painterResource(id = icon),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(10.dp)
-
-                )
-            }
-            Box {
-                Column {
-                    Text(
-                        modifier = Modifier
-                            .padding(top = 10.dp, start = 10.dp),
-                        text = title, style = TextStyle(fontSize = 18.sp)
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = 10.dp),
-                        text = description,
-                        style = TextStyle(fontSize = 14.sp, color = Color.White.copy(0.5f))
-                    )
-                }
-
-            }
-
-        }
-    }
-}
-
-
-@Composable
-fun CopyId() {
+fun CopyId(id: String) {
     Row {
         Text(
-            text = "JHN2D5",
+            text = id,
             textAlign = TextAlign.Start, color = Gray,
             style = MaterialTheme.typography.h4
         )
@@ -278,7 +213,7 @@ fun CopyId() {
 @Preview
 @Composable
 fun prevs() {
-    var user =
-        User(id = 0, username = "abdellah", email = "@egample.com", token = "", image = "", "")
+    //var user =
+    //User(id = 0, username = "abdellah", email = "@egample.com", token = "", image = "", "")
     //AppBar(user)
 }

@@ -11,6 +11,7 @@ import com.example.testfriends_jetpackcompose.data.DataStoreRepository
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.repository.LoginRepo
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ALREADY_SIGN
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.util.Utils.Companion.isEmailValid
 import com.google.android.gms.tasks.OnCompleteListener
@@ -38,17 +39,16 @@ class LoginViewModel @Inject constructor(
 
     private var auth: FirebaseAuth= Firebase.auth
 
-
     init {
         viewModelScope.launch {
             repository.readUserInfo().collect { user ->
                 if (user == "")
                     return@collect
-                Log.d("auth_user", user)
                 val userAuth = Utils.convertToUser(user)
                 email.value = userAuth.username
                 userState.value = userAuth
                 isAuth.value = true
+                ME = userAuth
             }
         }
     }
@@ -92,43 +92,35 @@ class LoginViewModel @Inject constructor(
     }
 
     fun saveUser(user: User) {
-        //val user: User = User(0, "00000", email.value, 0)
         try {
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
                     Log.w("Token", "Fetching FCM registration token failed", task.exception)
                     return@OnCompleteListener
                 }
-                // Get new FCM registration token
+
                 user.token = task.result
                 viewModelScope.launch(Dispatchers.IO) {
-                    var response = remoteRepo.insetUser(user = user)
-                    Log.d("userReq", response.body().toString())
-                    repository.saveUser(user = user.toString())
+                    val response = remoteRepo.insetUser(user = user)
+                    if (response.isSuccessful) {
+                        user.id = response.body()!!
+                        repository.saveUser(user = Utils.convertUserToJson(user = user))
+                    }
+
                 }
             })
-
-
         } catch (ex: Exception) {
             Log.d("Tokenfirebase", ex.toString())
         }
     }
 
-    fun getUser() {
-        var userInfo = repository.readUserInfo()
-        Log.d("Auth_user", userInfo.toString())
-    }
-
-
     fun getUserSafe() {
-
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                val response = remoteRepo.getUser(12)
+                //val response = remoteRepo.getUser(12)
                 //Log.d("Tag_quote", response.toString())
                 //userNetworkResult.value=NetworkResults.Success("")
             }
-
             //userNetworkResult.value = handle(response)
 
         } catch (ex: Exception) {

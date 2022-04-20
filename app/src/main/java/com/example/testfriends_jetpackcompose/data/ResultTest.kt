@@ -11,7 +11,7 @@ data class ResultTest(
     val Receiver: Int,
     @SerializedName("answers")
     val answers: String,
-    @SerializedName("ReceiverName")
+    @SerializedName("receiverName")
     val ReceiverName: String
 )
 

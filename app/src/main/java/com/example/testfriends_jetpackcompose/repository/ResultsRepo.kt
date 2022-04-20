@@ -7,13 +7,19 @@ import javax.inject.Inject
 
 class ResultsRepo @Inject constructor(private var remote: Remote) {
 
-    suspend fun updateMyQuestions(id: Int, questions: String) =
-        remote.updateMyQuestions(id, questions)
+    suspend fun updateMyQuestions(id: Int, invate: String, questions: String) =
+        remote.updateMyQuestions(id = id, invate = invate, questions = questions)
 
-    suspend fun challenge(id: Int) = remote.getUser(id)
+    suspend fun challenge(id: String) = remote.getUser(id)
 
-    suspend fun createResults(sender: Int, receiver: Int, answers: String, token: String) =
-        remote.createResults(sender, receiver, answers, token)
+    suspend fun createResults(
+        sender: Int,
+        receiver: Int,
+        answers: String,
+        token: String,
+        receiverName: String
+    ) =
+        remote.createResults(sender, receiver, answers, token, receiverName)
 
     suspend fun getResults(id: Int): Response<ListResults> = remote.getResults(id)
 }

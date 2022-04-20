@@ -7,10 +7,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.testfriends_jetpackcompose.data.DataStoreRepository
 import com.example.testfriends_jetpackcompose.data.ListResults
 import com.example.testfriends_jetpackcompose.data.Question
 import com.example.testfriends_jetpackcompose.repository.ResultsRepo
 import com.example.testfriends_jetpackcompose.util.Constant
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
+import com.example.testfriends_jetpackcompose.util.Utils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateTestViewModel @Inject constructor(
     @ApplicationContext val context: Context,
-    private val resultRepo: ResultsRepo
+    private val resultRepo: ResultsRepo,
 ) :
 
     ViewModel() {
@@ -35,7 +38,8 @@ class CreateTestViewModel @Inject constructor(
     var resultsList = mutableStateOf<ListResults?>(null)
     //private val questions = MutableStateFlow<question>
 
-    //var questions by mutableStateOf(_questions)
+    var myAnswers by mutableStateOf("")
+        private set
 
 
     var index by mutableStateOf(0)
@@ -58,29 +62,39 @@ class CreateTestViewModel @Inject constructor(
         question[index].realAnswerImg = img
     }
 
-    fun updateMyQuestions(id: Int) = viewModelScope.launch(Dispatchers.IO) {
-        //Log.d("updateMyQuestions","begin")
-        var stringQuetions = ""
-        question.forEach {
-            stringQuetions += it.realAnswer + ","
+    fun updateMyQuestions(dataStoreRepository: DataStoreRepository) =
+        viewModelScope.launch(Dispatchers.IO) {
+
+            question.forEach {
+                myAnswers += it.realAnswer + ","
+            }
+            val invateId = Utils.generateId(ME!!.username) + ME!!.id
+            ME!!.myQuestions = myAnswers
+            ME!!.inviteId = invateId
+            dataStoreRepository.saveUser(Utils.convertUserToJson(ME!!))
+            val response = resultRepo.updateMyQuestions(ME!!.id, invateId, myAnswers)
+            //Log.d("updateMyQuestions", response.body().toString())
         }
 
-        Log.d("question", stringQuetions)
-        val response = resultRepo.updateMyQuestions(id, stringQuetions)
-        Log.d("updateMyQuestions", response.body().toString())
-    }
-
-    fun createResults(sender: Int, receiver: Int, answers: String, token: String) =
-        viewModelScope.launch(Dispatchers.IO) {
-            Log.d("updateMyQuestions", token)
-            resultRepo.createResults(sender, receiver, answers, token)
+    fun createResults() =
+        viewModelScope.launch {
+            var myAnswers = ""
+            for (item in question) {
+                myAnswers += item.realAnswer + ","
+            }
+            resultRepo.createResults(
+                Constant.SENDER!!.id, ME!!.id, myAnswers, Constant.SENDER!!.token,
+                ME!!.username
+            )
         }
 
 
     fun getResults() = viewModelScope.launch(Dispatchers.IO) {
-        val results = resultRepo.getResults(38)
+        val results = resultRepo.getResults(ME!!.id)
         if (results.isSuccessful) {
             Log.d("results", results.body().toString())
+
+
             resultsList.value = results.body()
         } else
             Log.d("results", results.message())

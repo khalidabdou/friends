@@ -5,11 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,7 +18,6 @@ import androidx.navigation.NavHostController
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
-import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
 import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
@@ -28,7 +25,9 @@ import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 
 @Composable
 fun FinalScreen(navHostController: NavHostController, viewModel: CreateTestViewModel) {
+    val scaffoldState = rememberScaffoldState()
     Scaffold(
+        scaffoldState = scaffoldState,
         floatingActionButton = {
             FloatingActionButton(backgroundColor = Color.White, onClick = {
             }) {
@@ -40,12 +39,11 @@ fun FinalScreen(navHostController: NavHostController, viewModel: CreateTestViewM
             }
         }
     ) {
-        var myAnswers = ""
-        for (item in viewModel.question) {
-            myAnswers += item.realAnswer + ","
+
+        val results = Utils.compareResults(SENDER!!.myQuestions, viewModel.myAnswers)
+        LaunchedEffect(key1 = scaffoldState) {
+            viewModel.createResults()
         }
-        val results = Utils.compareResults(SENDER!!.myQuestions, myAnswers)
-        viewModel.createResults(SENDER!!.id, ME!!.id, myAnswers, SENDER!!.token)
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -131,6 +129,6 @@ fun Friend(user: String) {
                 )
         )
         Text(text = user, style = MaterialTheme.typography.h3, color = Color.White)
-        CopyId()
+        CopyId("share")
     }
 }

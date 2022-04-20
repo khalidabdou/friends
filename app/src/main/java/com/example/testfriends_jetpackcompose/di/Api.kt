@@ -13,14 +13,15 @@ interface Api {
     @POST("insertUser")
     suspend fun insertUser(
         @Body user: User
-    ): Response<Any>
+    ): Response<Int>
 
     @GET("getUser")
-    suspend fun getUser(@Query("id") id: Int): Response<User>
+    suspend fun getUser(@Query("id") id: String): Response<User>
 
     @POST("updateMyQuestions")
     suspend fun updateMyQuestions(
         @Query("id") id: Int,
+        @Query("inviteId") anviteId: String,
         @Query("questions") questions: String
     ): Response<Any>
 
@@ -29,7 +30,8 @@ interface Api {
         @Query("sender") sender: Int,
         @Query("receiver") receiver: Int,
         @Query("answers") answers: String,
-        @Query("token") token: String
+        @Query("token") token: String,
+        @Query("ReceiverName") ReceiverName: String
     )
 
     @GET("getResults")

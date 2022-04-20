@@ -8,11 +8,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testfriends_jetpackcompose.data.DataStoreRepository
 import com.example.testfriends_jetpackcompose.navigation.Screen
-import dagger.hilt.android.lifecycle.HiltViewModel
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
+import com.example.testfriends_jetpackcompose.util.Utils
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
-import kotlin.math.log
 
 
 class SplashViewModel @Inject constructor(
@@ -31,6 +30,7 @@ class SplashViewModel @Inject constructor(
                 if (user == "") {
                     _startDestination.value = Screen.Welcome.route
                 } else {
+                    ME = Utils.convertToUser(user)
                     _startDestination.value = Screen.Home.route
                 }
                 Log.d("login",user)

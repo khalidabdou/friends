@@ -20,7 +20,15 @@ class Utils {
             return gson.fromJson(userString, User::class.java)
         }
 
+        fun convertUserToJson(user: User): String {
+            val gson = Gson()
+            return gson.toJson(user)
+
+        }
+
         fun compareResults(sender: String, myAnswers: String): Int {
+            if (myAnswers == "")
+                return 0
             var res = 0
             val list1 = sender.split(",").toTypedArray()
             val list2 = myAnswers.split(",").toTypedArray()
@@ -34,6 +42,25 @@ class Utils {
             Log.d("question q", myAnswers)
             res = (res * 100) / list1.size
             return res
+        }
+
+        fun score(sender: String, myAnswers: String): String {
+            if (myAnswers == "")
+                return ""
+            var res = 0
+            val list1 = sender.split(",").toTypedArray()
+            val list2 = myAnswers.split(",").toTypedArray()
+            var i = 0
+            for (item in list1) {
+                if (item == list2[i])
+                    res++
+                i++
+            }
+            return "$res/${list1.size}"
+        }
+
+        fun generateId(username: String): String {
+            return username.substring(0, 2)
         }
 
     }

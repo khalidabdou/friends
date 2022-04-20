@@ -8,10 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,182 +37,230 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
     var question = viewModel.question
     var visible by remember { mutableStateOf(true) }
 
-    viewModel.getResults()
 
     fun setRealAnswer(answer: String, img: Int) {
         viewModel.setAnswer(answer = answer, img)
         if (viewModel.incrementIndex()) {
-            if (SENDER == null)
+            if (SENDER == null) {
                 navHostController.navigate("Share_screen")
-            else navHostController.navigate("Final_screen")
+            } else {
+                navHostController.navigate("Final_screen")
+            }
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(backgroundWhite),
-        verticalArrangement = Arrangement.Center
+    val scaffoldState = rememberScaffoldState()
+    Scaffold(scaffoldState = scaffoldState,
+        topBar = {
+            ActionBar("${index + 1}/${question.size}")
+        }
     ) {
-        if (SENDER != null)
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-                    .padding(20.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(
-                        Color.White
-                    )
-            ) {
-                Spacer(modifier = Modifier.width(10.dp))
-                Image(
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundWhite),
+            verticalArrangement = Arrangement.Center
+        ) {
+            if (SENDER != null)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
-                        .size(50.dp)
-                        .clip(
-                            CircleShape
-                        ),
-                    contentScale = ContentScale.Crop,
-                    painter = rememberAsyncImagePainter(SENDER!!.image),
-                    contentDescription = ""
-                )
-                Spacer(modifier = Modifier.width(5.dp))
-                Text(
-                    text = "answer for ${SENDER!!.username} questions ",
-                    style = MaterialTheme.typography.body1,
-                    color = darkGray
-                )
+                        .fillMaxWidth()
+                        .height(100.dp)
+                        .padding(20.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(
+                            Color.White
+                        )
+                ) {
+                    Spacer(modifier = Modifier.width(10.dp))
+                    Image(
+                        modifier = Modifier
+                            .size(50.dp)
+                            .clip(
+                                CircleShape
+                            ),
+                        contentScale = ContentScale.Crop,
+                        painter = rememberAsyncImagePainter(SENDER!!.image),
+                        contentDescription = ""
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(
+                        text = "answer for ${SENDER!!.username} questions ",
+                        style = MaterialTheme.typography.body1,
+                        color = darkGray
+                    )
+
+                }
+            Box {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(150.dp)
+                        .padding(10.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(darkGray),
+                    Alignment.Center
+
+                ) {
+                    Text(
+                        text = viewModel.questions[index].question,
+                        style = MaterialTheme.typography.body1,
+                    )
+                }
+
 
             }
-        Box {
-            Box(
+
+
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp)
-                    .padding(10.dp)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(darkGray),
-                Alignment.Center
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
 
             ) {
-                Text(
-                    text = viewModel.questions[index].question,
-                    style = MaterialTheme.typography.body1,
-                )
+                CardAnswer(
+                    R.drawable.kno,
+                    answer = viewModel.questions[index].answer1,
+                    realAnswer = question[index].realAnswer,
+                    visible = visible
+                ) { answer, realAnswerImg -> setRealAnswer(answer, realAnswerImg) }
+                Spacer(modifier = Modifier.width(20.dp))
+                CardAnswer(
+                    R.drawable.colors,
+                    answer = viewModel.questions[index].answer2,
+                    realAnswer = question[index].realAnswer,
+                    visible = visible
+                ) { answer, img ->
+                    setRealAnswer(answer = answer, img = img)
+                }
             }
-            Box(
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
                 modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(Color.White)
-                    .align(Alignment.TopEnd),
-                Alignment.Center
-
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = "${index + 1}/${question.size}",
-                    color = Color.Black,
-                )
+                CardAnswer(
+                    R.drawable.knowledge,
+                    answer = viewModel.questions[index].answer3,
+                    realAnswer = question[index].realAnswer,
+                    visible = visible
+                ) { answer, img ->
+                    setRealAnswer(answer = answer, img = img)
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+                CardAnswer(
+                    R.drawable.maths,
+                    answer = viewModel.questions[index].answer4,
+                    realAnswer = question[index].realAnswer,
+                    visible = visible
+                ) { answer, img ->
+                    setRealAnswer(answer = answer, img = img)
+                }
             }
-
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .width(50.dp)
+                        .height(50.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colors.primary)
+                        .clickable {
+                            viewModel.decrementIndex()
+                        }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_before),
+                        contentDescription = ""
+                    )
+                }
+                Spacer(modifier = Modifier.width(20.dp))
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .width(50.dp)
+                        .height(50.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colors.primary)
+                        .clickable {
+                            Log.d("Answer", question[index].realAnswer + " index$index")
+                            if (question[index].realAnswer != "")
+                                if (viewModel.incrementIndex()) {
+                                    if (SENDER == null)
+                                        navHostController.navigate("Share_screen")
+                                    else navHostController.navigate("Final_screen")
+                                }
+                        }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_next),
+                        contentDescription = ""
+                    )
+                }
+            }
         }
+    }
+
+}
 
 
-        Row(
+@Composable
+fun ActionBar(index: String) {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp)
+            .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp))
+            .background(darkGray)
+            .padding(10.dp)
+    ) {
+        Box(
             modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-
-        ) {
-            CardAnswer(
-                R.drawable.kno,
-                answer = viewModel.questions[index].answer1,
-                realAnswer = question[index].realAnswer,
-                visible = visible
-            ) { answer, realAnswerImg -> setRealAnswer(answer, realAnswerImg) }
-            Spacer(modifier = Modifier.width(20.dp))
-            CardAnswer(
-                R.drawable.colors,
-                answer = viewModel.questions[index].answer2,
-                realAnswer = question[index].realAnswer,
-                visible = visible
-            ) { answer, img ->
-                setRealAnswer(answer = answer, img = img)
-            }
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            CardAnswer(
-                R.drawable.knowledge,
-                answer = viewModel.questions[index].answer3,
-                realAnswer = question[index].realAnswer,
-                visible = visible
-            ) { answer, img ->
-                setRealAnswer(answer = answer, img = img)
-            }
-            Spacer(modifier = Modifier.width(20.dp))
-            CardAnswer(
-                R.drawable.maths,
-                answer = viewModel.questions[index].answer4,
-                realAnswer = question[index].realAnswer,
-                visible = visible
-            ) { answer, img ->
-                setRealAnswer(answer = answer, img = img)
-            }
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .width(50.dp)
-                    .height(50.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colors.primary)
-                    .clickable {
-                        viewModel.decrementIndex()
-                    }
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_before),
-                    contentDescription = ""
+                .size(40.dp)
+                .clip(RoundedCornerShape(5.dp))
+                .background(
+                    backgroundWhite
                 )
-            }
-            Spacer(modifier = Modifier.width(20.dp))
-            Box(
-                contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_before),
+                contentDescription = "",
+                tint = darkGray,
                 modifier = Modifier
-                    .width(50.dp)
-                    .height(50.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colors.primary)
-                    .clickable {
-                        Log.d("Answer", question[index].realAnswer + " index$index")
-                        if (question[index].realAnswer != "")
-                            if (viewModel.incrementIndex()) {
-                                if (SENDER == null)
-                                    navHostController.navigate("Share_screen")
-                                else navHostController.navigate("Final_screen")
-                            }
-                    }
+                    .size(30.dp)
+                    .align(
+                        Alignment.Center
+                    )
+            )
+        }
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .size(40.dp)
+                .clip(RoundedCornerShape(5.dp))
+                .background(Color.White),
+
+
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_next),
-                    contentDescription = ""
-                )
-            }
+            Text(
+                text = index,
+                color = Color.Black,
+                modifier = Modifier
+                    .size(30.dp)
+
+            )
         }
     }
 }

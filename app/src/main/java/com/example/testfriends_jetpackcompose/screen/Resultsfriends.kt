@@ -1,8 +1,6 @@
 package com.example.testfriends_jetpackcompose.screen
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
@@ -28,25 +26,21 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.ListResults
 import com.example.testfriends_jetpackcompose.data.ResultTest
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
-import com.example.testfriends_jetpackcompose.util.Constant
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Utils
-import com.example.testfriends_jetpackcompose.util.backgrounds.Companion.linearGradientBrush
 
 @Composable
 fun ResultsFriends(resultTest: ListResults) {
@@ -59,93 +53,12 @@ fun ResultsFriends(resultTest: ListResults) {
     ) {
 
         items(resultTest.listResults.size) {
+
+
             ItemResults(resultTest.listResults[it])
         }
     }
 }
-
-@Composable
-fun ItemResult(item: ResultTest) {
-    var expanded by remember {
-        mutableStateOf(false)
-    }
-    Box(
-        modifier = Modifier
-            .animateContentSize(
-                animationSpec = tween(durationMillis = 300, easing = LinearOutSlowInEasing)
-            )
-            .clickable {
-                expanded = !expanded
-            }
-
-    ) {
-
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 50.dp, start = 10.dp, end = 10.dp)
-                .clip(RoundedCornerShape(10.dp))
-                .background(linearGradientBrush)
-
-        ) {
-            Column {
-                Row(
-                    horizontalArrangement = Arrangement.SpaceAround,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    //User(item.Sender)
-                    //User(item.Receiver)
-                }
-                if (expanded) {
-                    Box(
-                        modifier = Modifier
-                            .width(100.dp)
-                            .height(100.dp)
-                            .clip(RoundedCornerShape(5.dp))
-                            .background(Color.White)
-                            .align(Alignment.CenterHorizontally)
-                    ) {
-                        Image(
-                            modifier = Modifier.padding(5.dp),
-                            painter = painterResource(id = R.drawable.qr),
-                            contentDescription = "",
-                        )
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(5.dp),
-                        horizontalArrangement = Arrangement.End,
-
-                        ) {
-                        BoxButton(icon = R.drawable.share, 30, onClick = {})
-                        Spacer(modifier = Modifier.width(4.dp))
-                        BoxButton(icon = R.drawable.download, 30, onClick = {})
-
-                    }
-                }
-            }
-        }
-        Box(
-            modifier = Modifier
-                .width(70.dp)
-                .align(Alignment.TopCenter),
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.love),
-                contentDescription = "",
-                tint = backgroundWhite
-            )
-            Text(
-                modifier = Modifier.align(Alignment.Center),
-                style = TextStyle(fontSize = 16.sp),
-                text = item.ReceiverName,
-                color = Black.copy(0.7f)
-            )
-        }
-    }
-}
-
 
 @Composable
 fun User(user: User) {
@@ -210,26 +123,19 @@ fun BoxButton(icon: Int, height: Int, onClick: () -> Unit) {
 @Composable
 fun ItemResults(item: ResultTest) {
     Row(
+        verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
-            .padding(6.dp)
+            .padding(5.dp)
             .clip(RoundedCornerShape(5.dp))
             .background(White)
     ) {
 
-        Image(
-            modifier = Modifier
-                .size(70.dp)
-                .padding(10.dp)
-                .clip(
-                    CircleShape
-                )
-                .weight(1f),
-            contentScale = ContentScale.Crop,
-            painter = painterResource(id = R.drawable.avatar),
-            contentDescription = "",
-        )
+        Spacer(modifier = Modifier.width(5.dp))
+        Avatar(item = "AB", backgroundWhite)
+
+        Spacer(modifier = Modifier.width(3.dp))
         Column(
             verticalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier
@@ -242,7 +148,11 @@ fun ItemResults(item: ResultTest) {
                 color = Black.copy(0.8f),
                 style = MaterialTheme.typography.h3
             )
-            Text(text = "5/20", color = Color.Gray, style = MaterialTheme.typography.body1)
+            Text(
+                text = Utils.score(item.answers, ME!!.myQuestions),
+                color = Color.Gray,
+                style = MaterialTheme.typography.body1
+            )
         }
         Box(
             contentAlignment = Alignment.Center,
@@ -252,7 +162,10 @@ fun ItemResults(item: ResultTest) {
         ) {
             CustomComponent(
                 canvasSize = 80.dp,
-                indicatorValue = Utils.compareResults(item.answers, Constant.ME!!.myQuestions),
+                indicatorValue = if (ME!!.myQuestions != null) Utils.compareResults(
+                    item.answers,
+                    ME!!.myQuestions
+                ) else 0,
                 backgroundIndicatorStrokeWidth = 25f,
                 foregroundIndicatorStrokeWidth = 25f, smallText = ""
             )

@@ -38,7 +38,6 @@ import com.example.testfriends_jetpackcompose.viewmodel.LoginViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 
 
@@ -65,6 +64,7 @@ fun LoginScreen(navController: NavController) {
 
                 var user = User(
                     id = 0,
+                    inviteId = "",
                     username = account.displayName!!,
                     token = "",
                     email = account.email!!,

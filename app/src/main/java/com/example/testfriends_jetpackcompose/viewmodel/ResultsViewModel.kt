@@ -20,17 +20,29 @@ class ResultsViewModel @Inject constructor(
 ) : ViewModel() {
 
     val user1 =
-        User(id = 0, username = "", email = "jhon wils", image = "", token = "", myQuestions = "")
+        User(
+            id = 0,
+            username = "",
+            email = "jhon wils",
+            image = "",
+            token = "",
+            myQuestions = "",
+            inviteId = ""
+        )
     val user2 =
-        User(id = 0, username = "", email = "jhon wils", image = "", token = "", myQuestions = "")
-    //val res1 = ResultTest(0, user1, user2, "50%")
+        User(
+            id = 0,
+            username = "",
+            email = "jhon wils",
+            image = "",
+            token = "",
+            myQuestions = "",
+            inviteId = ""
+        )
 
     var challenge = mutableStateOf<NetworkResults<User>>(NetworkResults.Loading())
 
-    //private val listResult = listOf<ResultTest>(res1, res1, res1)
-
     var userAuth = mutableStateOf(user1)
-
     var search = mutableStateOf("")
 
 
@@ -45,17 +57,12 @@ class ResultsViewModel @Inject constructor(
         }
     }
 
-
-    fun updateMyQuestions(id: Int, questions: String) = viewModelScope.launch(Dispatchers.IO) {
-        resultsRepo.updateMyQuestions(id, questions)
-    }
-
     fun setSearchText(text: String) {
         search.value = text
     }
 
 
-    fun challenge(id: Int) {
+    fun challenge(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             Log.d("question", "begin")
             try {
