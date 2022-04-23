@@ -11,7 +11,7 @@ class Remote @Inject constructor(
         return api.insertUser(user)
     }
 
-    suspend fun getUser(id: String): Response<User> {
+    suspend fun getUser(id: String): Response<User?> {
         return api.getUser(id = id)
     }
 
@@ -27,7 +27,7 @@ class Remote @Inject constructor(
     ) =
         api.createResult(sender, receiver, answers, token, receiverName)
 
-    suspend fun getResults(id: Int): Response<ListResults> = api.getMyResults(id)
+    suspend fun getResults(id: Int): Response<ListResults?> = api.getMyResults(id)
 
 
 }

@@ -16,7 +16,7 @@ interface Api {
     ): Response<Int>
 
     @GET("getUser")
-    suspend fun getUser(@Query("id") id: String): Response<User>
+    suspend fun getUser(@Query("id") id: String): Response<User?>
 
     @POST("updateMyQuestions")
     suspend fun updateMyQuestions(
@@ -37,7 +37,7 @@ interface Api {
     @GET("getResults")
     suspend fun getMyResults(
         @Query("id") id: Int,
-    ): Response<ListResults>
+    ): Response<ListResults?>
 
 
 }

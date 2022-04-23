@@ -10,22 +10,27 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
+import coil.compose.AsyncImage
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.DataStoreRepository
 import com.example.testfriends_jetpackcompose.data.Question
-import com.example.testfriends_jetpackcompose.util.Constant.Companion.questionList
+import com.example.testfriends_jetpackcompose.ui.theme.darkGray
+import com.example.testfriends_jetpackcompose.util.Constant
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
+import com.example.testfriends_jetpackcompose.util.Utils
+import com.example.testfriends_jetpackcompose.util.Utils.Companion.copyTextToClipboard
+import com.example.testfriends_jetpackcompose.util.Utils.Companion.shareChallenge
 import com.example.testfriends_jetpackcompose.util.backgrounds.Companion.linearGradientBrush
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 
@@ -33,68 +38,85 @@ import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 @Composable
 fun ShareTest(viewModel: CreateTestViewModel) {
 
-
+    val context = LocalContext.current
     val dataStoreRepository = DataStoreRepository(context = LocalContext.current)
-
-    viewModel.updateMyQuestions(dataStoreRepository)
-    Image(
-        painter = painterResource(id = R.drawable.back),
-        contentDescription = "", modifier = Modifier.fillMaxSize(),
-        contentScale = ContentScale.Crop
-    )
-    Column {
-        LazyColumn(modifier = Modifier.weight(5f)) {
-            items(viewModel.questions.size) {
-                ItemAnswer(viewModel.question[it])
-            }
-        }
-
-        ShareBox(onShare = {
-            Log.d("updateMyQuestions", "begin")
-
-        })
+    var scaffoldState = rememberScaffoldState()
+    LaunchedEffect(key1 = scaffoldState) {
+        viewModel.updateMyQuestions(dataStoreRepository)
     }
+    var shortLink by remember { mutableStateOf("") }
+    Utils.generateSharingLink(
+        deepLink = "${Constant.PREFIX}/ab22".toUri()
+    ) { generatedLink ->
+        shortLink =
+            context.getString(R.string.share_text) + " " + generatedLink + " Or Use my invitation code " + ME!!.inviteId
+        Log.d("dynamic_link", generatedLink)
+    }
+    Scaffold {
+        Column {
+            LazyColumn(modifier = Modifier.weight(5f)) {
+                items(viewModel.questions.size) {
+                    ItemAnswer(viewModel.question[it])
+                }
+            }
+            ShareBox(
+                text = shortLink,
+                onShare = {
+                    shareChallenge(context = context, shortLink)
+                },
+                onCopyText = {
+                    copyTextToClipboard(shortLink, context = context)
+                }
+
+            )
+        }
+    }
+
+
 }
 
 @Composable
 fun ItemAnswer(question: Question) {
+    var imgUrl = "${Constant.BASE_URL}english/${question.id}/${question.realAnswer.img}"
+    if (question.realAnswer.img == "")
+        imgUrl = "${Constant.BASE_URL}english/3/4.png"
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp)
             .clip(RoundedCornerShape(10.dp))
             .border(BorderStroke(2.dp, linearGradientBrush), shape = RoundedCornerShape(10.dp))
-
             .background(Color.White)
     ) {
 
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(10.dp)
+        ) {
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                style = MaterialTheme.typography.h4,
+                style = MaterialTheme.typography.body1,
                 text = question.question,
-
+                color = darkGray,
                 modifier = Modifier
                     .weight(4f)
-                    .padding(top = 5.dp, start = 5.dp), lineHeight = 15.sp
+
             )
             Column(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxSize()
             ) {
-                Image(
-                    painter = painterResource(id = question.realAnswerImg),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    alignment = Alignment.Center,
-                    contentDescription = "",
+                AsyncImage(
+                    model = imgUrl, contentDescription = null, modifier = Modifier.size(100.dp)
                 )
                 Text(
-                    text = question.realAnswer,
+                    text = question.realAnswer.text,
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.h4,
+                    style = MaterialTheme.typography.body1,
+                    color = darkGray,
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.weight(1f))
@@ -153,7 +175,7 @@ fun BoxImage(img: Int, answer: String) {
 @Composable
 fun item() {
     //BoxImage(R.drawable.knowledge,"sjfgkdsajfhjdesf")
-    ItemAnswer(question = questionList[0])
+    //ItemAnswer(question = questionList[0])
 }
 
 @Preview
@@ -163,7 +185,8 @@ fun ShareBoxPrv() {
 }
 
 @Composable
-fun ShareBox(onShare:()->Unit) {
+fun ShareBox(text: String, onShare: () -> Unit, onCopyText: () -> Unit) {
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -184,7 +207,7 @@ fun ShareBox(onShare:()->Unit) {
             }
             Column {
                 TextField(
-                    value = "A Verizon is the perfect device for taking Wi-Fi access with you. More robust than your smartphone's mobile hotspot, a Jetpack can connect multiple",
+                    value = text,
                     maxLines = 5,
                     singleLine = false,
                     onValueChange = {},
@@ -195,7 +218,7 @@ fun ShareBox(onShare:()->Unit) {
                         focusedIndicatorColor = Color.Transparent,
                         unfocusedIndicatorColor = Color.Transparent
                     ),
-                    textStyle = MaterialTheme.typography.h4
+                    textStyle = MaterialTheme.typography.body1
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Row(
@@ -205,7 +228,7 @@ fun ShareBox(onShare:()->Unit) {
                 ) {
                     Button(
                         onClick = {
-                                  onShare()
+                            onShare()
                         },
                         contentPadding = PaddingValues(
                             start = 20.dp,
@@ -216,7 +239,6 @@ fun ShareBox(onShare:()->Unit) {
                         colors = ButtonDefaults.buttonColors(contentColor = Color.White)
 
                     ) {
-                        // Inner content including an icon and a text label
                         Icon(
                             painter = painterResource(id = R.drawable.share),
                             contentDescription = "",
@@ -228,7 +250,7 @@ fun ShareBox(onShare:()->Unit) {
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     BoxButton(icon = R.drawable.link, 42,
                         onClick = {
-                            onShare()
+                            onCopyText()
                         })
                 }
 

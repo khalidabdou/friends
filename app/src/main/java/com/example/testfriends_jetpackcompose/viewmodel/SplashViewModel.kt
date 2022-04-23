@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.testfriends_jetpackcompose.data.DataStoreRepository
 import com.example.testfriends_jetpackcompose.navigation.Screen
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
 import com.example.testfriends_jetpackcompose.util.Utils
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,9 +32,12 @@ class SplashViewModel @Inject constructor(
                     _startDestination.value = Screen.Welcome.route
                 } else {
                     ME = Utils.convertToUser(user)
-                    _startDestination.value = Screen.Home.route
+                    Log.d("user", ME!!.myQuestions.toString())
+                    if (SENDER != null)
+                        _startDestination.value = Screen.Create.route
+                    else
+                        _startDestination.value = Screen.Home.route
                 }
-                Log.d("login",user)
             }
             _isLoading.value = false
         }

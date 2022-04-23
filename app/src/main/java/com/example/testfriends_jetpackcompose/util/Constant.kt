@@ -1,8 +1,6 @@
 package com.example.testfriends_jetpackcompose.util
 
 import android.content.Context
-import com.example.testfriends_jetpackcompose.R
-import com.example.testfriends_jetpackcompose.data.Question
 import com.example.testfriends_jetpackcompose.data.User
 import java.io.IOException
 
@@ -10,114 +8,14 @@ class Constant {
 
     companion object {
 
-        val BASE_URL = "https://testfriendss.herokuapp.com/api/"
+        val PREFIX: String = "https://testfriends.page.link"
+        val BASE_URL = "https://testfriendss.herokuapp.com/"
+
         val ALREADY_SIGN = "address is already in use by another account"
 
         var SENDER: User? = null
         var ME: User? = null
 
-
-        val questionList =
-            listOf(
-                Question(
-                    0,
-                    "qqq",
-                    "",
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    R.drawable.knowledge,
-                    R.drawable.maths,
-                    R.drawable.kno,
-                    R.drawable.colors,
-                ),
-                Question(
-                    1,
-                    "aaa",
-                    "",
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    R.drawable.knowledge,
-                    R.drawable.maths,
-                    R.drawable.kno,
-                    R.drawable.colors,
-                ),
-                Question(
-                    2,
-                    "sss",
-                    "",
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    R.drawable.knowledge,
-                    R.drawable.maths,
-                    R.drawable.kno,
-                    R.drawable.colors,
-                ),
-                Question(
-                    3,
-                    "ddd",
-                    "",
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    R.drawable.knowledge,
-                    R.drawable.maths,
-                    R.drawable.kno,
-                    R.drawable.colors,
-                ),
-                Question(
-                    4,
-                    "dsf",
-                    "",
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    R.drawable.knowledge,
-                    R.drawable.maths,
-                    R.drawable.kno,
-                    R.drawable.colors,
-                ),
-                Question(
-                    5,
-                    "df",
-                    "",
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    R.drawable.knowledge,
-                    R.drawable.maths,
-                    R.drawable.kno,
-                    R.drawable.colors,
-                ),
-                Question(
-                    6,
-                    "df",
-                    "",
-                    0,
-                    "",
-                    "",
-                    "",
-                    "",
-                    R.drawable.knowledge,
-                    R.drawable.maths,
-                    R.drawable.kno,
-                    R.drawable.colors,
-                ),
-            )
 
         fun getJsonDataFromAsset(context: Context, fileName: String): String? {
             val jsonString: String

@@ -1,11 +1,15 @@
 package com.example.testfriends_jetpackcompose.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -16,16 +20,28 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.testfriends_jetpackcompose.R
+import com.example.testfriends_jetpackcompose.navigation.Screen
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
-import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 
 
 @Composable
 fun FinalScreen(navHostController: NavHostController, viewModel: CreateTestViewModel) {
     val scaffoldState = rememberScaffoldState()
+    BackHandler {
+        navHostController.navigate(Screen.Home.route) {
+            popUpTo(Screen.FinalScreen.route) {
+                inclusive = true
+            }
+        }
+    }
+    LaunchedEffect(key1 = scaffoldState) {
+        viewModel.createResults()
+    }
+
     Scaffold(
         scaffoldState = scaffoldState,
         floatingActionButton = {
@@ -39,12 +55,6 @@ fun FinalScreen(navHostController: NavHostController, viewModel: CreateTestViewM
             }
         }
     ) {
-
-        val results = Utils.compareResults(SENDER!!.myQuestions, viewModel.myAnswers)
-        LaunchedEffect(key1 = scaffoldState) {
-            viewModel.createResults()
-        }
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
@@ -65,14 +75,14 @@ fun FinalScreen(navHostController: NavHostController, viewModel: CreateTestViewM
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    Friend("abdellah khalid")
+                    Friend(SENDER!!.username)
                     Image(
                         painter = painterResource(id = R.drawable.love),
                         contentDescription = "",
                         modifier = Modifier
                             .size(40.dp)
                     )
-                    Friend("mohamed mod")
+                    Friend(ME!!.username)
                 }
                 Box(
                     modifier = Modifier
@@ -85,7 +95,7 @@ fun FinalScreen(navHostController: NavHostController, viewModel: CreateTestViewM
                 ) {
                     CustomComponent(
                         canvasSize = 80.dp,
-                        indicatorValue = results,
+                        indicatorValue = viewModel.result,
                         maxIndicatorValue = 100,
                         backgroundIndicatorStrokeWidth = 25f,
                         foregroundIndicatorStrokeWidth = 25f, smallText = ""
@@ -112,6 +122,7 @@ fun FinalScreen(navHostController: NavHostController, viewModel: CreateTestViewM
     }
 
 
+
 }
 
 @Composable
@@ -128,7 +139,7 @@ fun Friend(user: String) {
                     CircleShape
                 )
         )
-        Text(text = user, style = MaterialTheme.typography.h3, color = Color.White)
-        CopyId("share")
+        Text(text = user)
     }
 }
+

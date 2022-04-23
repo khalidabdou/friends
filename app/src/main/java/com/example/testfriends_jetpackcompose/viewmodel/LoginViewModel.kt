@@ -11,7 +11,6 @@ import com.example.testfriends_jetpackcompose.data.DataStoreRepository
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.repository.LoginRepo
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ALREADY_SIGN
-import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.util.Utils.Companion.isEmailValid
 import com.google.android.gms.tasks.OnCompleteListener
@@ -38,20 +37,6 @@ class LoginViewModel @Inject constructor(
     var userNetworkResult: MutableLiveData<NetworkResults<User>> = MutableLiveData()
 
     private var auth: FirebaseAuth= Firebase.auth
-
-    init {
-        viewModelScope.launch {
-            repository.readUserInfo().collect { user ->
-                if (user == "")
-                    return@collect
-                val userAuth = Utils.convertToUser(user)
-                email.value = userAuth.username
-                userState.value = userAuth
-                isAuth.value = true
-                ME = userAuth
-            }
-        }
-    }
 
     private val _authState by lazy { MutableLiveData<AuthState>(AuthState.Idle) }
     val authState: LiveData<AuthState> = _authState
@@ -117,14 +102,10 @@ class LoginViewModel @Inject constructor(
     fun getUserSafe() {
         try {
             viewModelScope.launch(Dispatchers.IO) {
-                //val response = remoteRepo.getUser(12)
-                //Log.d("Tag_quote", response.toString())
-                //userNetworkResult.value=NetworkResults.Success("")
             }
             //userNetworkResult.value = handle(response)
 
         } catch (ex: Exception) {
-            Log.d("Tag_quote", ex.toString())
             userNetworkResult.value = NetworkResults.Error(ex.message)
         }
 
@@ -165,7 +146,6 @@ sealed class NetworkResults<T>(
     val data: T? = null,
     val message: String? = null
 ) {
-
     class Success<T>(data: T) : NetworkResults<T>(data)
     class Error<T>(message: String?, data: T? = null) : NetworkResults<T>(data, message)
     class Loading<T> : NetworkResults<T>()

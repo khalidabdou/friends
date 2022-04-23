@@ -36,9 +36,6 @@ fun SetupNavGraph(
         composable(route = Screen.Create.route) {
             TestMain(navHostController = navController, viewModel = viewModel)
         }
-        composable(route = Screen.Results.route) {
-            //ResultsFriends()
-        }
         composable(route = Screen.ShareTest.route) {
             ShareTest(viewModel=viewModel)
         }

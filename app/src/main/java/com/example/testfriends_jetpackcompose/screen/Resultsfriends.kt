@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.example.testfriends_jetpackcompose.R
-import com.example.testfriends_jetpackcompose.data.ListResults
 import com.example.testfriends_jetpackcompose.data.ResultTest
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
@@ -43,21 +42,31 @@ import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Utils
 
 @Composable
-fun ResultsFriends(resultTest: ListResults) {
+fun ResultsFriends(resultTest: List<ResultTest>) {
 
-
-    LazyColumn(
-        Modifier
-            .background(backgroundWhite)
-            .fillMaxSize()
-    ) {
-
-        items(resultTest.listResults.size) {
-
-
-            ItemResults(resultTest.listResults[it])
+    if (resultTest.isNullOrEmpty()) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.box),
+                contentDescription = "",
+                tint = darkGray, modifier = Modifier.size(120.dp)
+            )
         }
-    }
+    } else
+        LazyColumn(
+            Modifier
+                .background(backgroundWhite)
+                .fillMaxSize()
+        ) {
+
+            items(resultTest.size) {
+                ItemResults(resultTest[it])
+            }
+        }
 }
 
 @Composable
@@ -72,7 +81,7 @@ fun User(user: User) {
             Image(painter = painterResource(id = R.drawable.avatar), contentDescription = "")
         }
         Spacer(modifier = Modifier.height(5.dp))
-        Text(text = user.username, color = Black.copy(0.8f))
+        Text(text = user.username, style = MaterialTheme.typography.h4, color = Black.copy(0.8f))
     }
 }
 
@@ -121,7 +130,7 @@ fun BoxButton(icon: Int, height: Int, onClick: () -> Unit) {
 }
 
 @Composable
-fun ItemResults(item: ResultTest) {
+fun ItemResults(item: ResultTest, max: Int = 16) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -146,7 +155,7 @@ fun ItemResults(item: ResultTest) {
             Text(
                 text = "${item.ReceiverName}",
                 color = Black.copy(0.8f),
-                style = MaterialTheme.typography.h3
+                style = MaterialTheme.typography.h4
             )
             Text(
                 text = Utils.score(item.answers, ME!!.myQuestions),

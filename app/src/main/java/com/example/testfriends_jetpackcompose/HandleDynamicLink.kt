@@ -1,0 +1,131 @@
+package com.example.testfriends_jetpackcompose
+
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.testfriends_jetpackcompose.data.User
+import com.example.testfriends_jetpackcompose.screen.CircularProgressIndicatorSample
+import com.example.testfriends_jetpackcompose.screen.Friend
+import com.example.testfriends_jetpackcompose.screen.MyButton
+import com.example.testfriends_jetpackcompose.ui.theme.TestFriends_JetPackComposeTheme
+import com.example.testfriends_jetpackcompose.ui.theme.darkGray
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
+import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
+import com.example.testfriends_jetpackcompose.viewmodel.NetworkResults
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.firebase.dynamiclinks.ktx.dynamicLinks
+import com.google.firebase.ktx.Firebase
+import dagger.hilt.android.AndroidEntryPoint
+
+
+@ExperimentalAnimationApi
+@ExperimentalPagerApi
+@AndroidEntryPoint
+class HandleDynamicLink : ComponentActivity() {
+    val TAG = "firebase_app"
+
+    lateinit var context: Context
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            TestFriends_JetPackComposeTheme {
+                context = LocalContext.current
+                val viewModel: CreateTestViewModel = hiltViewModel()
+                Firebase.dynamicLinks
+                    .getDynamicLink(intent)
+                    .addOnSuccessListener(this) { pendingDynamicLinkData ->
+                        var deepLink: Uri? = null
+                        if (pendingDynamicLinkData != null) {
+                            deepLink = pendingDynamicLinkData.link
+                        }
+                        val userId: String? = deepLink!!.lastPathSegment
+                        Log.d(TAG, userId.toString())
+                        if (userId != null) {
+                            viewModel.challenge(userId)
+                        }
+                    }
+                    .addOnFailureListener(this) {
+                        context.startActivity(
+                            Intent(
+                                context,
+                                MainActivity::class.java
+                            )
+                        )
+                    }
+
+                when (viewModel.challenge.value) {
+                    is NetworkResults.Error -> {
+                        context.startActivity(Intent(context, MainActivity::class.java))
+                    }
+                    is NetworkResults.Success -> {
+                        SENDER = viewModel.challenge.value.data!!
+                        challenge(viewModel.challenge.value.data!!, context = context)
+                    }
+                    is NetworkResults.Loading -> {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(
+                                    darkGray
+                                )
+                        ) {
+                            CircularProgressIndicatorSample()
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@ExperimentalPagerApi
+@ExperimentalAnimationApi
+@Composable
+fun challenge(user: User, context: Context) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(darkGray)
+            .padding(20.dp)
+    ) {
+        Friend(user = user.username)
+        Spacer(modifier = Modifier.height(50.dp))
+        Text(
+            textAlign = TextAlign.Center,
+            text = "abdellah khalid want to challege you by answering his question ",
+            style = MaterialTheme.typography.h5,
+            modifier = Modifier.weight(1f)
+        )
+
+        MyButton(
+            text = "Start Answering",
+            icon = null,
+            background = Color.Black,
+            contentColor = Color.White,
+            onClickButton = {
+                context.startActivity(Intent(context, MainActivity::class.java))
+            }
+        )
+
+    }
+}
+

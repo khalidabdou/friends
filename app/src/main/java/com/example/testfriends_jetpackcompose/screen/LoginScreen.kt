@@ -22,9 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -206,6 +204,7 @@ fun MyTextField(
     TextField(
         textStyle = textStyle,
         value = text!!,
+
         trailingIcon = {
             Icon(
                 imageVector = Icons.Default.Search,
@@ -231,6 +230,7 @@ fun MyTextField(
         },
 
         visualTransformation = if (!isPassword) VisualTransformation.None else PasswordVisualTransformation(),
+
         modifier = modifier,
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,

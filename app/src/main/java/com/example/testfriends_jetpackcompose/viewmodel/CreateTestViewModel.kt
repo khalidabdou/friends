@@ -1,18 +1,20 @@
 package com.example.testfriends_jetpackcompose.viewmodel
 
+import android.app.Application
 import android.content.Context
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testfriends_jetpackcompose.data.DataStoreRepository
-import com.example.testfriends_jetpackcompose.data.ListResults
-import com.example.testfriends_jetpackcompose.data.Question
+import com.example.testfriends_jetpackcompose.data.*
 import com.example.testfriends_jetpackcompose.repository.ResultsRepo
 import com.example.testfriends_jetpackcompose.util.Constant
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
 import com.example.testfriends_jetpackcompose.util.Utils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -20,34 +22,39 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Response
 import javax.inject.Inject
 
 
 @HiltViewModel
 class CreateTestViewModel @Inject constructor(
+    application: Application,
     @ApplicationContext val context: Context,
     private val resultRepo: ResultsRepo,
-) :
-
-    ViewModel() {
+) : AndroidViewModel(application) {
     val questionFromJson = Constant.getJsonDataFromAsset(context = context, "question.json")
     val gson = Gson()
     val listPersonType = object : TypeToken<List<Question>>() {}.type
     var questions: List<Question> = gson.fromJson(questionFromJson, listPersonType)
 
-    var resultsList = mutableStateOf<ListResults?>(null)
+    var resultsList = mutableStateOf<NetworkResults<ListResults>?>(NetworkResults.Loading())
+        private set
     //private val questions = MutableStateFlow<question>
 
     var myAnswers by mutableStateOf("")
         private set
 
+    var result by mutableStateOf(0)
+        private set
 
     var index by mutableStateOf(0)
     var question: List<Question> by mutableStateOf(questions)
 
+    var challenge = mutableStateOf<NetworkResults<User>>(NetworkResults.Loading())
+        private set
 
     fun incrementIndex(): Boolean {
-        if (index < 17) {
+        if (index < question.size - 1) {
             index++
             return false
         } else return true
@@ -57,48 +64,103 @@ class CreateTestViewModel @Inject constructor(
         if (index > 0) index--
     }
 
-    fun setAnswer(answer: String, img: Int) {
+    fun setAnswer(answer: AnswerElement) {
         question[index].realAnswer = answer
-        question[index].realAnswerImg = img
     }
 
     fun updateMyQuestions(dataStoreRepository: DataStoreRepository) =
         viewModelScope.launch(Dispatchers.IO) {
-
             question.forEach {
-                myAnswers += it.realAnswer + ","
+                myAnswers += it.realAnswer.text + "*"
             }
             val invateId = Utils.generateId(ME!!.username) + ME!!.id
             ME!!.myQuestions = myAnswers
             ME!!.inviteId = invateId
             dataStoreRepository.saveUser(Utils.convertUserToJson(ME!!))
-            val response = resultRepo.updateMyQuestions(ME!!.id, invateId, myAnswers)
+            resultRepo.updateMyQuestions(ME!!.id, invateId, myAnswers)
             //Log.d("updateMyQuestions", response.body().toString())
         }
 
     fun createResults() =
         viewModelScope.launch {
+
             var myAnswers = ""
             for (item in question) {
-                myAnswers += item.realAnswer + ","
+                myAnswers += item.realAnswer.text + "*"
             }
+            Log.d("create", myAnswers)
+            result = Utils.compareResults(SENDER!!.myQuestions, myAnswers)
             resultRepo.createResults(
-                Constant.SENDER!!.id, ME!!.id, myAnswers, Constant.SENDER!!.token,
+                SENDER!!.id, ME!!.id, myAnswers, SENDER!!.token,
                 ME!!.username
             )
         }
 
 
     fun getResults() = viewModelScope.launch(Dispatchers.IO) {
-        val results = resultRepo.getResults(ME!!.id)
-        if (results.isSuccessful) {
-            Log.d("results", results.body().toString())
-
-
-            resultsList.value = results.body()
-        } else
-            Log.d("results", results.message())
-
+        if (!hasConnection) {
+            resultsList.value = NetworkResults.Error("No Internet Connection")
+            return@launch
+        }
+        if (resultsList.value is NetworkResults.Loading || resultsList.value is NetworkResults.Error) {
+            resultsList.value = NetworkResults.Loading()
+            val results = resultRepo.getResults(ME!!.id)
+            resultsList.value = handleResults(results)
+        }
     }
 
+    private fun handleResults(response: Response<ListResults?>?): NetworkResults<ListResults> {
+        when {
+            response == null -> return NetworkResults.Error("No Data Found")
+            response.body() == null -> return NetworkResults.Error("No Data Found")
+            response.message().toString()
+                .contains("timeout") -> return NetworkResults.Error("Timeout")
+            response.code() == 402 -> return NetworkResults.Error("Api Key Limited.")
+            response.isSuccessful -> {
+                val list = response.body()
+                return NetworkResults.Success(list!!)
+            }
+            else -> {
+                Log.d("user", response.message())
+                return NetworkResults.Error(response.message())
+            }
+        }
+    }
+
+    fun challenge(id: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            Log.d("user", "begin")
+            if (id == "")
+                return@launch
+            if (challenge.value is NetworkResults.Error || challenge.value is NetworkResults.Loading) {
+                challenge.value = NetworkResults.Loading()
+                val response = resultRepo.challenge(id)
+                challenge.value = handleUser(response)
+            }
+        }
+    }
+
+    private fun handleUser(response: Response<User?>?): NetworkResults<User> {
+        Log.d("user", response.toString())
+        when {
+            response == null -> return NetworkResults.Error("No Data Found")
+            response.body() == null -> return NetworkResults.Error("No Data Found")
+            response.message().toString()
+                .contains("timeout") -> return NetworkResults.Error("Timeout")
+            response.code() == 402 -> return NetworkResults.Error("Api Key Limited.")
+            response.isSuccessful -> {
+                val user = response.body()
+                Log.d("user", response.body()!!.username)
+                SENDER = user
+                return NetworkResults.Success(user!!)
+            }
+            else -> {
+                Log.d("user", response.message())
+                return NetworkResults.Error(response.message())
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    val hasConnection = Utils.hasConnection(context as Application)
 }

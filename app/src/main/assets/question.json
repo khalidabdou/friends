@@ -1,164 +1,386 @@
 [
   {
     "id": 0,
-    "question": "When is my birthday?",
-    "realAnswer": "",
-    "answer1": "Centerville",
-    "answer2": "Rivers",
-    "answer3": "Southmont",
-    "answer4": "Martinsville"
+    "question": "\uD83C\uDF08 What is abdellah's favorite color?",
+    "realAnswer": {
+      "text": "",
+      "img": ""
+    },
+    "answer1": {
+      "text": "Pink",
+      "img": "1.png"
+    },
+    "answer2": {
+      "text": "Blue",
+      "img": "2.png"
+    },
+    "answer3": {
+      "text": "Purple",
+      "img": "3.png"
+    },
+    "answer4": {
+      "text": "Red",
+      "img": "4.png"
+    }
   },
   {
     "id": 1,
-    "question": "What’s my favorite color?",
-    "realAnswer": "",
-    "answer1": "Taft",
-    "answer2": "Clarksburg",
-    "answer3": "Falconaire",
-    "answer4": "Blanco"
+    "question": "\uD83C\uDF92 How many schools has abdellah gone to?",
+    "realAnswer": {
+      "text": "",
+      "img": ""
+    },
+    "answer1": {
+      "text": "1",
+      "img": "1.png"
+    },
+    "answer2": {
+      "text": "2",
+      "img": "2.png"
+    },
+    "answer3": {
+      "text": "3",
+      "img": "3.png"
+    },
+    "answer4": {
+      "text": "4",
+      "img": "4.png"
+    }
   },
   {
     "id": 2,
-    "question": "What game do I hate to play?",
-    "realAnswer": "",
-    "answer1": "Springhill",
-    "answer2": "Delshire",
-    "answer3": "Thatcher",
-    "answer4": "Crisman"
+    "question": "\uD83D\uDDEF️ If abdellah could be a cartoon character for a day, who would it be?",
+    "realAnswer": {
+      "text": "",
+      "img": ""
+    },
+    "answer1": {
+      "text": "Rick (Rick & Morty)",
+      "img": ""
+    },
+    "answer2": {
+      "text": "Homer (The Simpsons)",
+      "img": ""
+    },
+    "answer3": {
+      "text": "Donald Duck",
+      "img": ""
+    },
+    "answer4": {
+      "text": "Finn/Jake/Bubblegum (Adventure Time)",
+      "img": ""
+    }
   },
   {
     "id": 3,
-    "question": "What’s my favorite food in the whole world?",
-    "realAnswer": "",
-    "answer1": "Masthope",
-    "answer2": "Belfair",
-    "answer3": "Cavalero",
-    "answer4": "Wescosville"
+    "question": "\uD83D\uDE31 What is abdellah most afraid of?",
+    "realAnswer": {
+      "text": "",
+      "img": ""
+    },
+    "answer1": {
+      "text": "\uD83D\uDC1B Bugs",
+      "img": "1.png"
+    },
+    "answer2": {
+      "text": "\uD83D\uDD77️Spider",
+      "img": "2.png"
+    },
+    "answer3": {
+      "text": "\uD83D\uDC00 Rats and mice",
+      "img": "3.png"
+    },
+    "answer4": {
+      "text": "heights",
+      "img": "4.png"
+    }
   },
   {
     "id": 4,
-    "question": "How old am I?",
-    "realAnswer": "",
-    "answer1": "Snowville",
-    "answer2": "Garberville",
-    "answer3": "Nutrioso",
-    "answer4": "Henrietta"
+    "question": "What is abdellah's dream job?",
+    "realAnswer": {
+      "text": "",
+      "img": ""
+    },
+    "answer1": {
+      "text": "\uD83D\uDC68\u200D\uD83D\uDE80 Astronaut",
+      "img": "1.png"
+    },
+    "answer2": {
+      "text": "\uD83C\uDFA5 Famous actor/actressr",
+      "img": "2.png"
+    },
+    "answer3": {
+      "text": "\uD83C\uDF0C Jedi",
+      "img": "3.png"
+    },
+    "answer4": {
+      "text": "\uD83D\uDD2C Scientist",
+      "img": "4.png"
+    }
   },
   {
     "id": 5,
-    "question": "How tall am I?",
-    "realAnswer": "",
-    "answer1": "Weogufka",
-    "answer2": "Franklin",
-    "answer3": "Blackgum",
-    "answer4": "Kaka"
+    "question": "If abdellah could instantly speak fluently any other language, what would that language be?",
+    "realAnswer": {
+      "text": "",
+      "img": ""
+    },
+    "answer1": {
+      "text": "\uD83C\uDDEB\uD83C\uDDF7 French",
+      "img": "1.png"
+    },
+    "answer2": {
+      "text": "\uD83C\uDDE9\uD83C\uDDEA German",
+      "img": "2.png"
+    },
+    "answer3": {
+      "text": "\uD83C\uDDEF\uD83C\uDDF5 Japanese",
+      "img": "3.png"
+    },
+    "answer4": {
+      "text": "\uD83C\uDDEE\uD83C\uDDF9 Italian",
+      "img": "4.png"
+    }
   },
   {
     "id": 6,
-    "question": "What’s my favorite flavor of ice cream?",
-    "realAnswer": "",
-    "answer1": "Marenisco",
-    "answer2": "Tibbie",
-    "answer3": "Fowlerville",
-    "answer4": "Sutton"
+    "question": "\uD83C\uDFAC What is abdellah's favorite movie?",
+    "realAnswer": {
+      "text": "",
+      "img": ""
+    },
+    "answer1": {
+      "text": "Avengers: Endgame ",
+      "img": "1.png"
+    },
+    "answer2": {
+      "text": "It: Chapter Two",
+      "img": ""
+    },
+    "answer3": {
+      "text": "Spider-Man: Far From Home",
+      "img": "3.png"
+    },
+    "answer4": {
+      "text": "Toy Story 4",
+      "img": "4.png"
+    }
   },
   {
     "id": 7,
-    "question": "What’s my favorite movie?",
-    "realAnswer": "",
-    "answer1": "Carrizo",
-    "answer2": "Salunga",
-    "answer3": "Como",
-    "answer4": "Goochland"
+    "question": "If abdellah meets a genie, what would be his/her wish?",
+    "realAnswer": {
+      "text": "",
+      "img": ""
+    },
+    "answer1": {
+      "text": "\uD83D\uDCB8 A billion Dollars",
+      "img": "1.png"
+    },
+    "answer2": {
+      "text": "\uD83D\uDC91 Beautiful wife/Handsome Husband",
+      "img": "2.png"
+    },
+    "answer3": {
+      "text": "\uD83D\uDC51 To be the king of the world",
+      "img": "3.png"
+    },
+    "answer4": {
+      "text": "other",
+      "img": ""
+    }
   },
   {
     "id": 8,
-    "question": "What type of music do I like best?",
-    "realAnswer": "",
-    "answer1": "Umapine",
-    "answer2": "Blandburg",
-    "answer3": "Groveville",
-    "answer4": "Loyalhanna"
+    "question": "What does abdellah drink the most?",
+    "realAnswer": {
+      "text": "",
+      "img": ""
+    },
+    "answer1": {
+      "text": "☕ Tea",
+      "img": "1.png"
+    },
+    "answer2": {
+      "text": "\uD83C\uDF7A juice",
+      "img": "2.png"
+    },
+    "answer3": {
+      "text": "☕ Coffee",
+      "img": "3.png"
+    },
+    "answer4": {
+      "text": "\uD83C\uDF75 Green Tea",
+      "img": "4.png"
+    }
   },
   {
     "id": 9,
-    "question": " What’s my favorite vegetable?",
-    "realAnswer": "",
-    "answer1": "Orin",
-    "answer2": "Hinsdale",
-    "answer3": "Grimsley",
-    "answer4": "Dawn"
+    "question": "Which fast food restaurant does abdellah prefer the most",
+    "realAnswer": {
+      "text": "",
+      "img": ""
+    },
+    "answer1": {
+      "text": "Pizza Hut",
+      "img": "1.png"
+    },
+    "answer2": {
+      "text": "Subway",
+      "img": ""
+    },
+    "answer3": {
+      "text": "Taco Bell",
+      "img": "3.png"
+    },
+    "answer4": {
+      "text": "McDonald's",
+      "img": "4.png"
+    }
   },
   {
     "id": 10,
     "question": "What’s my favorite animal?",
-    "realAnswer": "",
-    "answer1": "Mansfield",
-    "answer2": "Summerset",
-    "answer3": "Worton",
-    "answer4": "Juntura"
+    "realAnswer": {
+      "text": "",
+      "img": ""
+    },
+    "answer1": {
+      "text": "cats",
+      "img": "1.png"
+    },
+    "answer2": {
+      "text": "dogs",
+      "img": "2.png"
+    },
+    "answer3": {
+      "text": "hamster",
+      "img": "3.png"
+    },
+    "answer4": {
+      "text": "other",
+      "img": ""
+    }
   },
   {
     "id": 11,
-    "question": "What’s my favorite sport?",
-    "realAnswer": "",
-    "answer1": "Defiance",
-    "answer2": "Machias",
-    "answer3": "Dunlo",
-    "answer4": "Genoa"
+    "question": "Where would abdellah like to go with soulmate?",
+    "realAnswer": {
+      "text": "",
+      "img": ""
+    },
+    "answer1": {
+      "text": "\uD83D\uDDFC Paris",
+      "img": "1.png"
+    },
+    "answer2": {
+      "text": "\uD83C\uDFDD Bali",
+      "img": "2.png"
+    },
+    "answer3": {
+      "text": "\uD83C\uDFDE Sonoma",
+      "img": ""
+    },
+    "answer4": {
+      "text": "\uD83C\uDF09 Venice",
+      "img": "4.png"
+    }
   },
   {
     "id": 12,
-    "question": "What’s my least favorite sport?",
-    "realAnswer": "",
-    "answer1": "Riviera",
-    "answer2": "Torboy",
-    "answer3": "Wyano",
-    "answer4": "Whitehaven"
+    "question": "Which animal does abdellah dream to pet?",
+    "realAnswer": {
+      "text": "",
+      "img": ""
+    },
+    "answer1": {
+      "text": "\uD83D\uDC36 A Dog",
+      "img": "1.png"
+    },
+    "answer2": {
+      "text": "\uD83D\uDC30 Rabbit",
+      "img": "2.png"
+    },
+    "answer3": {
+      "text": "\uD83D\uDC31 A Cat",
+      "img": "3.png"
+    },
+    "answer4": {
+      "text": "\uD83D\uDC39 A Hamster",
+      "img": "4.png"
+    }
   },
   {
     "id": 13,
-    "question": "What’s my bedtime?",
-    "realAnswer": "",
-    "answer1": "Homeworth",
-    "answer2": "Shaft",
-    "answer3": "Loretto",
-    "answer4": "Moraida"
+    "question": "favorite player for john",
+    "realAnswer": {
+      "text": "",
+      "img": ""
+    },
+    "answer1": {
+      "text": "messi",
+      "img": "1.png"
+    },
+    "answer2": {
+      "text": "cristiano ronaldo",
+      "img": "2.png"
+    },
+    "answer3": {
+      "text": "neymar",
+      "img": "3.png"
+    },
+    "answer4": {
+      "text": "other",
+      "img": "4.png"
+    }
   },
   {
     "id": 14,
-    "question": "What are my hobbies?",
-    "realAnswer": "",
-    "answer1": "Urbana",
-    "answer2": "Lewis",
-    "answer3": "Hartsville/Hartley",
-    "answer4": "Grantville"
+    "question": "\uD83C\uDFAC What type of movies does abdellah like?",
+    "realAnswer": {
+      "text": "",
+      "img": ""
+    },
+    "answer1": {
+      "text": "\uD83D\uDC91 Romance",
+      "img": "1.png"
+    },
+    "answer2": {
+      "text": "\uD83D\uDC4A Action",
+      "img": "2.png"
+    },
+    "answer3": {
+      "text": "\uD83D\uDE32 Thriller",
+      "img": "3.png"
+    },
+    "answer4": {
+      "text": "\uD83D\uDE02 Comedy",
+      "img": "4.png"
+    }
   },
   {
     "id": 15,
-    "question": "What is the first thing I do in the morning?",
-    "realAnswer": "Tivoli",
-    "answer1": "Strong",
-    "answer2": "Norris",
-    "answer3": "Bluffview",
-    "answer4": "Sexton"
-  },
-  {
-    "id": 16,
-    "question": "In aute pariatur aute laboris elit qui aliquip ut ullamco ipsum tempor dolor mollit pariatur.",
-    "realAnswer": "",
-    "answer1": "Ferney",
-    "answer2": "Fairforest",
-    "answer3": "Valmy",
-    "answer4": "Stouchsburg"
-  },
-  {
-    "id": 17,
-    "question": "In ullamco amet deserunt laborum adipisicing eiusmod nisi officia commodo velit elit.",
-    "realAnswer": "",
-    "answer1": "Gerber",
-    "answer2": "Hiseville",
-    "answer3": "Nelson",
-    "answer4": "Tyro"
+    "question": "In abdellah's freetime, where would abdellah go?",
+    "realAnswer": {
+      "text": "",
+      "img": ""
+    },
+    "answer1": {
+      "text": "\uD83D\uDE34 Sleeping",
+      "img": "1.png"
+    },
+    "answer2": {
+      "text": "\uD83D\uDED2 Shopping",
+      "img": "2.png"
+    },
+    "answer3": {
+      "text": "\uD83D\uDCD6 Library",
+      "img": "3.png"
+    },
+    "answer4": {
+      "text": "\uD83D\uDCAA Gym",
+      "img": "4.png"
+    }
   }
 ]

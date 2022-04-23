@@ -21,8 +21,8 @@ val Typography = Typography(
     body1 = TextStyle(
         fontFamily = QuickSand,
         fontWeight = FontWeight.Normal,
-        fontSize = 20.sp,
-        lineHeight = 12.sp,
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
         color = Color.White,
         textAlign = TextAlign.Center
     ),
@@ -43,8 +43,8 @@ val Typography = Typography(
 
     h2  = TextStyle(
         fontFamily = QuickSand,
-        fontWeight = FontWeight.Bold,
-        lineHeight = 17.sp,
+        fontWeight = FontWeight.Normal,
+        lineHeight = 20.sp,
         fontSize = 30.sp
     ),
     h3 = TextStyle(

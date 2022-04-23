@@ -1,31 +1,20 @@
 package com.example.testfriends_jetpackcompose.di
 
-import android.content.Context
-import com.example.testfriends_jetpackcompose.data.DataStoreRepository
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.BASE_URL
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.Exception
-import java.lang.RuntimeException
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 import javax.net.ssl.*
-import com.google.gson.GsonBuilder
-
-import com.google.gson.Gson
-
-
-
 
 
 @Module
@@ -59,7 +48,7 @@ object   NetworkModule {
     ): Retrofit {
 
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BASE_URL + "api/")
             .client(getUnsafeOkHttpClient())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()

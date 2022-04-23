@@ -4,7 +4,9 @@ import com.example.testfriends_jetpackcompose.data.ListResults
 import com.example.testfriends_jetpackcompose.data.Remote
 import retrofit2.Response
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class ResultsRepo @Inject constructor(private var remote: Remote) {
 
     suspend fun updateMyQuestions(id: Int, invate: String, questions: String) =
@@ -21,5 +23,5 @@ class ResultsRepo @Inject constructor(private var remote: Remote) {
     ) =
         remote.createResults(sender, receiver, answers, token, receiverName)
 
-    suspend fun getResults(id: Int): Response<ListResults> = remote.getResults(id)
+    suspend fun getResults(id: Int): Response<ListResults?> = remote.getResults(id)
 }
