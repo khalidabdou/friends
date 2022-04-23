@@ -31,10 +31,10 @@ import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
+import com.example.testfriends_jetpackcompose.util.NetworkResults
 import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.util.Utils.Companion.copyTextToClipboard
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
-import com.example.testfriends_jetpackcompose.viewmodel.NetworkResults
 import com.example.testfriends_jetpackcompose.viewmodel.ResultsViewModel
 
 

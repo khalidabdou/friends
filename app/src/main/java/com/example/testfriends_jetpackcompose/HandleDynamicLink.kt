@@ -27,8 +27,8 @@ import com.example.testfriends_jetpackcompose.screen.MyButton
 import com.example.testfriends_jetpackcompose.ui.theme.TestFriends_JetPackComposeTheme
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
+import com.example.testfriends_jetpackcompose.util.NetworkResults
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
-import com.example.testfriends_jetpackcompose.viewmodel.NetworkResults
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase

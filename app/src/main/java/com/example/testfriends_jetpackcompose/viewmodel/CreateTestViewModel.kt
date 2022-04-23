@@ -15,6 +15,7 @@ import com.example.testfriends_jetpackcompose.repository.ResultsRepo
 import com.example.testfriends_jetpackcompose.util.Constant
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
+import com.example.testfriends_jetpackcompose.util.NetworkResults
 import com.example.testfriends_jetpackcompose.util.Utils
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -135,28 +136,8 @@ class CreateTestViewModel @Inject constructor(
             if (challenge.value is NetworkResults.Error || challenge.value is NetworkResults.Loading) {
                 challenge.value = NetworkResults.Loading()
                 val response = resultRepo.challenge(id)
-                challenge.value = handleUser(response)
-            }
-        }
-    }
-
-    private fun handleUser(response: Response<User?>?): NetworkResults<User> {
-        Log.d("user", response.toString())
-        when {
-            response == null -> return NetworkResults.Error("No Data Found")
-            response.body() == null -> return NetworkResults.Error("No Data Found")
-            response.message().toString()
-                .contains("timeout") -> return NetworkResults.Error("Timeout")
-            response.code() == 402 -> return NetworkResults.Error("Api Key Limited.")
-            response.isSuccessful -> {
-                val user = response.body()
-                Log.d("user", response.body()!!.username)
-                SENDER = user
-                return NetworkResults.Success(user!!)
-            }
-            else -> {
-                Log.d("user", response.message())
-                return NetworkResults.Error(response.message())
+                val handleUser=HandleResponse(response)
+                challenge.value = handleUser.handleResult()
             }
         }
     }

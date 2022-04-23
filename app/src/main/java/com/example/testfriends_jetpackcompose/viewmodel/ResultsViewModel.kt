@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.testfriends_jetpackcompose.data.*
 import com.example.testfriends_jetpackcompose.repository.ResultsRepo
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
+import com.example.testfriends_jetpackcompose.util.NetworkResults
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,31 +33,11 @@ class ResultsViewModel @Inject constructor(
                 return@launch
             challenge.value = NetworkResults.Loading()
             val response = resultsRepo.challenge(id)
-            challenge.value = handleUser(response)
+            val success=HandleResponse(response)
+            challenge.value=success.handleResult()
+            //challenge.value = handleUser(response)
 
         }
     }
-
-    private fun handleUser(response: Response<User?>?): NetworkResults<User> {
-        Log.d("user", response.toString())
-        when {
-            response == null -> return NetworkResults.Error("No Data Found")
-            response.body() == null -> return NetworkResults.Error("No Data Found")
-            response.message().toString()
-                .contains("timeout") -> return NetworkResults.Error("Timeout")
-            response.code() == 402 -> return NetworkResults.Error("Api Key Limited.")
-            response.isSuccessful -> {
-                val user = response.body()
-                Log.d("user", response.body()!!.username)
-                SENDER = user
-                return NetworkResults.Success(user!!)
-            }
-            else -> {
-                Log.d("user", response.message())
-                return NetworkResults.Error(response.message())
-            }
-        }
-    }
-
 
 }

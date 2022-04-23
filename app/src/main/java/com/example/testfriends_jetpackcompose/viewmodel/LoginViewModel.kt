@@ -11,6 +11,7 @@ import com.example.testfriends_jetpackcompose.data.DataStoreRepository
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.repository.LoginRepo
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ALREADY_SIGN
+import com.example.testfriends_jetpackcompose.util.NetworkResults
 import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.util.Utils.Companion.isEmailValid
 import com.google.android.gms.tasks.OnCompleteListener
@@ -63,8 +64,6 @@ class LoginViewModel @Inject constructor(
             if (task.isSuccessful) {
                 Log.i(TAG, "Email signup is successful")
                 _authState.value = AuthState.Success
-
-                //saveUser(user = )
             } else {
                 task.exception?.let {
                     Log.i(TAG, "Email signup failed with error ${it.localizedMessage}")
@@ -142,13 +141,3 @@ sealed class AuthState {
     class AuthError(val message: String? = null) : AuthState()
 }
 
-sealed class NetworkResults<T>(
-    val data: T? = null,
-    val message: String? = null
-) {
-    class Success<T>(data: T) : NetworkResults<T>(data)
-    class Error<T>(message: String?, data: T? = null) : NetworkResults<T>(data, message)
-    class Loading<T> : NetworkResults<T>()
-    class Cached<T> : NetworkResults<T>()
-
-}
