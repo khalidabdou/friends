@@ -38,14 +38,14 @@ val Typography = Typography(
     h1 = TextStyle(
         fontFamily = QuickSand,
         fontWeight = FontWeight.Bold,
-        fontSize = 40.sp
+        fontSize = 32.sp
     ),
 
     h2  = TextStyle(
         fontFamily = QuickSand,
         fontWeight = FontWeight.Normal,
         lineHeight = 20.sp,
-        fontSize = 30.sp
+        fontSize = 28.sp
     ),
     h3 = TextStyle(
         fontFamily = QuickSand,

@@ -1,6 +1,5 @@
 package com.example.testfriends_jetpackcompose.viewmodel
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -32,7 +31,6 @@ class SplashViewModel @Inject constructor(
                     _startDestination.value = Screen.Welcome.route
                 } else {
                     ME = Utils.convertToUser(user)
-                    Log.d("user", ME!!.myQuestions.toString())
                     if (SENDER != null)
                         _startDestination.value = Screen.Create.route
                     else

@@ -32,7 +32,6 @@ import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
 import com.example.testfriends_jetpackcompose.util.NetworkResults
-import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.util.Utils.Companion.copyTextToClipboard
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 import com.example.testfriends_jetpackcompose.viewmodel.ResultsViewModel
@@ -178,7 +177,7 @@ fun AppBar(
                             style = MaterialTheme.typography.h5
                         )
                         Spacer(modifier = Modifier.height(5.dp))
-                        CopyId(Utils.generateId(user.username) + user.id.toString(), onCopyClick = {
+                        CopyId(user.inviteId!!, onCopyClick = {
                             copyTextToClipboard(it, context = context)
                         })
                         Spacer(modifier = Modifier.height(10.dp))

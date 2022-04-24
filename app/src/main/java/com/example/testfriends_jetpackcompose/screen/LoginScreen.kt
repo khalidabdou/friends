@@ -1,8 +1,11 @@
 package com.example.testfriends_jetpackcompose.screen
 
+import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -11,13 +14,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,13 +34,14 @@ import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
+import com.example.testfriends_jetpackcompose.viewmodel.AuthState
 import com.example.testfriends_jetpackcompose.viewmodel.LoginViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.GoogleAuthProvider
 
 
+@RequiresApi(Build.VERSION_CODES.M)
 @Composable
 fun LoginScreen(navController: NavController) {
 
@@ -56,11 +59,8 @@ fun LoginScreen(navController: NavController) {
             try {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
                 val account = task.getResult(ApiException::class.java)!!
-                val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
-                //viewModel.signWithCredential(credential)
-                Log.d("USERLOG", account.displayName!!)
-
-                var user = User(
+                //val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
+                val user = User(
                     id = 0,
                     inviteId = "",
                     username = account.displayName!!,
@@ -76,8 +76,10 @@ fun LoginScreen(navController: NavController) {
         }
 
 
-    var email = authState.email
-    var password = authState.password
+    val email = authState.email
+    val password = authState.password
+    val firstName = authState.firstname
+    val lastName = authState.lastname
 
     var startAnimation by remember {
         mutableStateOf(false)
@@ -98,11 +100,42 @@ fun LoginScreen(navController: NavController) {
             .padding(20.dp)
             .alpha(alphaAnim.value)
     ) {
-
         //Spacer(modifier = Modifier.height(60.dp))
-        MyText(text = "Create an account", style = MaterialTheme.typography.h1)
+        MyText(text = "Create an account", style = MaterialTheme.typography.h3)
         //Spacer(modifier = Modifier.height(60.dp))
         Column(modifier = Modifier.fillMaxWidth()) {
+            Row(horizontalArrangement = Arrangement.SpaceBetween) {
+                MyTextField(
+                    placeholder = "First name",
+                    isPassword = false,
+                    text = firstName.value,
+                    onChange = {
+                        firstName.value = it
+                    },
+                    modifier = Modifier
+                        .height(50.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .weight(1f)
+                        .background(Color.White),
+                    textStyle = MaterialTheme.typography.h6, onSearch = {}
+                )
+                Spacer(modifier = Modifier.width(5.dp))
+                MyTextField(
+                    placeholder = "Last name",
+                    isPassword = false,
+                    text = lastName.value,
+                    onChange = {
+                        lastName.value = it
+                    },
+                    modifier = Modifier
+                        .height(50.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color.White)
+                        .weight(1f),
+                    textStyle = MaterialTheme.typography.h6, onSearch = {}
+                )
+            }
+            Spacer(modifier = Modifier.height(22.dp))
             MyTextField(
                 placeholder = "Email address",
                 isPassword = false,
@@ -115,7 +148,7 @@ fun LoginScreen(navController: NavController) {
                     .height(50.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(Color.White),
-                textStyle = MaterialTheme.typography.h4, onSearch = {}
+                textStyle = MaterialTheme.typography.h6, onSearch = {}
             )
             Spacer(modifier = Modifier.height(22.dp))
             MyTextField(
@@ -141,6 +174,14 @@ fun LoginScreen(navController: NavController) {
             contentColor = Color.White,
             onClickButton = {
                 authState.handleSignUp()
+                if (authState.authState.value is AuthState.AuthError) {
+                    Toast.makeText(
+                        context,
+                        (authState.authState.value as AuthState.AuthError).message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+
                 //authState.handleSignIn()
                 //navController.navigate("Home_screen")
             }
@@ -171,21 +212,21 @@ fun LoginScreen(navController: NavController) {
                 }
             )
             Spacer(modifier = Modifier.height(22.dp))
-            MyButton(
-                text = "Continue with facebook",
-                icon = R.drawable.facebook,
-                background = Color.White,
-                contentColor = darkGray,
-                onClickButton = {}
-            )
-            Spacer(modifier = Modifier.height(22.dp))
-            MyButton(
-                text = "Continue with Apple",
-                icon = R.drawable.apple,
-                background = Color.White,
-                contentColor = darkGray,
-                onClickButton = {}
-            )
+//            MyButton(
+//                text = "Continue with facebook",
+//                icon = R.drawable.facebook,
+//                background = Color.White,
+//                contentColor = darkGray,
+//                onClickButton = {}
+//            )
+//            Spacer(modifier = Modifier.height(22.dp))
+//            MyButton(
+//                text = "Continue with Apple",
+//                icon = R.drawable.apple,
+//                background = Color.White,
+//                contentColor = darkGray,
+//                onClickButton = {}
+//            )
         }
     }
 }
@@ -196,7 +237,8 @@ fun MyTextField(
     text: String? = "",
     textStyle: TextStyle,
     placeholder: String,
-    isPassword: Boolean,
+    isPassword: Boolean = false,
+    icon: ImageVector? = null,
     onChange: (String) -> Unit,
     onSearch: () -> Unit?,
 ) {
@@ -206,14 +248,15 @@ fun MyTextField(
         value = text!!,
 
         trailingIcon = {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = "",
-                tint = darkGray,
-                modifier = Modifier.clickable {
-                    Log.d("question", "cl")
-                    onSearch()
-                })
+            if (icon != null)
+                Icon(
+                    imageVector = icon,
+                    contentDescription = "",
+                    tint = darkGray,
+                    modifier = Modifier.clickable {
+                        Log.d("question", "cl")
+                        onSearch()
+                    })
         },
         placeholder = {
             Text(
@@ -272,9 +315,9 @@ fun MyButton(
                 modifier = Modifier.size(ButtonDefaults.IconSize)
             )
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text(text, style = MaterialTheme.typography.h4, color = contentColor)
+            Text(text, style = MaterialTheme.typography.h6, color = contentColor)
             Spacer(Modifier.weight(1f))
-        } else Text(text, style = MaterialTheme.typography.h4, color = contentColor)
+        } else Text(text, style = MaterialTheme.typography.h6, color = contentColor)
 
     }
 }
@@ -296,6 +339,5 @@ fun MyText(text: String, style: TextStyle) {
 @Composable
 @Preview
 fun perv() {
-    //LoginScreen()
 
 }

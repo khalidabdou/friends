@@ -11,8 +11,8 @@ class Remote @Inject constructor(
         return api.insertUser(user)
     }
 
-    suspend fun getUser(id: String): Response<User?> {
-        return api.getUser(id = id)
+    suspend fun getUser(id: String?, email: String?): Response<User?> {
+        return api.getUser(id = id, email = email)
     }
 
     suspend fun updateMyQuestions(id: Int, invate: String, questions: String) =
@@ -28,6 +28,7 @@ class Remote @Inject constructor(
         api.createResult(sender, receiver, answers, token, receiverName)
 
     suspend fun getResults(id: Int): Response<ListResults?> = api.getMyResults(id)
+    suspend fun updateUser(user: User): Response<User?> = api.updateUser(user)
 
 
 }

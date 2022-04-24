@@ -3,10 +3,7 @@ package com.example.testfriends_jetpackcompose.di
 import com.example.testfriends_jetpackcompose.data.ListResults
 import com.example.testfriends_jetpackcompose.data.User
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface Api {
 
@@ -15,8 +12,17 @@ interface Api {
         @Body user: User
     ): Response<Int>
 
+    @PUT("updateUser")
+    suspend fun updateUser(
+        @Body user: User
+    ): Response<User?>
+
     @GET("getUser")
-    suspend fun getUser(@Query("id") id: String): Response<User?>
+    suspend fun getUser(
+        @Query("id") id: String?,
+        @Query("email") email: String?,
+    ): Response<User?>
+
 
     @POST("updateMyQuestions")
     suspend fun updateMyQuestions(

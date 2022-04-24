@@ -93,6 +93,9 @@ object   NetworkModule {
             // Create an ssl socket factory with our all-trusting manager
             val sslSocketFactory: SSLSocketFactory = sslContext.socketFactory
             val builder = OkHttpClient.Builder()
+                .connectTimeout(5, TimeUnit.MINUTES) // connect timeout
+                .writeTimeout(5, TimeUnit.MINUTES) // write timeout
+                .readTimeout(5, TimeUnit.MINUTES) // read timeout
             builder.sslSocketFactory(
                 sslSocketFactory,
                 trustAllCerts[0] as X509TrustManager
