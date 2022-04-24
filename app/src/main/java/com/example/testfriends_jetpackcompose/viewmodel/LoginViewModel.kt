@@ -20,6 +20,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
+import kotlin.math.log
 
 
 @HiltViewModel
@@ -79,8 +80,8 @@ class LoginViewModel @Inject constructor(
                 Log.i(TAG, "Email signup is successful")
                 val user = User(
                     id = 0,
-                    inviteId = "",
-                    username = "${firstname.value}${lastname.value}",
+                    inviteId = "create your test and get your id",
+                    username = "${firstname.value} ${lastname.value}",
                     token = "",
                     email = email.value,
                     image = "",
@@ -150,6 +151,9 @@ class LoginViewModel @Inject constructor(
                     if (response.isSuccessful) {
                         user.id = response.body()!!
                         repository.saveUser(user = Utils.convertUserToJson(user = user))
+                        Log.d("login",user.email)
+                    }else{
+                        Log.d("login",response.toString())
                     }
                 }
             })

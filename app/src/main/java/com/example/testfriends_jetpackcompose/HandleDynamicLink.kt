@@ -25,6 +25,7 @@ import com.example.testfriends_jetpackcompose.screen.CircularProgressIndicatorSa
 import com.example.testfriends_jetpackcompose.screen.Friend
 import com.example.testfriends_jetpackcompose.screen.MyButton
 import com.example.testfriends_jetpackcompose.ui.theme.TestFriends_JetPackComposeTheme
+import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
 import com.example.testfriends_jetpackcompose.util.NetworkResults
@@ -40,8 +41,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HandleDynamicLink : ComponentActivity() {
     val TAG = "firebase_app"
-
     lateinit var context: Context
+     var activitythis=this
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -68,15 +70,22 @@ class HandleDynamicLink : ComponentActivity() {
                                 MainActivity::class.java
                             )
                         )
+                        this.finish()
                     }
 
                 when (viewModel.challenge.value) {
                     is NetworkResults.Error -> {
                         context.startActivity(Intent(context, MainActivity::class.java))
+                        this.finish()
                     }
                     is NetworkResults.Success -> {
                         SENDER = viewModel.challenge.value.data!!
-                        challenge(viewModel.challenge.value.data!!, context = context)
+                        challenge(
+                            viewModel.challenge.value.data!!,
+                            onStartClick = {
+                                context.startActivity(Intent(context, MainActivity::class.java))
+                                this.finish()
+                            })
                     }
                     is NetworkResults.Loading -> {
                         Box(
@@ -99,19 +108,19 @@ class HandleDynamicLink : ComponentActivity() {
 @ExperimentalPagerApi
 @ExperimentalAnimationApi
 @Composable
-fun challenge(user: User, context: Context) {
+fun challenge(user: User,onStartClick:()->Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .background(darkGray)
+            .background(backgroundWhite)
             .padding(20.dp)
     ) {
         Friend(user = user.username)
         Spacer(modifier = Modifier.height(50.dp))
         Text(
             textAlign = TextAlign.Center,
-            text = "abdellah khalid want to challege you by answering his question ",
+            text = "${user.username} want to challege you by answering his question ",
             style = MaterialTheme.typography.h5,
             modifier = Modifier.weight(1f)
         )
@@ -121,9 +130,9 @@ fun challenge(user: User, context: Context) {
             icon = null,
             background = Color.Black,
             contentColor = Color.White,
-            onClickButton = {
-                context.startActivity(Intent(context, MainActivity::class.java))
-            }
+            onClickButton = { onStartClick() }
+
+
         )
 
     }

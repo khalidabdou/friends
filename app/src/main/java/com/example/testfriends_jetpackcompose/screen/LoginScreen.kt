@@ -70,6 +70,7 @@ fun LoginScreen(navController: NavController) {
                     myQuestions = ""
                 )
                 authState.saveUser(user)
+                Toast.makeText(context, account.displayName, Toast.LENGTH_SHORT).show()
             } catch (e: ApiException) {
                 Log.w("TAG", "Google sign in failed", e)
             }
@@ -231,109 +232,8 @@ fun LoginScreen(navController: NavController) {
     }
 }
 
-@Composable
-fun MyTextField(
-    modifier: Modifier,
-    text: String? = "",
-    textStyle: TextStyle,
-    placeholder: String,
-    isPassword: Boolean = false,
-    icon: ImageVector? = null,
-    onChange: (String) -> Unit,
-    onSearch: () -> Unit?,
-) {
-    //var textContent by rememberSaveable { mutableStateOf("") }
-    TextField(
-        textStyle = textStyle,
-        value = text!!,
-
-        trailingIcon = {
-            if (icon != null)
-                Icon(
-                    imageVector = icon,
-                    contentDescription = "",
-                    tint = darkGray,
-                    modifier = Modifier.clickable {
-                        Log.d("question", "cl")
-                        onSearch()
-                    })
-        },
-        placeholder = {
-            Text(
-                text = placeholder,
-                style = TextStyle(color = Color.Black.copy(0.5f))
-            )
-        },
-        maxLines = 1,
-        singleLine = true,
-        onValueChange = {
-            onChange(it)
-            //textContent = it
-
-        },
-
-        visualTransformation = if (!isPassword) VisualTransformation.None else PasswordVisualTransformation(),
-
-        modifier = modifier,
-        colors = TextFieldDefaults.textFieldColors(
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            textColor = Color.Black, backgroundColor = Color.White
-        ),
-        keyboardOptions = KeyboardOptions(keyboardType = if (isPassword) KeyboardType.Password else KeyboardType.Email),
-    )
-}
 
 
-@Composable
-fun MyButton(
-    text: String,
-    icon: Int?,
-    background: Color,
-    contentColor: Color,
-    onClickButton: () -> Unit
-) {
-    Button(
-
-        onClick = { onClickButton() },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(50.dp)
-            .clip(RoundedCornerShape(10.dp)),
-        colors = ButtonDefaults.buttonColors(
-            contentColor = contentColor,
-            backgroundColor = background
-        ),
-
-        ) {
-
-        if (icon != null) {
-            Spacer(Modifier.width(50.dp))
-            Icon(
-                painter = painterResource(id = icon),
-                contentDescription = "",
-                modifier = Modifier.size(ButtonDefaults.IconSize)
-            )
-            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text(text, style = MaterialTheme.typography.h6, color = contentColor)
-            Spacer(Modifier.weight(1f))
-        } else Text(text, style = MaterialTheme.typography.h6, color = contentColor)
-
-    }
-}
-
-@Composable
-fun MyText(text: String, style: TextStyle) {
-
-    Text(
-        text = text,
-        modifier = Modifier
-            .fillMaxWidth(),
-        style = style,
-        color = darkGray,
-        textAlign = TextAlign.Center
-    )
-}
 
 
 @Composable

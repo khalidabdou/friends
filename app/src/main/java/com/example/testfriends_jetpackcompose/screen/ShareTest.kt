@@ -46,7 +46,7 @@ fun ShareTest(viewModel: CreateTestViewModel) {
     }
     var shortLink by remember { mutableStateOf("") }
     Utils.generateSharingLink(
-        deepLink = "${Constant.PREFIX}/ab22".toUri()
+        deepLink = "${Constant.PREFIX}/${ME!!.inviteId}".toUri()
     ) { generatedLink ->
         shortLink =
             context.getString(R.string.share_text) + " " + generatedLink + " Or Use my invitation code " + ME!!.inviteId

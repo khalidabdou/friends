@@ -10,6 +10,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -199,6 +201,7 @@ fun AppBar(
                 MyTextField(
                     placeholder = "friend code ",
                     text = textSearch,
+                    icon= Icons.Default.Search,
                     textStyle = MaterialTheme.typography.h6,
                     isPassword = false,
                     onChange = { search(it) },
