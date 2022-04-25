@@ -60,11 +60,5 @@ fun ChallengeDialog(user: User?, onConfirm: (Boolean) -> Unit?, onClick: (Boolea
 
 }
 
-@Composable
-fun CircularProgressIndicatorSample(color: androidx.compose.ui.graphics.Color = backgroundWhite) {
-    var progress by remember { mutableStateOf(0.1f) }
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        CircularProgressIndicator(color = color)
-    }
-}
+
 

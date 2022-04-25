@@ -15,6 +15,7 @@ import com.example.testfriends_jetpackcompose.repository.ResultsRepo
 import com.example.testfriends_jetpackcompose.util.Constant
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
+import com.example.testfriends_jetpackcompose.util.HandleResponse
 import com.example.testfriends_jetpackcompose.util.NetworkResults
 import com.example.testfriends_jetpackcompose.util.Utils
 import com.google.gson.Gson
@@ -67,6 +68,13 @@ class CreateTestViewModel @Inject constructor(
 
     fun setAnswer(answer: AnswerElement) {
         question[index].realAnswer = answer
+    }
+
+    fun cleanAnswers(){
+        index=0
+        question.forEach{item ->
+            item.realAnswer=AnswerElement("","")
+        }
     }
 
     fun updateMyQuestions(dataStoreRepository: DataStoreRepository) =
@@ -136,7 +144,7 @@ class CreateTestViewModel @Inject constructor(
             if (challenge.value is NetworkResults.Error || challenge.value is NetworkResults.Loading) {
                 challenge.value = NetworkResults.Loading()
                 val response = resultRepo.challenge(id)
-                val handleUser=HandleResponse(response)
+                val handleUser= HandleResponse(response)
                 challenge.value = handleUser.handleResult()
             }
         }

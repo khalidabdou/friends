@@ -4,11 +4,13 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.testfriends_jetpackcompose.data.DataStoreRepository
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.repository.LoginRepo
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ALREADY_SIGN
+import com.example.testfriends_jetpackcompose.util.HandleResponse
 import com.example.testfriends_jetpackcompose.util.NetworkResults
 import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.util.Utils.Companion.isEmailValid
@@ -18,9 +20,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.log
 
 
 @HiltViewModel
@@ -33,14 +35,14 @@ class LoginViewModel @Inject constructor(
     var firstname = mutableStateOf("")
     var lastname = mutableStateOf("")
     var password = mutableStateOf("")
-    var isAuth = mutableStateOf(false)
     var userState = mutableStateOf<User?>(null)
-    var userNetworkResult: MutableLiveData<NetworkResults<User>> = MutableLiveData()
-    var updateNetworkResult: MutableLiveData<NetworkResults<User>> = MutableLiveData()
+    var userNetworkResult = mutableStateOf<NetworkResults<User>>(NetworkResults.NoAction())
+
+    //var updateNetworkResult: MutableLiveData<NetworkResults<User>> = MutableLiveData()
     private var auth: FirebaseAuth = Firebase.auth
 
-    private val _authState by lazy { MutableLiveData<AuthState>(AuthState.Idle) }
-    val authState: LiveData<AuthState> = _authState
+    //private val _authState by lazy { MutableLiveData<AuthState>(AuthState.Idle) }
+    //val authState: LiveData<AuthState> = _authState
 
     fun handleSignIn() {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email.value, password.value)
@@ -55,23 +57,26 @@ class LoginViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.M)
     fun handleSignUp() {
-        if (firstname.value == "" || lastname.value.length < 2) {
-            _authState.value = AuthState.AuthError("first name is empty")
+
+        if (firstname.value == "") {
+            userNetworkResult.value = NetworkResults.Error("first name is empty")
             return
         }
         if (!isEmailValid(email.value)) {
-            _authState.value = AuthState.AuthError("Invalid email")
+            userNetworkResult.value = NetworkResults.Error("Invalid email")
             return
         }
 
         if (lastname.value == "") {
-            _authState.value = AuthState.AuthError("last name is invalid")
+            userNetworkResult.value = NetworkResults.Error("last name is invalid")
             return
         }
         if (password.value == "") {
-            _authState.value = AuthState.AuthError("Invalid password")
+            userNetworkResult.value = NetworkResults.Error("Invalid password")
             return
         }
+
+        userNetworkResult.value = NetworkResults.Loading()
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(
             email.value, password.value
@@ -88,33 +93,31 @@ class LoginViewModel @Inject constructor(
                     myQuestions = ""
                 )
                 saveUser(user)
-                _authState.value = AuthState.Success
             } else {
                 task.exception?.let {
-                    Log.i(TAG, "Email signup failed with error ${it.localizedMessage}")
                     if (it.localizedMessage.contains(ALREADY_SIGN)) {
-                        Log.i(TAG, "Email signup failed with error")
+                        //Log.i(TAG, "Email signup failed with error")
                         viewModelScope.launch {
                             val response = remoteRepo.getUser(email = email.value)
                             val success = HandleResponse(response)
-
                             userNetworkResult.value = success.handleResult()
                             if (userNetworkResult.value is NetworkResults.Success) {
                                 updateUser((userNetworkResult.value as NetworkResults.Success<User>).data!!)
                             } else if (userNetworkResult.value is NetworkResults.Error) {
-                                Log.d("update", updateNetworkResult.value.toString())
+                                userNetworkResult.value = NetworkResults.Error("error")
                             }
-
                         }
-
-                    } else
-                        _authState.value = AuthState.AuthError(it.localizedMessage)
+                        return@let
+                    }
+                    Log.i(TAG, "${it.localizedMessage}")
+                    userNetworkResult.value = NetworkResults.Error("Invalid")
                 }
             }
         }
     }
 
     fun updateUser(user: User) {
+        userNetworkResult.value = NetworkResults.Loading()
         try {
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
@@ -125,8 +128,8 @@ class LoginViewModel @Inject constructor(
                 viewModelScope.launch {
                     val response = remoteRepo.updateUser(user = user)
                     val success = HandleResponse(response)
-                    updateNetworkResult.value = success.handleResult()
-                    if (updateNetworkResult.value is NetworkResults.Success) {
+                    userNetworkResult.value = success.handleResult()
+                    if (userNetworkResult.value is NetworkResults.Success) {
                         repository.saveUser(user = Utils.convertUserToJson(user = user))
                     }
                 }
@@ -139,6 +142,7 @@ class LoginViewModel @Inject constructor(
     }
 
     fun saveUser(user: User) {
+        userNetworkResult.value = NetworkResults.Loading()
         try {
             FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
@@ -151,9 +155,9 @@ class LoginViewModel @Inject constructor(
                     if (response.isSuccessful) {
                         user.id = response.body()!!
                         repository.saveUser(user = Utils.convertUserToJson(user = user))
-                        Log.d("login",user.email)
-                    }else{
-                        Log.d("login",response.toString())
+                        Log.d("login", user.email)
+                    } else {
+                        Log.d("login", response.toString())
                     }
                 }
             })
@@ -161,16 +165,6 @@ class LoginViewModel @Inject constructor(
             Log.d("Tokenfirebase", ex.toString())
         }
     }
-
-
 }
 
-
-sealed class AuthState {
-    object Idle : AuthState()
-    object Loading : AuthState()
-    object Success : AuthState()
-    object Already : AuthState()
-    class AuthError(val message: String? = null) : AuthState()
-}
 

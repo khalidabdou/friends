@@ -1,9 +1,6 @@
-package com.example.testfriends_jetpackcompose.viewmodel
+package com.example.testfriends_jetpackcompose.util
 
 import android.util.Log
-import com.example.testfriends_jetpackcompose.data.User
-import com.example.testfriends_jetpackcompose.util.Constant
-import com.example.testfriends_jetpackcompose.util.NetworkResults
 import retrofit2.Response
 
 class HandleResponse<T>(private val response: Response<T?>?) {

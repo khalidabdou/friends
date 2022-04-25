@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.ListResults
@@ -71,6 +72,7 @@ fun HomeScreen(navController: NavHostController, createTestViewModel: CreateTest
         floatingActionButton = {
             FloatingActionButton(backgroundColor = White, onClick = {
                 SENDER = null
+                createTestViewModel.cleanAnswers()
                 navController.navigate("Create_screen")
             }) {
                 Image(
@@ -117,6 +119,7 @@ fun HomeScreen(navController: NavHostController, createTestViewModel: CreateTest
                         user = viewModelresults.challenge.value.data,
                         onClick = { openDialog.value = it },
                         onConfirm = {
+                            createTestViewModel.cleanAnswers()
                             if (it) navController.navigate("Create_screen")
                         }
                     )
@@ -184,7 +187,7 @@ fun AppBar(
                         })
                         Spacer(modifier = Modifier.height(10.dp))
                     }
-                    Avatar(null, textColor = darkGray)
+                    Avatar(ME!!.username)
                 }
 
             }

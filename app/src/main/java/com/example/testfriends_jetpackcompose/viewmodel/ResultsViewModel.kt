@@ -6,12 +6,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testfriends_jetpackcompose.data.*
 import com.example.testfriends_jetpackcompose.repository.ResultsRepo
-import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
+import com.example.testfriends_jetpackcompose.util.HandleResponse
 import com.example.testfriends_jetpackcompose.util.NetworkResults
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Response
 import javax.inject.Inject
 
 
@@ -33,7 +32,7 @@ class ResultsViewModel @Inject constructor(
                 return@launch
             challenge.value = NetworkResults.Loading()
             val response = resultsRepo.challenge(id)
-            val success=HandleResponse(response)
+            val success= HandleResponse(response)
             challenge.value=success.handleResult()
             //challenge.value = handleUser(response)
 

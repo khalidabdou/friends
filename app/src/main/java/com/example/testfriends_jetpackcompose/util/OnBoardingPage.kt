@@ -11,19 +11,19 @@ sealed class OnBoardingPage(
 ) {
     object First : OnBoardingPage(
         image = R.drawable.create,
-        title = "Create Test",
-        description = "Create test by answering real answers for your self and share link with friends and wait Fo"
+        title = "Create",
+        description = "Create your own quiz"
     )
 
     object Second : OnBoardingPage(
-        image = R.drawable.ic_launcher_background,
-        title = "Coordination",
-        description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
+        image = R.drawable.network,
+        title = "Share",
+        description = "Share it with your friends"
     )
 
     object Third : OnBoardingPage(
-        image = R.drawable.ic_launcher_background,
-        title = "Dialogue",
-        description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod."
+        image = R.drawable.stats,
+        title = "results",
+        description = "See their results & discover your real best friends\n"
     )
 }

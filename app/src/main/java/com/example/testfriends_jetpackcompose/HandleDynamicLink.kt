@@ -120,19 +120,16 @@ fun challenge(user: User,onStartClick:()->Unit) {
         Spacer(modifier = Modifier.height(50.dp))
         Text(
             textAlign = TextAlign.Center,
-            text = "${user.username} want to challege you by answering his question ",
+            text = "${user.username} want to challenge you by answering his question ",
             style = MaterialTheme.typography.h5,
             modifier = Modifier.weight(1f)
         )
-
         MyButton(
             text = "Start Answering",
             icon = null,
-            background = Color.Black,
+            background = darkGray,
             contentColor = Color.White,
             onClickButton = { onStartClick() }
-
-
         )
 
     }
