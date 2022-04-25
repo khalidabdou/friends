@@ -41,6 +41,11 @@ fun ShareTest(viewModel: CreateTestViewModel) {
     val context = LocalContext.current
     val dataStoreRepository = DataStoreRepository(context = LocalContext.current)
     var scaffoldState = rememberScaffoldState()
+
+    var username = ME!!.username
+    if (Constant.SENDER != null)
+        username = Constant.SENDER!!.username
+
     LaunchedEffect(key1 = scaffoldState) {
         viewModel.updateMyQuestions(dataStoreRepository)
     }
@@ -56,7 +61,7 @@ fun ShareTest(viewModel: CreateTestViewModel) {
         Column {
             LazyColumn(modifier = Modifier.weight(5f)) {
                 items(viewModel.questions.size) {
-                    ItemAnswer(viewModel.question[it])
+                    ItemAnswer(viewModel.question[it], username)
                 }
             }
             ShareBox(
@@ -76,7 +81,7 @@ fun ShareTest(viewModel: CreateTestViewModel) {
 }
 
 @Composable
-fun ItemAnswer(question: Question) {
+fun ItemAnswer(question: Question, username: String) {
     var imgUrl = "${Constant.BASE_URL}english/${question.id}/${question.realAnswer.img}"
     if (question.realAnswer.img == "")
         imgUrl = "${Constant.BASE_URL}english/3/4.png"
@@ -98,7 +103,7 @@ fun ItemAnswer(question: Question) {
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 style = MaterialTheme.typography.body1,
-                text = question.question,
+                text = question.question.replace("****", username),
                 color = darkGray,
                 modifier = Modifier
                     .weight(4f)

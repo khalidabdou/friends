@@ -20,7 +20,6 @@ import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import javax.inject.Inject
-import kotlin.math.log
 
 
 @HiltViewModel
@@ -97,12 +96,12 @@ class LoginViewModel @Inject constructor(
                         viewModelScope.launch {
                             val response = remoteRepo.getUser(email = email.value)
                             val success = HandleResponse(response)
-
                             userNetworkResult.value = success.handleResult()
                             if (userNetworkResult.value is NetworkResults.Success) {
                                 updateUser((userNetworkResult.value as NetworkResults.Success<User>).data!!)
                             } else if (userNetworkResult.value is NetworkResults.Error) {
                                 Log.d("update", updateNetworkResult.value.toString())
+
                             }
 
                         }
@@ -146,14 +145,15 @@ class LoginViewModel @Inject constructor(
                     return@OnCompleteListener
                 }
                 user.token = task.result
-                viewModelScope.launch(Dispatchers.IO) {
+                viewModelScope.launch {
                     val response = remoteRepo.insetUser(user = user)
-                    if (response.isSuccessful) {
-                        user.id = response.body()!!
-                        repository.saveUser(user = Utils.convertUserToJson(user = user))
-                        Log.d("login",user.email)
-                    }else{
-                        Log.d("login",response.toString())
+                    val success = HandleResponse(response)
+                    userNetworkResult.value = success.handleResult()
+                    if (userNetworkResult.value is NetworkResults.Success) {
+                        repository.saveUser(user = Utils.convertUserToJson((userNetworkResult.value as NetworkResults.Success<User>).data!!))
+                        Log.d("login", user.email)
+                    } else {
+                        Log.d("login", response.toString())
                     }
                 }
             })

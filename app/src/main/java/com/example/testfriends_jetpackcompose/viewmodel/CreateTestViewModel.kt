@@ -38,6 +38,7 @@ class CreateTestViewModel @Inject constructor(
     val listPersonType = object : TypeToken<List<Question>>() {}.type
     var questions: List<Question> = gson.fromJson(questionFromJson, listPersonType)
 
+
     var resultsList = mutableStateOf<NetworkResults<ListResults>?>(NetworkResults.Loading())
         private set
     //private val questions = MutableStateFlow<question>

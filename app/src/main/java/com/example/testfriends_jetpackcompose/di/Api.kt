@@ -10,7 +10,7 @@ interface Api {
     @POST("insertUser")
     suspend fun insertUser(
         @Body user: User
-    ): Response<Int>
+    ): Response<User?>
 
     @PUT("updateUser")
     suspend fun updateUser(

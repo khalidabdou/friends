@@ -8,7 +8,7 @@ import javax.inject.Inject
 class LoginRepo @Inject constructor(private val remote: Remote) {
 
 
-    suspend fun insetUser(user: User): Response<Int> {
+    suspend fun insetUser(user: User): Response<User?> {
         return remote.insertUser(user)
     }
 

@@ -7,7 +7,7 @@ import javax.inject.Inject
 class Remote @Inject constructor(
     private val api: Api
 ) {
-    suspend fun insertUser(user: User): Response<Int> {
+    suspend fun insertUser(user: User): Response<User?> {
         return api.insertUser(user)
     }
 

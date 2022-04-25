@@ -28,6 +28,7 @@ import com.example.testfriends_jetpackcompose.navigation.Screen
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.Constant
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 
@@ -38,6 +39,9 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
 
     var index = viewModel.index
     var question = viewModel.question
+    var username = ME!!.username
+    if (SENDER != null)
+        username = SENDER!!.username
 
 
     fun setRealAnswer(answer: AnswerElement) {
@@ -79,7 +83,7 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
 
                 ) {
                     Text(
-                        text = viewModel.questions[index].question,
+                        text = viewModel.questions[index].question.replace("****", username),
                         style = MaterialTheme.typography.body1,
                     )
                 }
