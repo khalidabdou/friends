@@ -131,6 +131,7 @@ class LoginViewModel @Inject constructor(
                     userNetworkResult.value = success.handleResult()
                     if (userNetworkResult.value is NetworkResults.Success) {
                         repository.saveUser(user = Utils.convertUserToJson(user = user))
+
                     }
                 }
             })
