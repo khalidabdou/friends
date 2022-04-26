@@ -9,23 +9,17 @@ import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.*
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,7 +29,6 @@ import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.NetworkResults
-
 import com.example.testfriends_jetpackcompose.viewmodel.LoginViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -67,7 +60,7 @@ fun LoginScreen(navController: NavController) {
                     myQuestions = ""
                 )
                 authState.saveUser(user)
-                Toast.makeText(context, account.displayName, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context, account.displayName, Toast.LENGTH_SHORT).show()
             } catch (e: ApiException) {
                 Log.w("TAG", "Google sign in failed", e)
             }

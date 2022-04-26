@@ -39,6 +39,8 @@ class CreateTestViewModel @Inject constructor(
     val listPersonType = object : TypeToken<List<Question>>() {}.type
     var questions: List<Question> = gson.fromJson(questionFromJson, listPersonType)
 
+    var userResults: User? = null
+
 
     var resultsList = mutableStateOf<NetworkResults<ListResults>?>(NetworkResults.Loading())
         private set
@@ -71,10 +73,10 @@ class CreateTestViewModel @Inject constructor(
         question[index].realAnswer = answer
     }
 
-    fun cleanAnswers(){
-        index=0
-        question.forEach{item ->
-            item.realAnswer=AnswerElement("","")
+    fun cleanAnswers() {
+        index = 0
+        question.forEach { item ->
+            item.realAnswer = AnswerElement("", "")
         }
     }
 
@@ -83,12 +85,20 @@ class CreateTestViewModel @Inject constructor(
             question.forEach {
                 myAnswers += it.realAnswer.text + "*"
             }
-            val invateId = Utils.generateId(ME!!.username) + ME!!.id
+
+            if (ME?.inviteId == null || ME?.inviteId == "")
+                ME?.inviteId = Utils.generateId(ME!!.username) + ME!!.id
             ME!!.myQuestions = myAnswers
-            ME!!.inviteId = invateId
-            dataStoreRepository.saveUser(Utils.convertUserToJson(ME!!))
-            resultRepo.updateMyQuestions(ME!!.id, invateId, myAnswers)
-            //Log.d("updateMyQuestions", response.body().toString())
+            Log.d("update", ME!!.toString())
+            //dataStoreRepository.saveUser(Utils.convertUserToJson(ME!!))
+            val response = resultRepo.updateMyQuestions(ME!!)
+            val success = HandleResponse(response)
+            if (success.handleResult() is NetworkResults.Success) {
+                dataStoreRepository.saveUser(Utils.convertUserToJson(success.handleResult().data!!))
+                Log.d("update", success.handleResult().data.toString())
+            }
+
+
         }
 
     fun createResults() =
@@ -145,7 +155,7 @@ class CreateTestViewModel @Inject constructor(
             if (challenge.value is NetworkResults.Error || challenge.value is NetworkResults.Loading) {
                 challenge.value = NetworkResults.Loading()
                 val response = resultRepo.challenge(id)
-                val handleUser= HandleResponse(response)
+                val handleUser = HandleResponse(response)
                 challenge.value = handleUser.handleResult()
             }
         }

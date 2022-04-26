@@ -1,7 +1,7 @@
 [
   {
     "id": 0,
-    "question": "\uD83C\uDF08 What is ****'s favorite color?",
+    "question": " What is ****'s favorite color?",
     "realAnswer": {
       "text": "",
       "img": ""
@@ -25,7 +25,7 @@
   },
   {
     "id": 1,
-    "question": "\uD83C\uDF92 How many schools has **** gone to?",
+    "question": " How many schools has **** gone to?",
     "realAnswer": {
       "text": "",
       "img": ""
@@ -49,7 +49,7 @@
   },
   {
     "id": 2,
-    "question": "\uD83D\uDDEF️ If **** could be a cartoon character for a day, who would it be?",
+    "question": "If **** could be a cartoon character for a day, who would it be?",
     "realAnswer": {
       "text": "",
       "img": ""
@@ -73,21 +73,21 @@
   },
   {
     "id": 3,
-    "question": "\uD83D\uDE31 What is **** most afraid of?",
+    "question": "What is **** most afraid of?",
     "realAnswer": {
       "text": "",
       "img": ""
     },
     "answer1": {
-      "text": "\uD83D\uDC1B Bugs",
+      "text": "Bugs",
       "img": "1.png"
     },
     "answer2": {
-      "text": "\uD83D\uDD77️Spider",
+      "text": "Spider",
       "img": "2.png"
     },
     "answer3": {
-      "text": "\uD83D\uDC00 Rats and mice",
+      "text": " Rats and mice",
       "img": "3.png"
     },
     "answer4": {
@@ -103,19 +103,19 @@
       "img": ""
     },
     "answer1": {
-      "text": "\uD83D\uDC68\u200D\uD83D\uDE80 Astronaut",
+      "text": " Astronaut",
       "img": "1.png"
     },
     "answer2": {
-      "text": "\uD83C\uDFA5 Famous actor/actressr",
+      "text": " Famous actor/actressr",
       "img": "2.png"
     },
     "answer3": {
-      "text": "\uD83C\uDF0C Jedi",
+      "text": " Jedi",
       "img": "3.png"
     },
     "answer4": {
-      "text": "\uD83D\uDD2C Scientist",
+      "text": "Scientist",
       "img": "4.png"
     }
   },
@@ -127,25 +127,25 @@
       "img": ""
     },
     "answer1": {
-      "text": "\uD83C\uDDEB\uD83C\uDDF7 French",
+      "text": " French",
       "img": "1.png"
     },
     "answer2": {
-      "text": "\uD83C\uDDE9\uD83C\uDDEA German",
+      "text": " German",
       "img": "2.png"
     },
     "answer3": {
-      "text": "\uD83C\uDDEF\uD83C\uDDF5 Japanese",
+      "text": "Japanese",
       "img": "3.png"
     },
     "answer4": {
-      "text": "\uD83C\uDDEE\uD83C\uDDF9 Italian",
+      "text": "Italian",
       "img": "4.png"
     }
   },
   {
     "id": 6,
-    "question": "\uD83C\uDFAC What is ****'s favorite movie?",
+    "question": " What is ****'s favorite movie?",
     "realAnswer": {
       "text": "",
       "img": ""
@@ -175,15 +175,15 @@
       "img": ""
     },
     "answer1": {
-      "text": "\uD83D\uDCB8 A billion Dollars",
+      "text": " A billion Dollars",
       "img": "1.png"
     },
     "answer2": {
-      "text": "\uD83D\uDC91 Beautiful wife/Handsome Husband",
+      "text": "Beautiful wife/Handsome Husband",
       "img": "2.png"
     },
     "answer3": {
-      "text": "\uD83D\uDC51 To be the king of the world",
+      "text": "To be the king of the world",
       "img": "3.png"
     },
     "answer4": {
@@ -203,7 +203,7 @@
       "img": "1.png"
     },
     "answer2": {
-      "text": "\uD83C\uDF7A juice",
+      "text": " juice",
       "img": "2.png"
     },
     "answer3": {
@@ -211,7 +211,7 @@
       "img": "3.png"
     },
     "answer4": {
-      "text": "\uD83C\uDF75 Green Tea",
+      "text": " Green Tea",
       "img": "4.png"
     }
   },
@@ -271,19 +271,19 @@
       "img": ""
     },
     "answer1": {
-      "text": "\uD83D\uDDFC Paris",
+      "text": " Paris",
       "img": "1.png"
     },
     "answer2": {
-      "text": "\uD83C\uDFDD Bali",
+      "text": "Bali",
       "img": "2.png"
     },
     "answer3": {
-      "text": "\uD83C\uDFDE Sonoma",
+      "text": " Sonoma",
       "img": ""
     },
     "answer4": {
-      "text": "\uD83C\uDF09 Venice",
+      "text": " Venice",
       "img": "4.png"
     }
   },
@@ -295,19 +295,19 @@
       "img": ""
     },
     "answer1": {
-      "text": "\uD83D\uDC36 A Dog",
+      "text": " A Dog",
       "img": "1.png"
     },
     "answer2": {
-      "text": "\uD83D\uDC30 Rabbit",
+      "text": "Rabbit",
       "img": "2.png"
     },
     "answer3": {
-      "text": "\uD83D\uDC31 A Cat",
+      "text": "A Cat",
       "img": "3.png"
     },
     "answer4": {
-      "text": "\uD83D\uDC39 A Hamster",
+      "text": "A Hamster",
       "img": "4.png"
     }
   },
@@ -337,25 +337,25 @@
   },
   {
     "id": 14,
-    "question": "\uD83C\uDFAC What type of movies does **** like?",
+    "question": " What type of movies does **** like?",
     "realAnswer": {
       "text": "",
       "img": ""
     },
     "answer1": {
-      "text": "\uD83D\uDC91 Romance",
+      "text": " Romance",
       "img": "1.png"
     },
     "answer2": {
-      "text": "\uD83D\uDC4A Action",
+      "text": " Action",
       "img": "2.png"
     },
     "answer3": {
-      "text": "\uD83D\uDE32 Thriller",
+      "text": " Thriller",
       "img": "3.png"
     },
     "answer4": {
-      "text": "\uD83D\uDE02 Comedy",
+      "text": " Comedy",
       "img": "4.png"
     }
   },
@@ -367,19 +367,19 @@
       "img": ""
     },
     "answer1": {
-      "text": "\uD83D\uDE34 Sleeping",
+      "text": "Sleeping",
       "img": "1.png"
     },
     "answer2": {
-      "text": "\uD83D\uDED2 Shopping",
+      "text": "Shopping",
       "img": "2.png"
     },
     "answer3": {
-      "text": "\uD83D\uDCD6 Library",
+      "text": "Library",
       "img": "3.png"
     },
     "answer4": {
-      "text": "\uD83D\uDCAA Gym",
+      "text": "Gym",
       "img": "4.png"
     }
   }

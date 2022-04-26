@@ -85,7 +85,7 @@ class LoginViewModel @Inject constructor(
                 Log.i(TAG, "Email signup is successful")
                 val user = User(
                     id = 0,
-                    inviteId = "create your test and get your id",
+                    inviteId = "",
                     username = "${firstname.value} ${lastname.value}",
                     token = "",
                     email = email.value,
@@ -131,7 +131,6 @@ class LoginViewModel @Inject constructor(
                     userNetworkResult.value = success.handleResult()
                     if (userNetworkResult.value is NetworkResults.Success) {
                         repository.saveUser(user = Utils.convertUserToJson(user = user))
-
                     }
                 }
             })
@@ -153,9 +152,9 @@ class LoginViewModel @Inject constructor(
                 user.token = task.result
                 viewModelScope.launch(Dispatchers.IO) {
                     val response = remoteRepo.insetUser(user = user)
-                    if (response.isSuccessful) {
-                        user.id = response.body()!!
-                        repository.saveUser(user = Utils.convertUserToJson(user = user))
+                    val success = HandleResponse(response)
+                    if (success.handleResult() is NetworkResults.Success) {
+                        repository.saveUser(user = Utils.convertUserToJson(success.handleResult().data!!))
                         Log.d("login", user.email)
                     } else {
                         Log.d("login", response.toString())

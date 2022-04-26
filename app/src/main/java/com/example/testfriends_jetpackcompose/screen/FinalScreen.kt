@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
@@ -20,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.testfriends_jetpackcompose.R
+import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.navigation.Screen
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
@@ -31,29 +31,25 @@ import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 @Composable
 fun FinalScreen(navHostController: NavHostController, viewModel: CreateTestViewModel) {
     val scaffoldState = rememberScaffoldState()
-    BackHandler {
-        navHostController.navigate(Screen.Home.route) {
-            popUpTo(Screen.FinalScreen.route) {
-                inclusive = true
-            }
+
+    var sender: User?
+    var result = viewModel.result
+    if (SENDER != null) {
+        sender = SENDER!!
+        LaunchedEffect(key1 = scaffoldState) {
+            viewModel.createResults()
         }
+    } else {
+        sender = viewModel.userResults
+        result = com.example.testfriends_jetpackcompose.util.Utils.compareResults(
+            sender!!.myQuestions,
+            ME!!.myQuestions
+        )
     }
-    LaunchedEffect(key1 = scaffoldState) {
-        viewModel.createResults()
-    }
+
 
     Scaffold(
         scaffoldState = scaffoldState,
-        floatingActionButton = {
-            FloatingActionButton(backgroundColor = Color.White, onClick = {
-            }) {
-                Image(
-                    painter = painterResource(id = R.drawable.share),
-                    contentDescription = "",
-                    modifier = Modifier.size(25.dp)
-                )
-            }
-        }
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -75,7 +71,7 @@ fun FinalScreen(navHostController: NavHostController, viewModel: CreateTestViewM
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    Avatar(SENDER!!.username, enableText = true )
+                    Avatar(sender.username, enableText = true)
                     Image(
                         painter = painterResource(id = R.drawable.love),
                         contentDescription = "",
@@ -95,15 +91,13 @@ fun FinalScreen(navHostController: NavHostController, viewModel: CreateTestViewM
                 ) {
                     CustomComponent(
                         canvasSize = 80.dp,
-                        indicatorValue = viewModel.result,
+                        indicatorValue = result,
                         maxIndicatorValue = 100,
                         backgroundIndicatorStrokeWidth = 25f,
                         foregroundIndicatorStrokeWidth = 25f, smallText = ""
                     )
                 }
-
             }
-
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
                 Image(
                     painter = painterResource(id = R.drawable.qr),
@@ -121,7 +115,11 @@ fun FinalScreen(navHostController: NavHostController, viewModel: CreateTestViewM
         }
     }
 
-
+    BackHandler {
+        navHostController.navigate(Screen.Home.route) {
+            navHostController.popBackStack()
+        }
+    }
 
 }
 

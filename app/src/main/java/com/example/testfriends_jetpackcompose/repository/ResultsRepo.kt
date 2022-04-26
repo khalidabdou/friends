@@ -2,6 +2,7 @@ package com.example.testfriends_jetpackcompose.repository
 
 import com.example.testfriends_jetpackcompose.data.ListResults
 import com.example.testfriends_jetpackcompose.data.Remote
+import com.example.testfriends_jetpackcompose.data.User
 import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -9,8 +10,8 @@ import javax.inject.Singleton
 @Singleton
 class ResultsRepo @Inject constructor(private var remote: Remote) {
 
-    suspend fun updateMyQuestions(id: Int, invate: String, questions: String) =
-        remote.updateMyQuestions(id = id, invate = invate, questions = questions)
+    suspend fun updateMyQuestions(user: User) =
+        remote.updateMyQuestions(user = user)
 
     suspend fun challenge(id: String) = remote.getUser(id, null)
 

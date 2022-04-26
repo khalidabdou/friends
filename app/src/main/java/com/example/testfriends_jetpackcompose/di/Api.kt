@@ -26,10 +26,8 @@ interface Api {
 
     @POST("updateMyQuestions")
     suspend fun updateMyQuestions(
-        @Query("id") id: Int,
-        @Query("inviteId") anviteId: String,
-        @Query("questions") questions: String
-    ): Response<Any>
+        @Body user: User,
+    ): Response<User?>
 
     @POST("createResult")
     suspend fun createResult(

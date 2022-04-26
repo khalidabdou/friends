@@ -15,8 +15,8 @@ class Remote @Inject constructor(
         return api.getUser(id = id, email = email)
     }
 
-    suspend fun updateMyQuestions(id: Int, invate: String, questions: String) =
-        api.updateMyQuestions(id = id, questions = questions, anviteId = invate)
+    suspend fun updateMyQuestions(user: User) =
+        api.updateMyQuestions(user)
 
     suspend fun createResults(
         sender: Int,

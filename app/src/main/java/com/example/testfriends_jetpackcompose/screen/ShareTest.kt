@@ -47,6 +47,7 @@ fun ShareTest(viewModel: CreateTestViewModel) {
     LaunchedEffect(key1 = scaffoldState) {
         viewModel.updateMyQuestions(dataStoreRepository)
     }
+
     var shortLink by remember { mutableStateOf("") }
     Utils.generateSharingLink(
         deepLink = "${Constant.PREFIX}/${ME!!.inviteId}".toUri()
@@ -144,9 +145,13 @@ fun ShareBox(text: String, onShare: () -> Unit, onCopyText: () -> Unit) {
 
     ) {
         Row(modifier = Modifier.padding(5.dp)) {
-            Spacer(modifier = Modifier.width(10.dp).height(10.dp))
+            Spacer(modifier = Modifier
+                .width(10.dp)
+                .height(10.dp))
             Avatar(ME!!.username, )
-            Spacer(modifier = Modifier.width(10.dp).height(10.dp))
+            Spacer(modifier = Modifier
+                .width(10.dp)
+                .height(10.dp))
             Column {
                 TextField(
                     value = text,

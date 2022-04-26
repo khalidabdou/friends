@@ -26,11 +26,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.ListResults
 import com.example.testfriends_jetpackcompose.data.User
+import com.example.testfriends_jetpackcompose.navigation.Screen
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
@@ -93,7 +93,13 @@ fun HomeScreen(navController: NavHostController, createTestViewModel: CreateTest
                 ).show()
             }
             is NetworkResults.Success -> {
-                ResultsFriends((createTestViewModel.resultsList.value as NetworkResults.Success<ListResults>).data!!.listResults)
+                ResultsFriends(
+                    (createTestViewModel.resultsList.value as NetworkResults.Success<ListResults>).data!!.listResults,
+                    onClick = {
+                        SENDER = null
+                        createTestViewModel.userResults = it
+                        navController.navigate(Screen.FinalScreen.route)
+                    })
             }
             is NetworkResults.Loading -> {
                 Toast.makeText(LocalContext.current, "loading data ...", Toast.LENGTH_SHORT).show()
@@ -170,7 +176,7 @@ fun AppBar(
                         .fillMaxSize()
                         .padding(10.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    ) {
+                ) {
                     Column(
                         modifier = Modifier
                             .weight(3f)
@@ -204,7 +210,7 @@ fun AppBar(
                 MyTextField(
                     placeholder = "friend code ",
                     text = textSearch,
-                    icon= Icons.Default.Search,
+                    icon = Icons.Default.Search,
                     textStyle = MaterialTheme.typography.h6,
                     isPassword = false,
                     onChange = { search(it) },

@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +27,6 @@ import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,7 +43,7 @@ import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Utils
 
 @Composable
-fun ResultsFriends(resultTest: List<ResultTest>) {
+fun ResultsFriends(resultTest: List<ResultTest>, onClick: (User) -> Unit) {
 
     if (resultTest.isNullOrEmpty()) {
         Box(
@@ -64,7 +65,7 @@ fun ResultsFriends(resultTest: List<ResultTest>) {
         ) {
 
             items(resultTest.size) {
-                ItemResults(resultTest[it])
+                ItemResults(resultTest[it], onClick = { onClick(it) })
             }
         }
 }
@@ -85,27 +86,6 @@ fun User(user: User) {
     }
 }
 
-@Composable
-fun ButtonCard(iconButton: ImageVector, color: Color, text: String) {
-    Button(
-        onClick = {},
-        contentPadding = PaddingValues(
-            start = 20.dp,
-            top = 12.dp,
-            end = 20.dp,
-            bottom = 12.dp
-        ),
-    ) {
-        // Inner content including an icon and a text label
-        Icon(
-            iconButton,
-            contentDescription = "",
-            modifier = Modifier.size(ButtonDefaults.IconSize)
-        )
-        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-        Text(text)
-    }
-}
 
 @Composable
 fun BoxButton(icon: Int, height: Int, onClick: () -> Unit) {
@@ -116,7 +96,7 @@ fun BoxButton(icon: Int, height: Int, onClick: () -> Unit) {
             .clip(RoundedCornerShape(5.dp))
             .background(Color.White)
             .clickable {
-                onClick
+                onClick()
             }
     ) {
         Image(
@@ -130,7 +110,7 @@ fun BoxButton(icon: Int, height: Int, onClick: () -> Unit) {
 }
 
 @Composable
-fun ItemResults(item: ResultTest, max: Int = 16) {
+fun ItemResults(item: ResultTest, onClick: (User) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -139,6 +119,18 @@ fun ItemResults(item: ResultTest, max: Int = 16) {
             .padding(5.dp)
             .clip(RoundedCornerShape(5.dp))
             .background(White)
+            .clickable {
+                var user = User(
+                    id = 0,
+                    inviteId = "",
+                    username = item.ReceiverName,
+                    token = "",
+                    email = "",
+                    image = "",
+                    myQuestions = item.answers
+                )
+                onClick(user)
+            }
     ) {
 
         Spacer(modifier = Modifier.width(5.dp))
