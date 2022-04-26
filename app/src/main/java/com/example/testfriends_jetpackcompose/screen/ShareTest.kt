@@ -2,12 +2,10 @@ package com.example.testfriends_jetpackcompose.screen
 
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -32,7 +30,6 @@ import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.util.Utils.Companion.copyTextToClipboard
 import com.example.testfriends_jetpackcompose.util.Utils.Companion.shareChallenge
-import com.example.testfriends_jetpackcompose.util.backgrounds.Companion.linearGradientBrush
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 
 
@@ -73,7 +70,6 @@ fun ShareTest(viewModel: CreateTestViewModel) {
                 onCopyText = {
                     copyTextToClipboard(shortLink, context = context)
                 }
-
             )
         }
     }

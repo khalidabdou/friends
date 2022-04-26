@@ -58,7 +58,6 @@ class Utils {
                     res++
                 i++
             }
-
             res = (res * 100) / list1.size
             return res
         }
