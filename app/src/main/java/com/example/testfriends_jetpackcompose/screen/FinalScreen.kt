@@ -75,14 +75,14 @@ fun FinalScreen(navHostController: NavHostController, viewModel: CreateTestViewM
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    Friend(SENDER!!.username)
+                    Avatar(SENDER!!.username, enableText = true )
                     Image(
                         painter = painterResource(id = R.drawable.love),
                         contentDescription = "",
                         modifier = Modifier
                             .size(40.dp)
                     )
-                    Friend(ME!!.username)
+                    Avatar(ME!!.username, enableText = true)
                 }
                 Box(
                     modifier = Modifier
@@ -126,7 +126,7 @@ fun FinalScreen(navHostController: NavHostController, viewModel: CreateTestViewM
 }
 
 @Composable
-fun Friend(user: String) {
+fun Friend(user: String,textColor:Color= darkGray) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -139,7 +139,7 @@ fun Friend(user: String) {
                     CircleShape
                 )
         )
-        Text(text = user)
+        Text(text = user, color = textColor)
     }
 }
 

@@ -241,7 +241,7 @@
   },
   {
     "id": 10,
-    "question": "What’s my favorite animal?",
+    "question": "What’s **** favorite animal?",
     "realAnswer": {
       "text": "",
       "img": ""
@@ -313,7 +313,7 @@
   },
   {
     "id": 13,
-    "question": "favorite player for john",
+    "question": "favorite player for ****",
     "realAnswer": {
       "text": "",
       "img": ""

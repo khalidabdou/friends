@@ -25,6 +25,7 @@ import coil.compose.AsyncImage
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.DataStoreRepository
 import com.example.testfriends_jetpackcompose.data.Question
+import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.Constant
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
@@ -76,8 +77,6 @@ fun ShareTest(viewModel: CreateTestViewModel) {
             )
         }
     }
-
-
 }
 
 @Composable
@@ -90,7 +89,7 @@ fun ItemAnswer(question: Question, username: String) {
             .fillMaxWidth()
             .padding(5.dp)
             .clip(RoundedCornerShape(10.dp))
-            .border(BorderStroke(2.dp, linearGradientBrush), shape = RoundedCornerShape(10.dp))
+            .border(BorderStroke(2.dp, darkGray), shape = RoundedCornerShape(10.dp))
             .background(Color.White)
     ) {
 
@@ -132,50 +131,6 @@ fun ItemAnswer(question: Question, username: String) {
     }
 }
 
-@Composable
-fun BoxImage(img: Int, answer: String) {
-    Column(
-        modifier = Modifier
-    ) {
-        Box(
-            modifier = Modifier
-                .width(150.dp)
-                .height(150.dp)
-                .clip(RoundedCornerShape(5.dp))
-                //.background(Color.Gray.copy(0.2f))
-                .background(
-                    Color.Gray.copy(
-                        0.2f
-                    )
-                )
-
-        ) {
-
-            Image(
-                alignment = Alignment.Center,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 10.dp, bottom = 60.dp),
-                painter = painterResource(id = img),
-                contentDescription = "",
-            )
-            Text(
-                style = MaterialTheme.typography.body1,
-                text = answer,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .width(150.dp)
-                    .height(150.dp)
-                    .wrapContentHeight(Alignment.Bottom)
-                    .background(linearGradientBrush)
-            )
-
-        }
-
-    }
-
-}
-
 @Preview
 @Composable
 fun item() {
@@ -183,33 +138,19 @@ fun item() {
     //ItemAnswer(question = questionList[0])
 }
 
-@Preview
-@Composable
-fun ShareBoxPrv() {
-    //ShareBox()
-}
-
 @Composable
 fun ShareBox(text: String, onShare: () -> Unit, onCopyText: () -> Unit) {
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
-            .background(linearGradientBrush)
+            .background(darkGray)
 
     ) {
         Row(modifier = Modifier.padding(5.dp)) {
-            Box(
-                modifier = Modifier
-                    .width(100.dp)
-                    .height(100.dp)
-                    .padding(20.dp)
-                    .clip(CircleShape)
-                    .background(Color.Green)
-            ) {
-                Image(painter = painterResource(id = R.drawable.avatar), contentDescription = "")
-            }
+            Spacer(modifier = Modifier.width(10.dp).height(10.dp))
+            Avatar(ME!!.username, )
+            Spacer(modifier = Modifier.width(10.dp).height(10.dp))
             Column {
                 TextField(
                     value = text,
@@ -241,7 +182,7 @@ fun ShareBox(text: String, onShare: () -> Unit, onCopyText: () -> Unit) {
                             end = 20.dp,
                             bottom = 12.dp
                         ),
-                        colors = ButtonDefaults.buttonColors(contentColor = Color.White)
+                        colors = ButtonDefaults.buttonColors(contentColor = darkGray, backgroundColor = backgroundWhite)
 
                     ) {
                         Icon(
@@ -250,7 +191,7 @@ fun ShareBox(text: String, onShare: () -> Unit, onCopyText: () -> Unit) {
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
                         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text("Share")
+                        Text("Share",color= darkGray, style = MaterialTheme.typography.h6)
                     }
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                     BoxButton(icon = R.drawable.link, 42,

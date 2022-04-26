@@ -34,7 +34,8 @@ import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
-import com.example.testfriends_jetpackcompose.viewmodel.AuthState
+import com.example.testfriends_jetpackcompose.util.NetworkResults
+
 import com.example.testfriends_jetpackcompose.viewmodel.LoginViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -50,12 +51,8 @@ fun LoginScreen(navController: NavController) {
     val context = LocalContext.current
     val token = stringResource(R.string.default_web_client_id)
 
-
-    //authState.getUserSafe()
-    // Equivalent of onActivityResult
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
-
             try {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
                 val account = task.getResult(ApiException::class.java)!!
@@ -75,7 +72,6 @@ fun LoginScreen(navController: NavController) {
                 Log.w("TAG", "Google sign in failed", e)
             }
         }
-
 
     val email = authState.email
     val password = authState.password
@@ -171,14 +167,15 @@ fun LoginScreen(navController: NavController) {
         MyButton(
             text = "Create an account",
             icon = null,
+            progressBar= authState.userNetworkResult.value is NetworkResults.Loading,
             background = darkGray,
             contentColor = Color.White,
             onClickButton = {
                 authState.handleSignUp()
-                if (authState.authState.value is AuthState.AuthError) {
+                if (authState.userNetworkResult.value is NetworkResults.Error) {
                     Toast.makeText(
                         context,
-                        (authState.authState.value as AuthState.AuthError).message,
+                        (authState.userNetworkResult.value as NetworkResults.Error).message,
                         Toast.LENGTH_SHORT
                     ).show()
                 }

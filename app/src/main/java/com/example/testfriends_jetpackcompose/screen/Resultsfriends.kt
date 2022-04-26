@@ -142,7 +142,7 @@ fun ItemResults(item: ResultTest, max: Int = 16) {
     ) {
 
         Spacer(modifier = Modifier.width(5.dp))
-        Avatar(item = "AB", backgroundWhite)
+        Avatar(name = ME!!.username, backgroundWhite)
 
         Spacer(modifier = Modifier.width(3.dp))
         Column(

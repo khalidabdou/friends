@@ -110,7 +110,7 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
             text = onBoardingPage.title,
             fontSize = MaterialTheme.typography.h1.fontSize,
             fontWeight = FontWeight.Bold,
-            color= Color.Black.copy(0.8f),
+            color= Black.copy(0.8f),
             textAlign = TextAlign.Center
         )
         Text(
@@ -119,7 +119,8 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
                 .padding(horizontal = 40.dp)
                 .padding(top = 20.dp),
             text = onBoardingPage.description,
-            style = TextStyle()
+            style = MaterialTheme.typography.h5,
+            textAlign = TextAlign.Center
         )
     }
 }

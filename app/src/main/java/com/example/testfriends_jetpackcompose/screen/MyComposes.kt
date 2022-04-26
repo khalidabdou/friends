@@ -27,40 +27,37 @@ import com.example.testfriends_jetpackcompose.util.backgrounds
 import kotlin.random.Random
 
 @Composable
-fun Avatar(item: String?, textColor: Color) {
-    Box(
-        modifier = Modifier
-            .width(50.dp)
-            .height(50.dp)
-            .clip(
-                CircleShape
-            )
-            .background(
-                if (item == null) backgroundWhite else backgrounds.colorList[Random.nextInt(
-                    0,
-                    backgrounds.colorList.size
-                )]
-            ), contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "AB",
-            color = textColor,
-            style = MaterialTheme.typography.h4,
-            textAlign = TextAlign.Center,
-        )
+fun Avatar(name: String? = null, textColor: Color = backgroundWhite, enableText: Boolean = false) {
 
-//            Image(
-//                modifier = Modifier
-//                    .size(70.dp)
-//                    .padding(10.dp)
-//                    .clip(
-//                        CircleShape
-//                    ),
-//                contentScale = ContentScale.Crop,
-//                painter = rememberAsyncImagePainter(item),
-//                contentDescription = ""
-//            )
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .width(50.dp)
+                .height(50.dp)
+                .clip(
+                    CircleShape
+                )
+                .background(
+                    if (name == null) backgroundWhite else backgrounds.colorList[Random.nextInt(
+                        0,
+                        backgrounds.colorList.size
+                    )]
+                ), contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = name!!.substring(0, 1).uppercase(),
+                color = textColor,
+                style = MaterialTheme.typography.h1,
+                textAlign = TextAlign.Center,
+            )
+
+        }
+        if (enableText)
+            Text(name!!, style = MaterialTheme.typography.h6)
     }
+
 }
 
 @Composable
@@ -121,12 +118,12 @@ fun MyTextField(
 fun MyButton(
     text: String,
     icon: Int?,
+    progressBar: Boolean = false,
     background: Color,
     contentColor: Color,
     onClickButton: () -> Unit
 ) {
     Button(
-
         onClick = { onClickButton() },
         modifier = Modifier
             .fillMaxWidth()
@@ -150,7 +147,16 @@ fun MyButton(
             Text(text, style = MaterialTheme.typography.h6, color = contentColor)
             Spacer(Modifier.weight(1f))
         } else Text(text, style = MaterialTheme.typography.h6, color = contentColor)
+        if (progressBar)
+            CircularProgressIndicator(color = contentColor, modifier = Modifier.size(20.dp))
 
+    }
+}
+
+@Composable
+fun CircularProgressIndicatorSample(color: Color = backgroundWhite) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        CircularProgressIndicator(color = color)
     }
 }
 
