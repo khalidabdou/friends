@@ -61,7 +61,7 @@ fun ResultsFriends(resultTest: List<ResultTest>, onClick: (User) -> Unit) {
         LazyColumn(
             Modifier
                 .background(backgroundWhite)
-                .fillMaxSize()
+                .fillMaxSize().padding(bottom = 20.dp)
         ) {
 
             items(resultTest.size) {

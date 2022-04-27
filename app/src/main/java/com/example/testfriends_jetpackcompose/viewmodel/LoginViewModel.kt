@@ -93,6 +93,7 @@ class LoginViewModel @Inject constructor(
                     myQuestions = ""
                 )
                 saveUser(user)
+
             } else {
                 task.exception?.let {
                     if (it.localizedMessage.contains(ALREADY_SIGN)) {
@@ -157,6 +158,7 @@ class LoginViewModel @Inject constructor(
                         repository.saveUser(user = Utils.convertUserToJson(success.handleResult().data!!))
                         Log.d("login", user.email)
                     } else {
+                        updateUser(user = user)
                         Log.d("login", response.toString())
                     }
                 }
