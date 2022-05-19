@@ -5,6 +5,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
@@ -14,7 +15,9 @@ import android.util.Log
 import android.util.Patterns
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.User
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import com.google.firebase.dynamiclinks.ShortDynamicLink
 import com.google.firebase.dynamiclinks.ktx.androidParameters
@@ -53,6 +56,8 @@ class Utils {
             val list1 = sender.split("*").toTypedArray()
             val list2 = myAnswers.split("*").toTypedArray()
             var i = 0
+            Log.d("list 1", list1.size.toString())
+            Log.d("list 2", list2.size.toString())
             for (item in list1) {
                 if (item == list2[i])
                     res++
@@ -131,11 +136,14 @@ class Utils {
             Toast.makeText(context, "Text copied to clipboard", Toast.LENGTH_LONG).show()
         }
 
-        fun shareChallenge(context: Context, text: String) {
+        fun shareChallenge(context: Context, link: String) {
+            val textShare =
+                context.getString(R.string.share_text) + " " + link + " Or Use my invitation code " + ME!!.inviteId
             val shareIntent = Intent()
             shareIntent.action = Intent.ACTION_SEND
             shareIntent.type = "text/plain"
-            shareIntent.putExtra(Intent.EXTRA_TEXT, text)
+            shareIntent.putExtra(Intent.EXTRA_TEXT, textShare)
+            shareIntent.flags = FLAG_ACTIVITY_NEW_TASK
             context.startActivity(Intent.createChooser(shareIntent, "SEND TO"))
         }
 

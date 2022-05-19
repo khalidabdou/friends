@@ -1,6 +1,5 @@
 package com.example.testfriends_jetpackcompose.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -21,6 +20,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.testfriends_jetpackcompose.ui.theme.Purple500
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.backgrounds
@@ -34,8 +34,7 @@ fun Avatar(name: String? = null, textColor: Color = backgroundWhite, enableText:
     ) {
         Box(
             modifier = Modifier
-                .width(50.dp)
-                .height(50.dp)
+                .size(45.dp)
                 .clip(
                     CircleShape
                 )
@@ -65,6 +64,8 @@ fun MyTextField(
     modifier: Modifier,
     text: String? = "",
     textStyle: TextStyle,
+    textColor: Color = Color.Black,
+    backgroundColor: Color = Color.White,
     placeholder: String,
     isPassword: Boolean = false,
     icon: ImageVector? = null,
@@ -75,17 +76,41 @@ fun MyTextField(
     TextField(
         textStyle = textStyle,
         value = text!!,
-
-        trailingIcon = {
+        leadingIcon = {
             if (icon != null)
                 Icon(
                     imageVector = icon,
                     contentDescription = "",
                     tint = darkGray,
                     modifier = Modifier.clickable {
-                        Log.d("question", "cl")
-                        onSearch()
+
                     })
+            else Box(modifier=Modifier.size(0.dp))
+        },
+        trailingIcon = {
+            if (icon != null)
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(2.dp)
+                        .clip(RoundedCornerShape(5.dp))
+                        .background(Purple500)
+                        .clickable {
+                            onSearch()
+                        }
+
+                ) {
+                    Text(
+                        text = "Find",
+                        modifier = Modifier
+                            .width(45.dp)
+                            .align(Alignment.Center)
+
+                    )
+                }
+            else Box(modifier=Modifier.size(0.dp))
+
         },
         placeholder = {
             Text(
@@ -97,17 +122,14 @@ fun MyTextField(
         singleLine = true,
         onValueChange = {
             onChange(it)
-            //textContent = it
-
         },
 
         visualTransformation = if (!isPassword) VisualTransformation.None else PasswordVisualTransformation(),
-
         modifier = modifier,
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
-            textColor = Color.Black, backgroundColor = Color.White
+            textColor = textColor, backgroundColor = backgroundColor
         ),
         keyboardOptions = KeyboardOptions(keyboardType = if (isPassword) KeyboardType.Password else KeyboardType.Email),
     )

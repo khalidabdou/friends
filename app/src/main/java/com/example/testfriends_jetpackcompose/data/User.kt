@@ -17,6 +17,8 @@ data class User(
     @SerializedName("image")
     val image: String,
     @SerializedName("myQuestions", alternate = ["myQuetions"])
-    var myQuestions: String
+    var myQuestions: String,
+    @SerializedName("dynamicLink")
+    var dynamicLink :String?
 )
 

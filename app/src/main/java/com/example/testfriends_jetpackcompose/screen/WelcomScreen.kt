@@ -7,8 +7,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -16,17 +19,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.navigation.Screen
 import com.example.testfriends_jetpackcompose.util.OnBoardingPage
 import com.google.accompanist.pager.*
+import kotlinx.coroutines.launch
 
 
 @ExperimentalPagerApi
@@ -40,11 +42,16 @@ fun WelcomeScreen(
         OnBoardingPage.Second,
         OnBoardingPage.Third
     )
-    val pagerState = rememberPagerState()
+    var pagerState = rememberPagerState()
+    val scope = rememberCoroutineScope()
+    var page=0
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White)) {
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White)
+    ) {
         HorizontalPager(
             modifier = Modifier.weight(10f),
             count = 3,
@@ -54,35 +61,44 @@ fun WelcomeScreen(
             PagerScreen(onBoardingPage = pages[position])
         }
         Row(
-            verticalAlignment=Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-            .weight(1f).padding(10.dp),
-            ) {
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .padding(10.dp),
+        ) {
             HorizontalPagerIndicator(
-                modifier=Modifier.weight(5f),
+                modifier = Modifier.weight(5f),
                 pagerState = pagerState
             )
-            AnimatedVisibility(
-                modifier = Modifier.size(50.dp).weight(1f).clip(CircleShape),
-                visible = pagerState.currentPage == 2
-            ) {
-                Box(
-                    contentAlignment= Alignment.Center,
-                    modifier = Modifier
-                    .size(50.dp)
 
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .size(50.dp)
+                    .clip(CircleShape)
                     .background(Black)
                     .clickable {
-                        //welcomeViewModel.saveOnBoardingState(completed = true)
-                        navController.popBackStack()
-                        navController.navigate(Screen.LoginScreen.route)
+
+                        if (pagerState.currentPage == 2) {
+                            //welcomeViewModel.saveOnBoardingState(completed = true)
+                            navController.popBackStack()
+                            navController.navigate(Screen.LoginScreen.route)
+                        } else
+                            scope.launch {
+                                page++
+                                pagerState.scrollToPage(page)
+                            }
 
                     }
-
-                ) {
-                    Icon(painter = painterResource(id = R.drawable.ic_next), tint = White,contentDescription = "")
-                }
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_next),
+                    tint = White,
+                    contentDescription = ""
+                )
             }
+
         }
     }
 }
@@ -110,7 +126,7 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
             text = onBoardingPage.title,
             fontSize = MaterialTheme.typography.h1.fontSize,
             fontWeight = FontWeight.Bold,
-            color= Black.copy(0.8f),
+            color = Black.copy(0.8f),
             textAlign = TextAlign.Center
         )
         Text(
@@ -132,19 +148,21 @@ fun FinishButton(
     pagerState: PagerState,
     onClick: () -> Unit
 ) {
-        AnimatedVisibility(
+    AnimatedVisibility(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(50.dp),
+        visible = pagerState.currentPage == 2
+    ) {
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(50.dp),
-            visible = pagerState.currentPage == 2
+                .size(50.dp)
+                .clip(CircleShape)
+                .background(Black)
         ) {
-          Box(modifier = Modifier
-              .size(50.dp)
-              .clip(CircleShape)
-              .background(Black)){
-              Icon(painter = painterResource(id = R.drawable.ic_next), contentDescription = "")
-          }
+            Icon(painter = painterResource(id = R.drawable.ic_next), contentDescription = "")
         }
+    }
 
 }
 

@@ -6,12 +6,12 @@ import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.ResultTest
 import com.example.testfriends_jetpackcompose.data.User
@@ -44,30 +45,44 @@ import com.example.testfriends_jetpackcompose.util.Utils
 
 @Composable
 fun ResultsFriends(resultTest: List<ResultTest>, onClick: (User) -> Unit) {
-
     if (resultTest.isNullOrEmpty()) {
-        Box(
-            contentAlignment = Alignment.Center,
+        LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
+                .background(White)
+                .padding(20.dp)
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.box),
-                contentDescription = "",
-                tint = darkGray, modifier = Modifier.size(120.dp)
-            )
+            item {
+                Step(text = "✿ click the button below")
+                Step(text = "✿ answer your questions  real answers")
+                Step(text = "✿ you get the link share it with your friends ")
+                Step(text = "✿  wait for their answers")
+                Step(text = "✿  Go back to this app and see the results")
+            }
         }
     } else
         LazyColumn(
             Modifier
-                .background(backgroundWhite)
-                .fillMaxSize().padding(bottom = 20.dp)
+                .fillMaxSize()
+                .background(White)
+                .padding(20.dp)
         ) {
 
             items(resultTest.size) {
                 ItemResults(resultTest[it], onClick = { onClick(it) })
             }
         }
+}
+
+@Composable
+fun Step(text: String,color:Color=darkGray) {
+    Text(
+        fontSize = 18.sp,
+        text = text,
+        color = color,
+        textAlign = TextAlign.Start,
+        modifier = Modifier.padding(5.dp)
+    )
 }
 
 @Composable
@@ -88,13 +103,13 @@ fun User(user: User) {
 
 
 @Composable
-fun BoxButton(icon: Int, height: Int, onClick: () -> Unit) {
+fun BoxButton(icon: Int, background: Color = White, height: Int, onClick: () -> Unit) {
     Box(
         modifier = Modifier
             .width(40.dp)
             .height(height.dp)
             .clip(RoundedCornerShape(5.dp))
-            .background(Color.White)
+            .background(background)
             .clickable {
                 onClick()
             }
@@ -117,8 +132,7 @@ fun ItemResults(item: ResultTest, onClick: (User) -> Unit) {
             .fillMaxWidth()
             .height(100.dp)
             .padding(5.dp)
-            .clip(RoundedCornerShape(5.dp))
-            .background(White)
+            .border(width = 0.5.dp, color = darkGray.copy(0.5f), shape = RoundedCornerShape(10.dp))
             .clickable {
                 var user = User(
                     id = 0,
@@ -127,20 +141,19 @@ fun ItemResults(item: ResultTest, onClick: (User) -> Unit) {
                     token = "",
                     email = "",
                     image = "",
-                    myQuestions = item.answers
+                    myQuestions = item.answers,
+                    dynamicLink = ME!!.dynamicLink
                 )
                 onClick(user)
             }
     ) {
 
-        Spacer(modifier = Modifier.width(5.dp))
+        Spacer(modifier = Modifier.width(7.dp))
         Avatar(name = ME!!.username, backgroundWhite)
-
-        Spacer(modifier = Modifier.width(3.dp))
+        Spacer(modifier = Modifier.width(7.dp))
         Column(
             verticalArrangement = Arrangement.SpaceEvenly,
             modifier = Modifier
-                .height(70.dp)
                 .weight(3f)
         ) {
 
@@ -168,7 +181,8 @@ fun ItemResults(item: ResultTest, onClick: (User) -> Unit) {
                     ME!!.myQuestions
                 ) else 0,
                 backgroundIndicatorStrokeWidth = 25f,
-                foregroundIndicatorStrokeWidth = 25f, smallText = ""
+                foregroundIndicatorStrokeWidth = 25f, smallText = "",
+                //foregroundIndicatorColor = Purple500
             )
         }
     }
@@ -190,7 +204,7 @@ fun ListPrev() {
 @Preview
 @Composable
 fun BoxButtonPrev() {
-    BoxButton(icon = R.drawable.share, 30, onClick = {})
+    BoxButton(icon = R.drawable.share, height = 30, onClick = {})
 }
 
 

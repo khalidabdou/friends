@@ -22,13 +22,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
+import com.example.testfriends_jetpackcompose.util.Constant
 import com.example.testfriends_jetpackcompose.util.NetworkResults
+import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.viewmodel.LoginViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -44,12 +47,16 @@ fun LoginScreen(navController: NavController) {
     val context = LocalContext.current
     val token = stringResource(R.string.default_web_client_id)
 
+
+
+
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
             try {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
                 val account = task.getResult(ApiException::class.java)!!
                 //val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
+
                 val user = User(
                     id = 0,
                     inviteId = "",
@@ -57,7 +64,8 @@ fun LoginScreen(navController: NavController) {
                     token = "",
                     email = account.email!!,
                     image = account.photoUrl.toString(),
-                    myQuestions = ""
+                    myQuestions = "",
+                    dynamicLink = ""
                 )
                 authState.saveUser(user)
                 //Toast.makeText(context, account.displayName, Toast.LENGTH_SHORT).show()

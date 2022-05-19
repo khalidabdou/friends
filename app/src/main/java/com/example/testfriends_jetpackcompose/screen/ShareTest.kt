@@ -1,6 +1,5 @@
 package com.example.testfriends_jetpackcompose.screen
 
-import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,12 +14,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import coil.compose.AsyncImage
 import com.example.testfriends_jetpackcompose.R
+import com.example.testfriends_jetpackcompose.data.AnswerElement
 import com.example.testfriends_jetpackcompose.data.DataStoreRepository
 import com.example.testfriends_jetpackcompose.data.Question
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
@@ -35,32 +33,32 @@ import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 
 @Composable
 fun ShareTest(viewModel: CreateTestViewModel) {
-
     val context = LocalContext.current
-    val dataStoreRepository = DataStoreRepository(context = LocalContext.current)
+    //val dataStoreRepository = DataStoreRepository(context = LocalContext.current)
     var scaffoldState = rememberScaffoldState()
 
     var username = ME!!.username
     if (Constant.SENDER != null)
         username = Constant.SENDER!!.username
 
-    LaunchedEffect(key1 = scaffoldState) {
-        viewModel.updateMyQuestions(dataStoreRepository)
-    }
-
     var shortLink by remember { mutableStateOf("") }
     Utils.generateSharingLink(
         deepLink = "${Constant.PREFIX}/${ME!!.inviteId}".toUri()
     ) { generatedLink ->
         shortLink =
-            context.getString(R.string.share_text) + " " + generatedLink + " Or Use my invitation code " + ME!!.inviteId
-        Log.d("dynamic_link", generatedLink)
+             generatedLink
+       viewModel.saveDynamicLink(shortLink)
     }
-    Scaffold {
+
+    LaunchedEffect(key1 = scaffoldState) {
+        viewModel.updateMyQuestions()
+    }
+
+    Scaffold(backgroundColor = Color.White) {
         Column {
             LazyColumn(modifier = Modifier.weight(5f)) {
                 items(viewModel.questions.size) {
-                    ItemAnswer(viewModel.question[it], username)
+                    ItemAnswer(index = it, question = viewModel.question[it], username = username)
                 }
             }
             ShareBox(
@@ -69,6 +67,8 @@ fun ShareTest(viewModel: CreateTestViewModel) {
                     shareChallenge(context = context, shortLink)
                 },
                 onCopyText = {
+                    ME!!.dynamicLink = shortLink
+                    viewModel.updateMyQuestions()
                     copyTextToClipboard(shortLink, context = context)
                 }
             )
@@ -77,7 +77,7 @@ fun ShareTest(viewModel: CreateTestViewModel) {
 }
 
 @Composable
-fun ItemAnswer(question: Question, username: String) {
+fun ItemAnswer(index: Int, question: Question, username: String) {
     var imgUrl = "${Constant.BASE_URL}english/${question.id}/${question.realAnswer.img}"
     if (question.realAnswer.img == "")
         imgUrl = "${Constant.BASE_URL}english/3/4.png"
@@ -85,11 +85,11 @@ fun ItemAnswer(question: Question, username: String) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .border(BorderStroke(2.dp, darkGray), shape = RoundedCornerShape(10.dp))
-            .background(Color.White)
+            .border(
+                BorderStroke(0.3.dp, darkGray.copy(0.3f)),
+                shape = RoundedCornerShape(10.dp)
+            )
     ) {
-
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -105,23 +105,15 @@ fun ItemAnswer(question: Question, username: String) {
                     .weight(4f)
 
             )
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxSize()
-            ) {
-                AsyncImage(
-                    model = imgUrl, contentDescription = null, modifier = Modifier.size(100.dp)
-                )
-                Text(
-                    text = question.realAnswer.text,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.body1,
-                    color = darkGray,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.weight(1f))
-            }
+
+            CardAnswer(
+                index = index,
+                answer = AnswerElement(question.realAnswer.text, question.realAnswer.img),
+                realAnswer = AnswerElement("", ""),
+                width = 100.dp,
+                height = 100.dp,
+                imageSize = 40.dp,
+                onClickAnswer = {})
 
         }
 
@@ -132,7 +124,8 @@ fun ItemAnswer(question: Question, username: String) {
 @Composable
 fun item() {
     //BoxImage(R.drawable.knowledge,"sjfgkdsajfhjdesf")
-    //ItemAnswer(question = questionList[0])
+
+//    ItemAnswer(index = 0,)
 }
 
 @Composable
@@ -141,35 +134,32 @@ fun ShareBox(text: String, onShare: () -> Unit, onCopyText: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
-            .background(darkGray)
+            .background(Color.White)
+            .padding(20.dp)
 
     ) {
         Row(modifier = Modifier.padding(5.dp)) {
-            Spacer(modifier = Modifier
-                .width(10.dp)
-                .height(10.dp))
-            Avatar(ME!!.username, )
-            Spacer(modifier = Modifier
-                .width(10.dp)
-                .height(10.dp))
             Column {
-                TextField(
-                    value = text,
-                    maxLines = 5,
-                    singleLine = false,
-                    onValueChange = {},
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(5.dp)),
-                    colors = TextFieldDefaults.textFieldColors(
-                        focusedIndicatorColor = Color.Transparent,
-                        unfocusedIndicatorColor = Color.Transparent
-                    ),
-                    textStyle = MaterialTheme.typography.body1
-                )
+                Text(text = text, color = darkGray)
+//                TextField(
+//                    value = text,
+//                    maxLines = 5,
+//                    singleLine = false,
+//                    onValueChange = {},
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .clip(RoundedCornerShape(5.dp)),
+//                    textStyle = MaterialTheme.typography.body1,
+//                    colors = TextFieldDefaults.textFieldColors(
+//                        focusedIndicatorColor = Color.Transparent,
+//                        unfocusedIndicatorColor = Color.Transparent,
+//                        textColor = Color.Black
+//                    ),
+//
+//                    )
                 Spacer(modifier = Modifier.height(5.dp))
                 Row(
-                    horizontalArrangement = Arrangement.End,
+                    horizontalArrangement = Arrangement.Center,
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -183,7 +173,10 @@ fun ShareBox(text: String, onShare: () -> Unit, onCopyText: () -> Unit) {
                             end = 20.dp,
                             bottom = 12.dp
                         ),
-                        colors = ButtonDefaults.buttonColors(contentColor = darkGray, backgroundColor = backgroundWhite)
+                        colors = ButtonDefaults.buttonColors(
+                            contentColor = darkGray,
+                            backgroundColor = backgroundWhite
+                        )
 
                     ) {
                         Icon(
@@ -192,19 +185,26 @@ fun ShareBox(text: String, onShare: () -> Unit, onCopyText: () -> Unit) {
                             modifier = Modifier.size(ButtonDefaults.IconSize)
                         )
                         Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text("Share",color= darkGray, style = MaterialTheme.typography.h6)
+                        Text("Share", color = darkGray, style = MaterialTheme.typography.h6)
                     }
                     Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    BoxButton(icon = R.drawable.link, 42,
+                    BoxButton(
+                        icon = R.drawable.link, background = backgroundWhite, height = 50,
                         onClick = {
                             onCopyText()
                         })
                 }
-
-
             }
-
         }
     }
 
+}
+
+@Preview
+@Composable
+fun preview() {
+    ShareBox(
+        text = "jsfhjk adfjhdkjf jhafskjahfk fsjhkjabf sldfkuaidwf ",
+        onCopyText = {},
+        onShare = {})
 }

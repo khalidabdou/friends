@@ -1,6 +1,7 @@
 package com.example.testfriends_jetpackcompose.screen
 
 import android.util.Log
+import android.util.Size
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
@@ -19,7 +20,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.testfriends_jetpackcompose.R
@@ -35,15 +38,11 @@ import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 
 @Composable
 fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewModel) {
-
-
     var index = viewModel.index
     var question = viewModel.question
     var username = ME!!.username
     if (SENDER != null)
         username = SENDER!!.username
-
-
     fun setRealAnswer(answer: AnswerElement) {
         viewModel.setAnswer(answer = answer)
         if (viewModel.incrementIndex()) {
@@ -68,7 +67,7 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(backgroundWhite),
+                .background(Color.White),
             verticalArrangement = Arrangement.Center
         ) {
             Box {
@@ -77,14 +76,14 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
                         .fillMaxWidth()
                         .height(150.dp)
                         .padding(10.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(darkGray),
+                        .clip(RoundedCornerShape(10.dp)),
                     Alignment.Center
-
                 ) {
                     Text(
                         text = viewModel.questions[index].question.replace("****", username),
                         style = MaterialTheme.typography.body1,
+                        color = darkGray,
+                        fontSize = 22.sp,
                     )
                 }
             }
@@ -147,7 +146,9 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
                         .width(50.dp)
                         .height(50.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colors.primary)
+                        .background(Color.Gray.copy(
+                            0.1f
+                        ))
                         .clickable {
                             viewModel.decrementIndex()
                         }
@@ -164,7 +165,10 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
                         .width(50.dp)
                         .height(50.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colors.primary)
+                        .background(
+                            Color.Gray.copy(
+                            0.1f
+                        ))
                         .clickable {
                             Log.d("Answer", question[index].realAnswer.text + " index$index")
                             if (question[index].realAnswer.text != "")
@@ -202,10 +206,10 @@ fun ActionBar(index: String) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .background(Color.White)
             .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp))
-            .background(darkGray)
-            .padding(10.dp)
+            .padding(20.dp)
+
     ) {
         Box(
             modifier = Modifier
@@ -240,14 +244,15 @@ fun ActionBar(index: String) {
             modifier = Modifier
                 .size(40.dp)
                 .clip(RoundedCornerShape(5.dp))
-                .background(Color.White),
+                .background(
+                    backgroundWhite
+                )
         ) {
             Text(
                 textAlign = TextAlign.Justify,
                 text = index,
                 color = darkGray,
-
-                )
+            )
         }
     }
 }
@@ -256,6 +261,9 @@ fun ActionBar(index: String) {
 fun CardAnswer(
     index: Int,
     answer: AnswerElement,
+    width: Dp =150.dp,
+    height:Dp=150.dp,
+    imageSize:Dp=70.dp,
     realAnswer: AnswerElement,
     onClickAnswer: (AnswerElement) -> Unit
 ) {
@@ -267,12 +275,12 @@ fun CardAnswer(
     ) {
         Box(
             modifier = Modifier
-                .width(150.dp)
-                .height(150.dp)
-                .clip(RoundedCornerShape(5.dp))
+                .width(width)
+                .height(height)
+                .clip(RoundedCornerShape(15.dp))
                 .background(
                     if (answer == realAnswer) MaterialTheme.colors.primary else Color.Gray.copy(
-                        0.2f
+                        0.1f
                     )
                 )
                 .clickable {
@@ -283,19 +291,21 @@ fun CardAnswer(
             AsyncImage(
                 model = imgUrl, contentDescription = null,
                 modifier = Modifier
-                    .size(70.dp)
+                    .size(imageSize)
                     .align(Alignment.Center)
 
             )
             Text(
                 style = MaterialTheme.typography.body1,
+                fontSize=16.sp,
                 text = answer.text,
+                color=if (answer != realAnswer) darkGray else Color.White,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .width(150.dp)
                     .height(150.dp)
                     .wrapContentHeight(Alignment.Bottom)
-                    .background(darkGray)
+
             )
 
         }

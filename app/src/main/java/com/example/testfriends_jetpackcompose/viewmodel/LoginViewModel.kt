@@ -4,11 +4,14 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.DataStoreRepository
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.repository.LoginRepo
+import com.example.testfriends_jetpackcompose.util.Constant
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ALREADY_SIGN
 import com.example.testfriends_jetpackcompose.util.HandleResponse
 import com.example.testfriends_jetpackcompose.util.NetworkResults
@@ -90,7 +93,8 @@ class LoginViewModel @Inject constructor(
                     token = "",
                     email = email.value,
                     image = "",
-                    myQuestions = ""
+                    myQuestions = "",
+                    dynamicLink = ""
                 )
                 saveUser(user)
 
@@ -125,6 +129,7 @@ class LoginViewModel @Inject constructor(
                     Log.w("Token", "Fetching FCM registration token failed", task.exception)
                     return@OnCompleteListener
                 }
+
                 user.token = task.result
                 viewModelScope.launch {
                     val response = remoteRepo.updateUser(user = user)

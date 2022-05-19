@@ -33,12 +33,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TestFriends_JetPackComposeTheme {
+
                 //val screen by splashViewModel.startDestination
                 val navController = rememberNavController()
                 val viewModel: CreateTestViewModel = hiltViewModel()
                 var startDestination = splashViewModel.startDestination.value
-
-
                 SetupNavGraph(
                     navController = navController,
                     startDestination = splashViewModel.startDestination.value,

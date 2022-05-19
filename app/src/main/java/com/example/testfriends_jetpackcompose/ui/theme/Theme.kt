@@ -26,18 +26,15 @@ private val LightColorPalette = lightColors(
     onBackground = Color.Black,
     onSurface = Color.Black,
 
-)
+    )
 
 @Composable
 fun TestFriends_JetPackComposeTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
+    val colors =
         LightColorPalette
-    }
 
     MaterialTheme(
         colors = colors,

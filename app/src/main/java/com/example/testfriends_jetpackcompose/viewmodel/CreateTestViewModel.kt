@@ -30,8 +30,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CreateTestViewModel @Inject constructor(
+    val local: DataStoreRepository,
     application: Application,
     @ApplicationContext val context: Context,
+
     private val resultRepo: ResultsRepo,
 ) : AndroidViewModel(application) {
     val questionFromJson = Constant.getJsonDataFromAsset(context = context, "question.json")
@@ -40,6 +42,8 @@ class CreateTestViewModel @Inject constructor(
     var questions: List<Question> = gson.fromJson(questionFromJson, listPersonType)
 
     var userResults: User? = null
+
+    var dynamicLink = ""
 
 
     var resultsList = mutableStateOf<NetworkResults<ListResults>?>(NetworkResults.Loading())
@@ -57,6 +61,7 @@ class CreateTestViewModel @Inject constructor(
 
     var challenge = mutableStateOf<NetworkResults<User>>(NetworkResults.Loading())
         private set
+
 
     fun incrementIndex(): Boolean {
         if (index < question.size - 1) {
@@ -80,30 +85,29 @@ class CreateTestViewModel @Inject constructor(
         }
     }
 
-    fun updateMyQuestions(dataStoreRepository: DataStoreRepository) =
+    fun updateMyQuestions() =
         viewModelScope.launch(Dispatchers.IO) {
             question.forEach {
                 myAnswers += it.realAnswer.text + "*"
             }
 
+            val dynamicLink = ME!!.dynamicLink
             if (ME?.inviteId == null || ME?.inviteId == "")
                 ME?.inviteId = Utils.generateId(ME!!.username) + ME!!.id
             ME!!.myQuestions = myAnswers
-            Log.d("update", ME!!.toString())
             //dataStoreRepository.saveUser(Utils.convertUserToJson(ME!!))
             val response = resultRepo.updateMyQuestions(ME!!)
             val success = HandleResponse(response)
             if (success.handleResult() is NetworkResults.Success) {
-                dataStoreRepository.saveUser(Utils.convertUserToJson(success.handleResult().data!!))
-                Log.d("update", success.handleResult().data.toString())
+                val userObject = success.handleResult().data!!
+                userObject.dynamicLink = dynamicLink
+                val user = Utils.convertUserToJson(userObject)
+                local.saveUser(user)
             }
-
-
         }
 
     fun createResults() =
         viewModelScope.launch {
-
             var myAnswers = ""
             for (item in question) {
                 myAnswers += item.realAnswer.text + "*"
@@ -115,7 +119,6 @@ class CreateTestViewModel @Inject constructor(
                 ME!!.username
             )
         }
-
 
     fun getResults() = viewModelScope.launch(Dispatchers.IO) {
         if (!hasConnection) {
@@ -158,6 +161,17 @@ class CreateTestViewModel @Inject constructor(
                 val handleUser = HandleResponse(response)
                 challenge.value = handleUser.handleResult()
             }
+        }
+    }
+
+
+    fun saveDynamicLink(dynamicLink: String) = viewModelScope.launch {
+        local.saveDynamicLink(dynamicLink)
+    }
+
+    fun shareDynamcLink() = viewModelScope.launch {
+        local.getDynamicLink().collect { link ->
+            dynamicLink = link
         }
     }
 
