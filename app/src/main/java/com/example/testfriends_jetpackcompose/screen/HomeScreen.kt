@@ -168,14 +168,23 @@ fun HomeScreen(navController: NavHostController, createTestViewModel: CreateTest
                     }
                     is NetworkResults.Success -> {
                         SENDER = viewModelresults.challenge.value.data
-                        ChallengeDialog(
-                            user = viewModelresults.challenge.value.data,
-                            onClick = { openDialog.value = it },
-                            onConfirm = {
-                                createTestViewModel.cleanAnswers()
-                                if (it) navController.navigate("Create_screen")
-                            }
-                        )
+                        if (SENDER!!.myQuestions.isNullOrEmpty()) {
+                            Toast.makeText(
+                                LocalContext.current,
+                                "${SENDER!!.username} have no test, tell he to create test ",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                            openDialog.value = false
+                        } else
+                            ChallengeDialog(
+                                user = viewModelresults.challenge.value.data,
+                                onClick = { openDialog.value = it },
+                                onConfirm = {
+                                    createTestViewModel.cleanAnswers()
+                                    if (it) navController.navigate("Create_screen")
+                                }
+                            )
                     }
                     is NetworkResults.Loading -> {
                         ChallengeDialog(user = null, onClick = {

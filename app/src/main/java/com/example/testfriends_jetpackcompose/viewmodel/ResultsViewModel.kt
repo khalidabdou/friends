@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testfriends_jetpackcompose.data.*
+import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.repository.ResultsRepo
 import com.example.testfriends_jetpackcompose.util.HandleResponse
 import com.example.testfriends_jetpackcompose.util.NetworkResults
@@ -34,8 +34,8 @@ class ResultsViewModel @Inject constructor(
             val response = resultsRepo.challenge(id)
             val success= HandleResponse(response)
             challenge.value=success.handleResult()
-            //challenge.value = handleUser(response)
 
+            //challenge.value = handleUser(response)
         }
     }
 

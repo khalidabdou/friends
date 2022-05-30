@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -42,7 +41,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class HandleDynamicLink : ComponentActivity() {
     val TAG = "firebase_app"
     lateinit var context: Context
-     var activitythis=this
+    var notNull = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,11 +55,20 @@ class HandleDynamicLink : ComponentActivity() {
                         var deepLink: Uri? = null
                         if (pendingDynamicLinkData != null) {
                             deepLink = pendingDynamicLinkData.link
-                        }
-                        val userId: String? = deepLink!!.lastPathSegment
-                        Log.d(TAG, userId.toString())
-                        if (userId != null) {
-                            viewModel.challenge(userId)
+                            if (deepLink != null) {
+                                val userId: String? = deepLink.lastPathSegment
+                                if (userId != null) {
+                                    viewModel.challenge(userId)
+                                } else {
+                                    context.startActivity(
+                                        Intent(
+                                            context,
+                                            MainActivity::class.java
+                                        )
+                                    )
+                                    this.finish()
+                                }
+                            }
                         }
                     }
                     .addOnFailureListener(this) {
@@ -105,10 +113,11 @@ class HandleDynamicLink : ComponentActivity() {
     }
 }
 
+
 @ExperimentalPagerApi
 @ExperimentalAnimationApi
 @Composable
-fun challenge(user: User,onStartClick:()->Unit) {
+fun challenge(user: User, onStartClick: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
