@@ -9,5 +9,5 @@ sealed class Screen (val route :String) {
     object LoginScreen : Screen(route = "Login_screen")
     object StartScreen : Screen(route = "Start_screen")
     object FinalScreen : Screen(route = "Final_screen")
-
+    object Answer : Screen(route = "Answer_screen")
 }

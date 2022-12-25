@@ -9,6 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.testfriends_jetpackcompose.navigation.SetupNavGraph
 import com.example.testfriends_jetpackcompose.ui.theme.TestFriends_JetPackComposeTheme
+import com.example.testfriends_jetpackcompose.viewmodel.AnswerTestViewModel
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 import com.example.testfriends_jetpackcompose.viewmodel.SplashViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -37,11 +38,13 @@ class MainActivity : ComponentActivity() {
                 //val screen by splashViewModel.startDestination
                 val navController = rememberNavController()
                 val viewModel: CreateTestViewModel = hiltViewModel()
+                val viewModel2: AnswerTestViewModel = hiltViewModel()
                 var startDestination = splashViewModel.startDestination.value
                 SetupNavGraph(
                     navController = navController,
                     startDestination = splashViewModel.startDestination.value,
-                    viewModel
+                    viewModel,
+                    viewModel2
                 )
             }
         }

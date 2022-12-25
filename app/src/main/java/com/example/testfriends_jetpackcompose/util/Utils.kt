@@ -16,6 +16,8 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.testfriends_jetpackcompose.R
+import com.example.testfriends_jetpackcompose.data.AnswerElement
+import com.example.testfriends_jetpackcompose.data.Question
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
@@ -26,6 +28,7 @@ import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.dynamiclinks.ktx.shortLinkAsync
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 
 class Utils {
@@ -48,23 +51,8 @@ class Utils {
         }
 
         fun compareResults(sender: String, myAnswers: String): Int {
-            Log.d("question ", sender)
-            Log.d("question 2", myAnswers)
-            if (myAnswers == "")
-                return 0
-            var res = 0
-            val list1 = sender.split("*").toTypedArray()
-            val list2 = myAnswers.split("*").toTypedArray()
-            var i = 0
-            Log.d("list 1", list1.size.toString())
-            Log.d("list 2", list2.size.toString())
-            for (item in list1) {
-                if (item == list2[i])
-                    res++
-                i++
-            }
-            res = (res * 100) / list1.size
-            return res
+
+            return 10
         }
 
         fun score(sender: String, myAnswers: String): String {
@@ -163,6 +151,19 @@ class Utils {
                 else -> false
             }
         }
+        fun stringToQuestionArrayList(question: String): List<Question> {
+
+            var q=question
+
+
+            val gson = Gson()
+            val list: List<Question> = gson.fromJson(q, object : TypeToken<List<Question>>() {}.type)
+
+            return list
+        }
+
+
     }
+
 
 }

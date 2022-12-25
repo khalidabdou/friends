@@ -9,7 +9,7 @@ class Constant {
     companion object {
 
         val PREFIX: String = "https://testfriends.page.link"
-        val BASE_URL = "http://206.189.121.105:3001/"
+        val BASE_URL = "http://206.189.121.105:9000/"
 
         val ALREADY_SIGN = "address is already in use by another account"
 

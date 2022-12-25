@@ -18,7 +18,8 @@ fun ChallengeDialog(user: User?, onConfirm: (Boolean) -> Unit?, onClick: (Boolea
         onDismissRequest = {}, title = {
             if (user != null) {
                 Text(
-                    text = "Do you know ${user.username}",
+                    text = "Do you know ${user.username}?",
+                    color= backgroundWhite,
                     style = MaterialTheme.typography.h3,
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center

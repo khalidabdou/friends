@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,7 +30,8 @@ import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
 import com.example.testfriends_jetpackcompose.util.NetworkResults
-import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
+import com.example.testfriends_jetpackcompose.util.Utils
+import com.example.testfriends_jetpackcompose.viewmodel.AnswerTestViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.firebase.dynamiclinks.ktx.dynamicLinks
 import com.google.firebase.ktx.Firebase
@@ -42,25 +44,34 @@ import dagger.hilt.android.AndroidEntryPoint
 class HandleDynamicLink : ComponentActivity() {
     val TAG = "firebase_app"
     lateinit var context: Context
-     var activitythis=this
+    var notNull = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             TestFriends_JetPackComposeTheme {
                 context = LocalContext.current
-                val viewModel: CreateTestViewModel = hiltViewModel()
+                val viewModel: AnswerTestViewModel = hiltViewModel()
                 Firebase.dynamicLinks
                     .getDynamicLink(intent)
                     .addOnSuccessListener(this) { pendingDynamicLinkData ->
                         var deepLink: Uri? = null
                         if (pendingDynamicLinkData != null) {
                             deepLink = pendingDynamicLinkData.link
-                        }
-                        val userId: String? = deepLink!!.lastPathSegment
-                        Log.d(TAG, userId.toString())
-                        if (userId != null) {
-                            viewModel.challenge(userId)
+                            if (deepLink != null) {
+                                val userId: String? = deepLink.lastPathSegment
+                                if (userId != null) {
+                                    viewModel.challenge(userId)
+                                } else {
+                                    context.startActivity(
+                                        Intent(
+                                            context,
+                                            MainActivity::class.java
+                                        )
+                                    )
+                                    this.finish()
+                                }
+                            }
                         }
                     }
                     .addOnFailureListener(this) {
@@ -73,15 +84,19 @@ class HandleDynamicLink : ComponentActivity() {
                         this.finish()
                     }
 
-                when (viewModel.challenge.value) {
+                when (viewModel._questions.value) {
                     is NetworkResults.Error -> {
                         context.startActivity(Intent(context, MainActivity::class.java))
                         this.finish()
                     }
                     is NetworkResults.Success -> {
-                        SENDER = viewModel.challenge.value.data!!
+                        SENDER = viewModel._questions.value!!.data!!
+                        Log.d("USER", viewModel._questions.value!!.data!!.myQuestions)
+                        viewModel.questions =
+                            Utils.stringToQuestionArrayList(viewModel._questions.value!!.data!!.myQuestions)
+                                .toMutableStateList()
                         challenge(
-                            viewModel.challenge.value.data!!,
+                            viewModel._questions.value!!.data!!,
                             onStartClick = {
                                 context.startActivity(Intent(context, MainActivity::class.java))
                                 this.finish()
@@ -105,10 +120,11 @@ class HandleDynamicLink : ComponentActivity() {
     }
 }
 
+
 @ExperimentalPagerApi
 @ExperimentalAnimationApi
 @Composable
-fun challenge(user: User,onStartClick:()->Unit) {
+fun challenge(user: User, onStartClick: () -> Unit) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier

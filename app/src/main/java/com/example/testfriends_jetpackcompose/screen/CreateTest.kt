@@ -2,6 +2,7 @@ package com.example.testfriends_jetpackcompose.screen
 
 import android.util.Log
 import android.util.Size
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
@@ -16,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -27,24 +29,37 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.AnswerElement
+import com.example.testfriends_jetpackcompose.data.Question
 import com.example.testfriends_jetpackcompose.navigation.Screen
 import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
 import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.Constant
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
+import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 
 
 @Composable
 fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewModel) {
+    val context= LocalContext.current
     var index = viewModel.index
     var question = viewModel.question
     var username = ME!!.username
-    if (SENDER != null)
+    if (SENDER != null){
         username = SENDER!!.username
-    fun setRealAnswer(answer: AnswerElement) {
-        viewModel.setAnswer(answer = answer)
+        viewModel.question = Utils.stringToQuestionArrayList(SENDER!!.myQuestions)
+        //Log.d("CHAAA",SENDER!!.myQuestions)
+        //Toast.makeText(context,question.size.toString(),Toast.LENGTH_LONG).show()
+    }
+
+
+    fun setRealAnswer(answer: String) {
+        if (SENDER == null){
+            viewModel.setAnswer(answer = answer)
+        }else{
+            viewModel.setAnswerSender(answer)
+        }
         if (viewModel.incrementIndex()) {
             if (SENDER == null) {
                 navHostController.navigate("Share_screen")
@@ -97,14 +112,14 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
             ) {
                 CardAnswer(
                     index = index,
-                    answer = viewModel.questions[index].answer1,
+                    answer = question[index].answer1,
                     realAnswer = question[index].realAnswer,
 
                     ) { answer -> setRealAnswer(answer) }
                 Spacer(modifier = Modifier.width(20.dp))
                 CardAnswer(
                     index = index,
-                    answer = viewModel.questions[index].answer2,
+                    answer = question[index].answer2,
                     realAnswer = question[index].realAnswer,
                 ) { answer ->
                     setRealAnswer(answer = answer)
@@ -119,7 +134,7 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
             ) {
                 CardAnswer(
                     index = index,
-                    answer = viewModel.questions[index].answer3,
+                    answer = question[index].answer3,
                     realAnswer = question[index].realAnswer,
                 ) { answer ->
                     setRealAnswer(answer = answer)
@@ -127,7 +142,7 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
                 Spacer(modifier = Modifier.width(20.dp))
                 CardAnswer(
                     index = index,
-                    answer = viewModel.questions[index].answer4,
+                    answer = question[index].answer4,
                     realAnswer = question[index].realAnswer,
                 ) { answer ->
                     setRealAnswer(answer = answer)
@@ -198,141 +213,3 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
 }
 
 
-@Composable
-fun ActionBar(index: String) {
-    val onBackPressedDispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(Color.White)
-            .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp))
-            .padding(20.dp)
-
-    ) {
-        Box(
-            modifier = Modifier
-                .size(40.dp)
-                .clip(RoundedCornerShape(5.dp))
-                .background(
-                    backgroundWhite
-                )
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_before),
-                contentDescription = "",
-                tint = darkGray,
-                modifier = Modifier
-                    .size(30.dp)
-                    .align(
-                        Alignment.Center
-                    )
-                    .clickable {
-                        onBackPressedDispatcher?.onBackPressed()
-                    }
-            )
-        }
-        if (SENDER != null)
-            Text(
-                text = "answer for ${SENDER!!.username} questions ",
-                style = MaterialTheme.typography.body1,
-                color = backgroundWhite
-            )
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .size(40.dp)
-                .clip(RoundedCornerShape(5.dp))
-                .background(
-                    backgroundWhite
-                )
-        ) {
-            Text(
-                textAlign = TextAlign.Justify,
-                text = index,
-                color = darkGray,
-            )
-        }
-    }
-}
-
-@Composable
-fun CardAnswer(
-    index: Int,
-    answer: AnswerElement,
-    width: Dp =150.dp,
-    height:Dp=150.dp,
-    imageSize:Dp=70.dp,
-    realAnswer: AnswerElement,
-    onClickAnswer: (AnswerElement) -> Unit
-) {
-    var imgUrl = "${Constant.BASE_URL}english/$index/${answer.img}"
-    if (answer.img == "")
-        imgUrl = "${Constant.BASE_URL}english/3/4.png"
-    Column(
-        modifier = Modifier
-    ) {
-        Box(
-            modifier = Modifier
-                .width(width)
-                .height(height)
-                .clip(RoundedCornerShape(15.dp))
-                .background(
-                    if (answer == realAnswer) MaterialTheme.colors.primary else Color.Gray.copy(
-                        0.1f
-                    )
-                )
-                .clickable {
-                    onClickAnswer(answer)
-                }
-        ) {
-
-            AsyncImage(
-                model = imgUrl, contentDescription = null,
-                modifier = Modifier
-                    .size(imageSize)
-                    .align(Alignment.Center)
-
-            )
-            Text(
-                style = MaterialTheme.typography.body1,
-                fontSize=16.sp,
-                text = answer.text,
-                color=if (answer != realAnswer) darkGray else Color.White,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .width(150.dp)
-                    .height(150.dp)
-                    .wrapContentHeight(Alignment.Bottom)
-
-            )
-
-        }
-    }
-
-}
-
-
-@Composable
-fun MyTextField(
-    label: String,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    value: String,
-    onValueChanged: (String) -> Unit,
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChanged,
-        label = { Text(text = label) },
-        visualTransformation = visualTransformation,
-        keyboardOptions = keyboardOptions
-    )
-}
-
-@Composable
-@Preview
-fun prev() {
-    // MyCard(img = R.drawable.knowledge, answer = "crau", realAnswer = "", onClick = {})
-}

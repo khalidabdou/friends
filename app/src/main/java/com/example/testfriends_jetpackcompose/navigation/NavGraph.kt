@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.testfriends_jetpackcompose.screen.*
+import com.example.testfriends_jetpackcompose.viewmodel.AnswerTestViewModel
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 
@@ -17,6 +18,7 @@ fun SetupNavGraph(
     navController: NavHostController,
     startDestination: String,
     viewModel: CreateTestViewModel,
+    viewModel2: AnswerTestViewModel
 
 ) {
     NavHost(
@@ -41,7 +43,11 @@ fun SetupNavGraph(
         }
 
         composable(route = Screen.FinalScreen.route) {
-            FinalScreen(navHostController = navController, viewModel = viewModel)
+            FinalScreen(navHostController = navController, viewModel = viewModel2)
+        }
+
+        composable(route = Screen.Answer.route) {
+            AnswerTestMain(navHostController = navController, viewModel = viewModel2)
         }
 
     }

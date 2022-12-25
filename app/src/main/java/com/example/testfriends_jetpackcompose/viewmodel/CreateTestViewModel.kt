@@ -74,11 +74,15 @@ class CreateTestViewModel @Inject constructor(
         if (index > 0) index--
     }
 
-    fun setAnswer(answer: AnswerElement) {
-        question[index].realAnswer = answer
+    fun setAnswer(answer: String) {
+        question[index].realAnswer.text = answer
     }
 
-    fun cleanAnswers() {
+    fun setAnswerSender(answer: String) {
+        question[index].answerSender = answer
+    }
+
+        fun cleanAnswers() {
         index = 0
         question.forEach { item ->
             item.realAnswer = AnswerElement("", "")
@@ -87,14 +91,15 @@ class CreateTestViewModel @Inject constructor(
 
     fun updateMyQuestions() =
         viewModelScope.launch(Dispatchers.IO) {
-            question.forEach {
-                myAnswers += it.realAnswer.text + "*"
-            }
+//            question.forEach {
+//                myAnswers += it.realAnswer.text + "*"
+//            }
 
             val dynamicLink = ME!!.dynamicLink
             if (ME?.inviteId == null || ME?.inviteId == "")
                 ME?.inviteId = Utils.generateId(ME!!.username) + ME!!.id
-            ME!!.myQuestions = myAnswers
+            ME!!.myQuestions = gson.toJson(question)
+
             //dataStoreRepository.saveUser(Utils.convertUserToJson(ME!!))
             val response = resultRepo.updateMyQuestions(ME!!)
             val success = HandleResponse(response)
@@ -152,7 +157,6 @@ class CreateTestViewModel @Inject constructor(
 
     fun challenge(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d("user", "begin")
             if (id == "")
                 return@launch
             if (challenge.value is NetworkResults.Error || challenge.value is NetworkResults.Loading) {
@@ -160,6 +164,8 @@ class CreateTestViewModel @Inject constructor(
                 val response = resultRepo.challenge(id)
                 val handleUser = HandleResponse(response)
                 challenge.value = handleUser.handleResult()
+                var arra=Utils.stringToQuestionArrayList(challenge.value.data!!.myQuestions)
+                Log.d("challenge",arra.toString())
             }
         }
     }
