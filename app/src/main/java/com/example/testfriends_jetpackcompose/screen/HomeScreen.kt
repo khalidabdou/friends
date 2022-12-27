@@ -137,6 +137,7 @@ fun HomeScreen(
                 if (createTestViewModel.dynamicLink == "")
                     FloatingActionButton(
                         containerColor = MaterialTheme.colorScheme.secondary, onClick = {
+
                             createTestViewModel.cleanAnswers()
                             navController.navigate(Screen.Create.route)
                         }) {
@@ -372,28 +373,30 @@ fun AppBar(
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
-                Row(
-                    modifier = Modifier
-                        .padding(6.dp)
-                        .clip(RoundedCornerShape(6.dp)),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    AsyncImage(
-                        model = language.image,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .size(25.dp)
-                            .clip(CircleShape)
-                            .clickable {
-                                onLanguageChange()
-                            }
-                    )
-                    Spacer(modifier = Modifier.width(6.dp))
-                    Text(
-                        text = language.label, style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
+                //language
+//                Row(
+//                    modifier = Modifier
+//                        .padding(6.dp)
+//                        .clip(RoundedCornerShape(6.dp))
+//                        .clickable {
+//                            onLanguageChange()
+//                        },
+//                    verticalAlignment = Alignment.CenterVertically
+//                ) {
+//                    AsyncImage(
+//                        model = language.image,
+//                        contentDescription = "",
+//                        modifier = Modifier
+//                            .size(25.dp)
+//                            .clip(CircleShape)
+//
+//                    )
+//                    Spacer(modifier = Modifier.width(6.dp))
+//                    Text(
+//                        text = language.label, style = MaterialTheme.typography.bodySmall,
+//                        color = MaterialTheme.colorScheme.primary
+//                    )
+//                }
 
             }
             Spacer(modifier = Modifier.height(20.dp))
@@ -512,11 +515,12 @@ fun NavigationDrawer(context: Context) {
                             width = 2.dp,
                             color = MaterialTheme.colorScheme.onBackground,
                             radius = 6.dp
-                        ).clickable {
-                                    Utils.copyTextToClipboard(
-                                        text = "${ME!!.dynamicLink}",
-                                        context = context
-                                    )
+                        )
+                        .clickable {
+                            Utils.copyTextToClipboard(
+                                text = "${ME!!.dynamicLink}",
+                                context = context
+                            )
                         },
                     contentAlignment = Alignment.Center
                 ) {

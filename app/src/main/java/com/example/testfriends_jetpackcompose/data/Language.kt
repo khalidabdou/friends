@@ -17,6 +17,13 @@ data class Language(
                 questions = "What is the capital of the United States?"
             ),
             Language(
+                id = 1,
+                label = "العربية",
+                code = "ar",
+                image = "https://cdn-icons-png.flaticon.com/512/323/323301.png",
+                questions = "What is the capital of the United States?"
+            ),
+            Language(
                 id = 2,
                 label = "Spanish",
                 code = "es",

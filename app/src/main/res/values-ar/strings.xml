@@ -12,7 +12,24 @@
     <string name="step3">🔗 سيتم إنشاء رابط الاختبار الخاص بك.</string>
     <string name="step4">📩 ارسل الرابط إلى أصدقائك.</string>
     <string name="step5">🏃‍️ ارجع لرؤية نتائجهم.</string>
-
+    <string name="create_an_acount">أنشئ حساب</string>
+    <string name="already_have_an_ccount">لديك بالفعل حساب</string>
+    <string name="with_google">تواصل مع Google</string>
+    <string name="results">النتائج</string>
+    <string name="challenge">تحدي</string>
+    <string name="add_question">أضف سؤال</string>
+    <string name="done">تم</string>
+    <string name="empty">فارغ</string>
+    <string name="add">أضف</string>
+    <string name="cancel">إلغاء</string>
+    <string name="your_question">سؤالك</string>
+    <string name="real_answer">الإجابة الحقيقية</string>
+    <string name="chose1">اختيار خاطئ 1</string>
+    <string name="chose2">اختيار خاطئ 2</string>
+    <string name="chose3">اختيار خاطئ 3</string>
+    <string name="share">شارك</string>
+    <string name="copy">نسخ</string>
+    <string name="want_challenge">هنا هو الاختبار الذي أنشأه ****. قبل التحدي وأجيب على الأسئلة لمعرفة كم معرفتك الحقيقية لصديقك!</string>
 
     <string name="welcome_title1">اختبار الصداقة الأفضل 🌟</string>
     <string name="welcome_desc1">أصنع اختبارًا للأصدقاء للتحقق مدى معرفتهم لك!🤔 أنشئ  أسئلة اختبار عن نفسك💭. يمكنك استخدام أمثلتنا أو كتابة أسئلة وأجوبة خاصة بك📝. لا تفكر كثيرًا في اختيار الجواب🤯. فقط اختر الجواب الذي يبدو أنه يوصفك بأدق الطريقة🤔. كن صادقًا👍🏼!</string>
