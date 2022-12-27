@@ -1,6 +1,46 @@
 <resources>
-    <string name="app_name">TestFriends_JetPackCompose</string>
-    <string name="title_activity_handle_dynamic_link">HandleDynamicLink</string>
-    <string name="share_text">Check your friendship score with me BFF Friendship Test App,  </string>
+    <string name="title_activity_handle_dynamic_link" translatable="false">HandleDynamicLink</string>
+
+    <string name="app_name">Test Friendship</string>
+
+    <string name="share_text">Test Friendship : Answer My Questions,  </string>
+    <string name="user_not_found">user not found</string>
+    <string name="have_no_answers">This user has no test</string>
+    <string name="profile">Profile</string>
+    <string name="welcome">Welcome</string>
+    <string name="step1">📲 Tap the button below</string>
+    <string name="step2">💭 Answer questions about yourself.</string>
+    <string name="step3">🔗 Your quiz link will be created.</string>
+    <string name="step4">📩 Send the link to your friends.</string>
+    <string name="step5">🏃‍️ Come back to see their results.</string>
+    <string name="create_an_acount">Create an account</string>
+    <string name="already_have_an_ccount">Already have an account</string>
+    <string name="with_google">Continue with Google</string>
+    <string name="results">Results</string>
+    <string name="challenge">Challenge</string>
+    <string name="add_question">Add Question</string>
+    <string name="done">Done</string>
+    <string name="empty">empty field</string>
+    <string name="add">Add</string>
+    <string name="cancel">cancel</string>
+    <string name="your_question">Your Question</string>
+    <string name="real_answer">Real Answer</string>
+    <string name="chose1">wrong chose 1</string>
+    <string name="chose2">wrong chose 2</string>
+    <string name="chose3">wrong chose 3</string>
+    <string name="share">Share</string>
+    <string name="copy">Copy</string>
+    <string name="want_challenge">Here is the quiz created by **** . Accept the challenge and answer questions to find out how well you really know your friend!</string>
+
+    <string name="welcome_title1">Best Friends Quiz 🌟</string>
+    <string name="welcome_desc1">Make a quiz for friends to check how well they know you!🤔 Create quiz questions about yourself💭. You can use our examples or write your own questions and answers📝. Don\'t think too long about which answer to choose🤯. Just select the one that seems to describe you most accurately🤔. Be honest👍🏼!</string>
+
+    <string name="welcome_title2">Friendship Quiz For Whatsapp 💬</string>
+    <string name="welcome_desc2">After answering all the questions you\'ll get a link to your friendship quiz. Share it with your friends on Whatsapp, Messenger or via email to check how well your friends really know you 😉! Who\'s ready to take up the challenge and who will get the highest score?</string>
+
+    <string name="welcome_title3">Quiz for fun 😂!</string>
+    <string name="welcome_desc3">It\'s supposed to be fun 😄! Don\'t take the results too seriously 😵! If your friends score a low number of points 💯 it doesn\'t mean that your bond is weak 😕. It might mean that your questions were really tricky or still there is a lot to find out about each other and strengthen your friendship!</string>
+
+
 
 </resources>

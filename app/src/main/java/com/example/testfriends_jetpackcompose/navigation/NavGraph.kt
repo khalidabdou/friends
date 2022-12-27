@@ -33,7 +33,7 @@ fun SetupNavGraph(
         }
 
         composable(route = Screen.Home.route) {
-            HomeScreen(navController = navController, viewModel)
+            HomeScreen(navController = navController, viewModel,viewModel2)
         }
         composable(route = Screen.Create.route) {
             TestMain(navHostController = navController, viewModel = viewModel)
@@ -44,6 +44,10 @@ fun SetupNavGraph(
 
         composable(route = Screen.FinalScreen.route) {
             FinalScreen(navHostController = navController, viewModel = viewModel2)
+        }
+
+        composable(route = Screen.ResultsScreen.route) {
+            ResultsScreen(navHostController = navController, viewModel = viewModel,viewModel2)
         }
 
         composable(route = Screen.Answer.route) {

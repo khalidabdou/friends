@@ -2,7 +2,7 @@ package com.example.testfriends_jetpackcompose.data
 
 data class Question(
     val id: Int,
-    val question: String,
+    var question: String,
     var realAnswer: AnswerElement,
     var answerSender: String?,
     val answer1: AnswerElement,

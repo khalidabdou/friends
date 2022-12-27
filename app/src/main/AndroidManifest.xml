@@ -17,12 +17,12 @@
             android:label="@string/title_activity_handle_dynamic_link"
             android:theme="@style/Theme.TestFriends_JetPackCompose.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+                <action android:name="android.intent.action.VIEW"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
                 <data
                     android:host="testfriends.page.link"
-                    android:scheme="https" />
+                    android:scheme="https"/>
             </intent-filter>
         </activity>
         <activity

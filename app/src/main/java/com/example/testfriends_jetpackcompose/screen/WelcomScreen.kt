@@ -1,33 +1,31 @@
 package com.example.testfriends_jetpackcompose.screen
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Black
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.navigation.Screen
 import com.example.testfriends_jetpackcompose.util.OnBoardingPage
-import com.google.accompanist.pager.*
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
 
 
@@ -44,13 +42,13 @@ fun WelcomeScreen(
     )
     var pagerState = rememberPagerState()
     val scope = rememberCoroutineScope()
-    var page=0
-
+    var page = 0
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
+
     ) {
         HorizontalPager(
             modifier = Modifier.weight(10f),
@@ -69,17 +67,19 @@ fun WelcomeScreen(
         ) {
             HorizontalPagerIndicator(
                 modifier = Modifier.weight(5f),
-                pagerState = pagerState
-            )
+                pagerState = pagerState,
+                activeColor = MaterialTheme.colorScheme.primary,
+                inactiveColor = MaterialTheme.colorScheme.primary.copy(0.4f),
 
+
+                )
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
                     .size(50.dp)
                     .clip(CircleShape)
-                    .background(Black)
+                    .background(MaterialTheme.colorScheme.primary)
                     .clickable {
-
                         if (pagerState.currentPage == 2) {
                             //welcomeViewModel.saveOnBoardingState(completed = true)
                             navController.popBackStack()
@@ -89,12 +89,11 @@ fun WelcomeScreen(
                                 page++
                                 pagerState.scrollToPage(page)
                             }
-
                     }
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_next),
-                    tint = White,
+                    tint = MaterialTheme.colorScheme.onPrimary,
                     contentDescription = ""
                 )
             }
@@ -109,24 +108,29 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(White),
+            .background(MaterialTheme.colorScheme.background),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        Image(
-            modifier = Modifier
-                .fillMaxWidth(0.5f)
-                .fillMaxHeight(0.7f),
-            painter = painterResource(id = onBoardingPage.image),
-            contentDescription = "Pager Image"
-        )
+        Box(
+            modifier = Modifier.fillMaxSize(0.4f),
+            contentAlignment = Alignment.Center) {
+            Icon(
+                modifier = Modifier
+                    .size(70.dp),
+                painter = painterResource(id = onBoardingPage.image),
+                contentDescription = "Pager Image",
+                tint = MaterialTheme.colorScheme.primary
+            )
+        }
+
         Text(
             modifier = Modifier
                 .fillMaxWidth(),
-            text = onBoardingPage.title,
-            fontSize = MaterialTheme.typography.h1.fontSize,
+            text = stringResource(id = onBoardingPage.title),
+            style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
-            color = Black.copy(0.8f),
+            color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center
         )
         Text(
@@ -134,50 +138,11 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp)
                 .padding(top = 20.dp),
-            text = onBoardingPage.description,
-            style = MaterialTheme.typography.h5,
-            textAlign = TextAlign.Center
-        )
+            text = stringResource(id = onBoardingPage.description),
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.secondary,
+
+            )
     }
 }
 
-@ExperimentalAnimationApi
-@ExperimentalPagerApi
-@Composable
-fun FinishButton(
-    pagerState: PagerState,
-    onClick: () -> Unit
-) {
-    AnimatedVisibility(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(50.dp),
-        visible = pagerState.currentPage == 2
-    ) {
-        Box(
-            modifier = Modifier
-                .size(50.dp)
-                .clip(CircleShape)
-                .background(Black)
-        ) {
-            Icon(painter = painterResource(id = R.drawable.ic_next), contentDescription = "")
-        }
-    }
-
-}
-
-@Composable
-@Preview(showBackground = true)
-fun FirstOnBoardingScreenPreview() {
-    Column(modifier = Modifier.fillMaxSize()) {
-        PagerScreen(onBoardingPage = OnBoardingPage.First)
-    }
-}
-
-@Composable
-@Preview(showBackground = true)
-fun SecondOnBoardingScreenPreview() {
-    Column(modifier = Modifier.fillMaxSize()) {
-        PagerScreen(onBoardingPage = OnBoardingPage.Second)
-    }
-}

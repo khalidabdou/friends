@@ -1,8 +1,6 @@
 package com.example.testfriends_jetpackcompose.screen
 
 import android.annotation.SuppressLint
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
@@ -10,14 +8,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -28,38 +26,38 @@ import coil.compose.AsyncImage
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.AnswerElement
 import com.example.testfriends_jetpackcompose.navigation.Screen
-import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
-import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.Constant
-import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
 import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.viewmodel.AnswerTestViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AnswerTestMain(navHostController: NavHostController, viewModel: AnswerTestViewModel) {
     var index = viewModel.index
-    val context = LocalContext.current
-    val questions = Utils.stringToQuestionArrayList(SENDER!!.myQuestions)
-    if (viewModel.questions.isNullOrEmpty())
+
+    if (viewModel.sender.value?.data==null && SENDER!=null){
+        viewModel.sender.value?.data= SENDER
+    }
+    val sender = viewModel.sender.value!!.data!!
+    val questions = Utils.stringToQuestionArrayList(sender.myQuestions)
+    if (viewModel.questions.isNullOrEmpty()) {
         viewModel.questions = questions.toMutableStateList()
-    val username = ME!!.username
+    }
+
+    //val username = ME!!.username
     //Toast.makeText(context, "reql", Toast.LENGTH_LONG).show()
-    fun setRealAnswer(answer: String) {
+    fun setRealAnswer(answer: AnswerElement) {
         viewModel.setAnswer(answer = answer)
-        questions[index].answerSender = answer
-        //viewModel.questions[index].answerSender = "kkkkkk"
-        Log.d("ANSWER", "${questions[index].answerSender} + $answer")
-        if (index > 0)
-            Log.d("ANSWER", "${questions[index - 1].answerSender} + $answer")
+        //questions[index].answerSender = answer
         if (viewModel.incrementIndex()) {
-            Log.d("ANSWER", "${questions[index]}")
+            //Log.d("ANSWER", "${questions[index]}")
             navHostController.navigate(Screen.FinalScreen.route)
         }
     }
 
     val scaffoldState = rememberScaffoldState()
-    Scaffold(scaffoldState = scaffoldState,
+    Scaffold(
         topBar = {
             ActionBar("${index + 1}/${questions.size}")
         }
@@ -67,7 +65,8 @@ fun AnswerTestMain(navHostController: NavHostController, viewModel: AnswerTestVi
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White),
+                .background(MaterialTheme.colorScheme.background)
+                .padding(it),
             verticalArrangement = Arrangement.Center
         ) {
             Box {
@@ -80,10 +79,10 @@ fun AnswerTestMain(navHostController: NavHostController, viewModel: AnswerTestVi
                     Alignment.Center
                 ) {
                     Text(
-                        text = questions[index].question.replace("****", username),
-                        style = MaterialTheme.typography.body1,
-                        color = darkGray,
-                        fontSize = 22.sp,
+                        text = questions[index].question.replace("****", sender.username),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onBackground,
+                        textAlign = TextAlign.Center
                     )
                 }
             }
@@ -97,16 +96,13 @@ fun AnswerTestMain(navHostController: NavHostController, viewModel: AnswerTestVi
                 CardAnswer(
                     index = index,
                     answer = questions[index].answer1,
-                    realAnswer = questions[index].realAnswer,
-
-                    ) { answer ->
+                ) { answer ->
                     setRealAnswer(answer)
                 }
                 Spacer(modifier = Modifier.width(20.dp))
                 CardAnswer(
                     index = index,
                     answer = questions[index].answer2,
-                    realAnswer = questions[index].realAnswer,
                 ) { answer ->
                     setRealAnswer(answer = answer)
                 }
@@ -121,7 +117,6 @@ fun AnswerTestMain(navHostController: NavHostController, viewModel: AnswerTestVi
                 CardAnswer(
                     index = index,
                     answer = questions[index].answer3,
-                    realAnswer = questions[index].realAnswer,
                 ) { answer ->
 
                     setRealAnswer(answer = answer)
@@ -130,7 +125,6 @@ fun AnswerTestMain(navHostController: NavHostController, viewModel: AnswerTestVi
                 CardAnswer(
                     index = index,
                     answer = questions[index].answer4,
-                    realAnswer = questions[index].realAnswer,
                 ) { answer ->
                     setRealAnswer(answer = answer)
                 }
@@ -175,7 +169,7 @@ fun AnswerTestMain(navHostController: NavHostController, viewModel: AnswerTestVi
                             )
                         )
                         .clickable {
-                            Log.d("Answer", questions[index].realAnswer.text + " index$index")
+                            //Log.d("Answer", questions[index].realAnswer.text + " index$index")
                             if (questions[index].realAnswer.text != "")
                                 if (viewModel.incrementIndex()) {
 
@@ -210,7 +204,7 @@ fun ActionBar(index: String) {
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .clip(RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp))
             .padding(20.dp)
 
@@ -220,13 +214,13 @@ fun ActionBar(index: String) {
                 .size(40.dp)
                 .clip(RoundedCornerShape(5.dp))
                 .background(
-                    backgroundWhite
+                    MaterialTheme.colorScheme.secondary
                 )
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_before),
                 contentDescription = "",
-                tint = darkGray,
+                tint = MaterialTheme.colorScheme.onSecondary,
                 modifier = Modifier
                     .size(30.dp)
                     .align(
@@ -237,25 +231,25 @@ fun ActionBar(index: String) {
                     }
             )
         }
-        if (SENDER != null)
-            Text(
-                text = "answer for ${SENDER!!.username} questions ",
-                style = MaterialTheme.typography.body1,
-                color = darkGray
-            )
+
+        Text(
+            text = "answer for questions ",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.secondary
+        )
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .size(40.dp)
                 .clip(RoundedCornerShape(5.dp))
                 .background(
-                    backgroundWhite
+                    MaterialTheme.colorScheme.secondary
                 )
         ) {
             Text(
                 textAlign = TextAlign.Justify,
                 text = index,
-                color = darkGray,
+                color = MaterialTheme.colorScheme.onSecondary,
             )
         }
     }
@@ -269,8 +263,7 @@ fun CardAnswer(
     width: Dp = 150.dp,
     height: Dp = 150.dp,
     imageSize: Dp = 70.dp,
-    realAnswer: AnswerElement,
-    onClickAnswer: (String) -> Unit
+    onClickAnswer: (AnswerElement) -> Unit
 ) {
 
 
@@ -286,12 +279,12 @@ fun CardAnswer(
                 .height(height)
                 .clip(RoundedCornerShape(15.dp))
                 .background(
-                    backgroundWhite
+                    MaterialTheme.colorScheme.secondary
                 )
                 .clickable {
 
 
-                    onClickAnswer(answer.text)
+                    onClickAnswer(answer)
 
 
                 }
@@ -304,10 +297,10 @@ fun CardAnswer(
                     .align(Alignment.Center)
             )
             Text(
-                style = MaterialTheme.typography.body1,
+                style = MaterialTheme.typography.bodySmall,
                 fontSize = 16.sp,
                 text = answer.text,
-                color = darkGray,
+                color = MaterialTheme.colorScheme.onSecondary,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .width(150.dp)

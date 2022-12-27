@@ -31,7 +31,7 @@ class SplashViewModel @Inject constructor(
                     _startDestination.value = Screen.Welcome.route
                 } else {
                     ME = Utils.convertToUser(user)
-                    if (SENDER != null)
+                    if (SENDER!=null)
                         _startDestination.value = Screen.Answer.route
                     else
                         _startDestination.value = Screen.Home.route

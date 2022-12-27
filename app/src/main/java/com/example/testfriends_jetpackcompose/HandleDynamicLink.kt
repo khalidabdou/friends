@@ -4,37 +4,33 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.screen.CircularProgressIndicatorSample
 import com.example.testfriends_jetpackcompose.screen.Friend
 import com.example.testfriends_jetpackcompose.screen.MyButton
 import com.example.testfriends_jetpackcompose.ui.theme.TestFriends_JetPackComposeTheme
-import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
-import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
 import com.example.testfriends_jetpackcompose.util.NetworkResults
 import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.viewmodel.AnswerTestViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.firebase.dynamiclinks.ktx.dynamicLinks
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -42,17 +38,17 @@ import dagger.hilt.android.AndroidEntryPoint
 @ExperimentalPagerApi
 @AndroidEntryPoint
 class HandleDynamicLink : ComponentActivity() {
-    val TAG = "firebase_app"
-    lateinit var context: Context
-    var notNull = false
 
+    lateinit var context: Context
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             TestFriends_JetPackComposeTheme {
                 context = LocalContext.current
-                val viewModel: AnswerTestViewModel = hiltViewModel()
-                Firebase.dynamicLinks
+                val viewModel: AnswerTestViewModel =
+                    ViewModelProvider(this).get(AnswerTestViewModel::class.java)
+
+                FirebaseDynamicLinks.getInstance()
                     .getDynamicLink(intent)
                     .addOnSuccessListener(this) { pendingDynamicLinkData ->
                         var deepLink: Uri? = null
@@ -84,19 +80,20 @@ class HandleDynamicLink : ComponentActivity() {
                         this.finish()
                     }
 
-                when (viewModel._questions.value) {
+                when (viewModel.sender.value) {
                     is NetworkResults.Error -> {
                         context.startActivity(Intent(context, MainActivity::class.java))
                         this.finish()
                     }
                     is NetworkResults.Success -> {
-                        SENDER = viewModel._questions.value!!.data!!
-                        Log.d("USER", viewModel._questions.value!!.data!!.myQuestions)
+                        SENDER = viewModel.sender.value!!.data!!
+                        //Log.d("USER", viewModel.sender.value!!.data!!.myQuestions)
+
                         viewModel.questions =
-                            Utils.stringToQuestionArrayList(viewModel._questions.value!!.data!!.myQuestions)
+                            Utils.stringToQuestionArrayList(viewModel.sender.value!!.data!!.myQuestions)
                                 .toMutableStateList()
                         challenge(
-                            viewModel._questions.value!!.data!!,
+                            viewModel.sender.value!!.data!!,
                             onStartClick = {
                                 context.startActivity(Intent(context, MainActivity::class.java))
                                 this.finish()
@@ -108,7 +105,7 @@ class HandleDynamicLink : ComponentActivity() {
                             modifier = Modifier
                                 .fillMaxSize()
                                 .background(
-                                    darkGray
+                                    MaterialTheme.colorScheme.background
                                 )
                         ) {
                             CircularProgressIndicatorSample()
@@ -129,22 +126,22 @@ fun challenge(user: User, onStartClick: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundWhite)
+            .background(MaterialTheme.colorScheme.background)
             .padding(20.dp)
     ) {
         Friend(user = user.username)
         Spacer(modifier = Modifier.height(50.dp))
         Text(
             textAlign = TextAlign.Center,
-            text = "${user.username} want to challenge you by answering his question ",
-            style = MaterialTheme.typography.h5,
+            text = stringResource(id = R.string.want_challenge),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.secondary,
             modifier = Modifier.weight(1f)
         )
         MyButton(
             text = "Start Answering",
             icon = null,
-            background = darkGray,
-            contentColor = Color.White,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
             onClickButton = { onStartClick() }
         )
 

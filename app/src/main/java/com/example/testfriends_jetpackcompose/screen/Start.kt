@@ -2,14 +2,17 @@ package com.example.testfriends_jetpackcompose.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.*
+
+import androidx.compose.material.Text
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import com.example.testfriends_jetpackcompose.data.User
-import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
-import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 
 
 @Composable
@@ -19,14 +22,13 @@ fun ChallengeDialog(user: User?, onConfirm: (Boolean) -> Unit?, onClick: (Boolea
             if (user != null) {
                 Text(
                     text = "Do you know ${user.username}?",
-                    color= backgroundWhite,
-                    style = MaterialTheme.typography.h3,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center
                 )
             }
         },
-        backgroundColor = darkGray,
         text = {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -37,25 +39,23 @@ fun ChallengeDialog(user: User?, onConfirm: (Boolean) -> Unit?, onClick: (Boolea
             }
 
         },
-
         confirmButton = {
             if (user != null)
                 Button(
-                    colors = ButtonDefaults.buttonColors(backgroundColor = backgroundWhite),
                     onClick = {
                         onConfirm(true)
                         onClick(false)
                     }) {
-                    Text("start", color = darkGray)
+                    Text("Yes start Test",color=MaterialTheme.colorScheme.background)
                 }
         },
         dismissButton = {
             Button(
-                colors = ButtonDefaults.buttonColors(backgroundColor = darkGray),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                 onClick = {
                     onClick(false)
                 }) {
-                Text("cancel")
+                Text("cancel",color=MaterialTheme.colorScheme.onErrorContainer)
             }
         })
 

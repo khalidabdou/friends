@@ -13,8 +13,8 @@ class Constant {
 
         val ALREADY_SIGN = "address is already in use by another account"
 
-        var SENDER: User? = null
         var ME: User? = null
+        var SENDER: User? = null
 
 
         fun getJsonDataFromAsset(context: Context, fileName: String): String? {

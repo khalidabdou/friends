@@ -1,7 +1,7 @@
 package com.example.testfriends_jetpackcompose.util
 
 sealed class NetworkResults<T>(
-    val data: T? = null,
+    var data: T? = null,
     val message: String? = null
 ) {
     class Success<T>(data: T) : NetworkResults<T>(data)

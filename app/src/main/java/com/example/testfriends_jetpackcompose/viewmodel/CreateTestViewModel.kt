@@ -14,7 +14,6 @@ import com.example.testfriends_jetpackcompose.data.*
 import com.example.testfriends_jetpackcompose.repository.ResultsRepo
 import com.example.testfriends_jetpackcompose.util.Constant
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
-import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
 import com.example.testfriends_jetpackcompose.util.HandleResponse
 import com.example.testfriends_jetpackcompose.util.NetworkResults
 import com.example.testfriends_jetpackcompose.util.Utils
@@ -36,35 +35,55 @@ class CreateTestViewModel @Inject constructor(
 
     private val resultRepo: ResultsRepo,
 ) : AndroidViewModel(application) {
+
     val questionFromJson = Constant.getJsonDataFromAsset(context = context, "question.json")
     val gson = Gson()
     val listPersonType = object : TypeToken<List<Question>>() {}.type
-    var questions: List<Question> = gson.fromJson(questionFromJson, listPersonType)
+    var defaultQuestions: List<Question> = gson.fromJson(questionFromJson, listPersonType)
 
-    var userResults: User? = null
 
+    //var user: User? = null
     var dynamicLink = ""
 
 
     var resultsList = mutableStateOf<NetworkResults<ListResults>?>(NetworkResults.Loading())
         private set
-    //private val questions = MutableStateFlow<question>
 
-    var myAnswers by mutableStateOf("")
+    var resultsByUser = mutableStateOf<ResultTest?>(null)
         private set
 
     var result by mutableStateOf(0)
         private set
 
     var index by mutableStateOf(0)
-    var question: List<Question> by mutableStateOf(questions)
+    var questions: ArrayList<Question> by mutableStateOf(defaultQuestions.toCollection(ArrayList()))
+
+    //add question
+    var addedQ = mutableStateOf("")
+    var realAnswer = mutableStateOf("")
+    var wrong1 = mutableStateOf("")
+    var wrong2 = mutableStateOf("")
+    var wrong3 = mutableStateOf("")
+
+    var addedQuestion = mutableStateOf(
+        Question(
+            id = 0,
+            question = "",
+            realAnswer = AnswerElement("", ""),
+            answerSender = null,
+            answer1 = AnswerElement("", ""),
+            answer2 = AnswerElement("", ""),
+            answer3 = AnswerElement("", ""),
+            answer4 = AnswerElement("", ""),
+        ),
+    )
 
     var challenge = mutableStateOf<NetworkResults<User>>(NetworkResults.Loading())
         private set
 
 
     fun incrementIndex(): Boolean {
-        if (index < question.size - 1) {
+        if (index < questions.size - 1) {
             index++
             return false
         } else return true
@@ -74,31 +93,47 @@ class CreateTestViewModel @Inject constructor(
         if (index > 0) index--
     }
 
-    fun setAnswer(answer: String) {
-        question[index].realAnswer.text = answer
+
+    fun setAnswerRealAnswer(answer: AnswerElement) {
+        questions[index].realAnswer = answer
     }
 
-    fun setAnswerSender(answer: String) {
-        question[index].answerSender = answer
-    }
-
-        fun cleanAnswers() {
+    fun cleanAnswers() {
         index = 0
-        question.forEach { item ->
+        questions.forEach { item ->
             item.realAnswer = AnswerElement("", "")
         }
     }
 
+    fun addQuestion() {
+        val question = Question(
+            id = defaultQuestions.size + 1,
+            question = addedQ.value,
+            realAnswer = AnswerElement(realAnswer.value, ""),
+            answerSender = null,
+            answer1 = AnswerElement(wrong1.value, ""),
+            answer2 = AnswerElement(realAnswer.value, ""),
+            answer3 = AnswerElement(wrong2.value, ""),
+            answer4 = AnswerElement(wrong3.value, ""),
+        )
+        questions.add(question)
+
+    }
+
+    fun resetQuestion() {
+        addedQ.value = ""
+        realAnswer.value = ""
+        wrong1.value = ""
+        wrong2.value = ""
+        wrong3.value = ""
+    }
+
     fun updateMyQuestions() =
         viewModelScope.launch(Dispatchers.IO) {
-//            question.forEach {
-//                myAnswers += it.realAnswer.text + "*"
-//            }
-
             val dynamicLink = ME!!.dynamicLink
             if (ME?.inviteId == null || ME?.inviteId == "")
                 ME?.inviteId = Utils.generateId(ME!!.username) + ME!!.id
-            ME!!.myQuestions = gson.toJson(question)
+            ME!!.myQuestions = gson.toJson(questions)
 
             //dataStoreRepository.saveUser(Utils.convertUserToJson(ME!!))
             val response = resultRepo.updateMyQuestions(ME!!)
@@ -111,19 +146,6 @@ class CreateTestViewModel @Inject constructor(
             }
         }
 
-    fun createResults() =
-        viewModelScope.launch {
-            var myAnswers = ""
-            for (item in question) {
-                myAnswers += item.realAnswer.text + "*"
-            }
-            Log.d("create", myAnswers)
-            result = Utils.compareResults(SENDER!!.myQuestions, myAnswers)
-            resultRepo.createResults(
-                SENDER!!.id, ME!!.id, myAnswers, SENDER!!.token,
-                ME!!.username
-            )
-        }
 
     fun getResults() = viewModelScope.launch(Dispatchers.IO) {
         if (!hasConnection) {
@@ -164,8 +186,8 @@ class CreateTestViewModel @Inject constructor(
                 val response = resultRepo.challenge(id)
                 val handleUser = HandleResponse(response)
                 challenge.value = handleUser.handleResult()
-                var arra=Utils.stringToQuestionArrayList(challenge.value.data!!.myQuestions)
-                Log.d("challenge",arra.toString())
+                var arra = Utils.stringToQuestionArrayList(challenge.value.data!!.myQuestions)
+                Log.d("challenge", arra.toString())
             }
         }
     }
@@ -180,6 +202,16 @@ class CreateTestViewModel @Inject constructor(
             dynamicLink = link
         }
     }
+
+    fun deleteQuestiom(indexAt:Int) {
+        questions.removeAt(indexAt)
+        //index=questions.size
+    }
+
+    fun checkIsNotEmpty(): Boolean {
+        return !(addedQ.value==""||realAnswer.value==""||wrong1.value==""||wrong2.value==""||wrong3.value=="")
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.M)
     val hasConnection = Utils.hasConnection(context as Application)

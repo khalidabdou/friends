@@ -11,7 +11,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.MaterialTheme
+
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -27,8 +28,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.User
-import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
-import com.example.testfriends_jetpackcompose.ui.theme.darkGray
 import com.example.testfriends_jetpackcompose.util.Constant
 import com.example.testfriends_jetpackcompose.util.NetworkResults
 import com.example.testfriends_jetpackcompose.util.Utils
@@ -70,7 +69,7 @@ fun LoginScreen(navController: NavController) {
                 authState.saveUser(user)
                 //Toast.makeText(context, account.displayName, Toast.LENGTH_SHORT).show()
             } catch (e: ApiException) {
-                Log.w("TAG", "Google sign in failed", e)
+                //Log.w("TAG", "Google sign in failed", e)
             }
         }
 
@@ -94,12 +93,12 @@ fun LoginScreen(navController: NavController) {
         verticalArrangement = Arrangement.SpaceEvenly,
         modifier = Modifier
             .fillMaxSize()
-            .background(backgroundWhite)
+            .background(MaterialTheme.colorScheme.background)
             .padding(20.dp)
             .alpha(alphaAnim.value)
     ) {
         //Spacer(modifier = Modifier.height(60.dp))
-        MyText(text = "Create an account", style = MaterialTheme.typography.h3)
+        MyText(text = stringResource(R.string.create_an_acount), style = MaterialTheme.typography.titleLarge)
         //Spacer(modifier = Modifier.height(60.dp))
         Column(modifier = Modifier.fillMaxWidth()) {
             Row(horizontalArrangement = Arrangement.SpaceBetween) {
@@ -115,7 +114,7 @@ fun LoginScreen(navController: NavController) {
                         .clip(RoundedCornerShape(10.dp))
                         .weight(1f)
                         .background(Color.White),
-                    textStyle = MaterialTheme.typography.h6, onSearch = {}
+                     onSearch = {}
                 )
                 Spacer(modifier = Modifier.width(5.dp))
                 MyTextField(
@@ -130,7 +129,7 @@ fun LoginScreen(navController: NavController) {
                         .clip(RoundedCornerShape(10.dp))
                         .background(Color.White)
                         .weight(1f),
-                    textStyle = MaterialTheme.typography.h6, onSearch = {}
+                     onSearch = {}
                 )
             }
             Spacer(modifier = Modifier.height(22.dp))
@@ -146,14 +145,13 @@ fun LoginScreen(navController: NavController) {
                     .height(50.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(Color.White),
-                textStyle = MaterialTheme.typography.h6, onSearch = {}
+               onSearch = {}
             )
             Spacer(modifier = Modifier.height(22.dp))
             MyTextField(
                 placeholder = "password",
                 isPassword = true,
                 text = password.value,
-                textStyle = MaterialTheme.typography.h4,
                 onChange = {
                     password.value = it
                 }, modifier = Modifier
@@ -166,11 +164,10 @@ fun LoginScreen(navController: NavController) {
 
         //Spacer(modifier = Modifier.height(22.dp))
         MyButton(
-            text = "Create an account",
+            text = stringResource(R.string.create_an_acount),
             icon = null,
             progressBar= authState.userNetworkResult.value is NetworkResults.Loading,
-            background = darkGray,
-            contentColor = Color.White,
+            contentColor = MaterialTheme.colorScheme.primaryContainer,
             onClickButton = {
                 authState.handleSignUp()
                 if (authState.userNetworkResult.value is NetworkResults.Error) {
@@ -186,7 +183,7 @@ fun LoginScreen(navController: NavController) {
             }
         )
         //Spacer(modifier = Modifier.height(30.dp))
-        MyText(text = "Already have an account", style = MaterialTheme.typography.h4)
+        MyText(text = stringResource(R.string.already_have_an_ccount), style = MaterialTheme.typography.bodyLarge)
         //Spacer(modifier = Modifier.height(30.dp))
         Spacer(
             modifier = Modifier
@@ -197,10 +194,9 @@ fun LoginScreen(navController: NavController) {
         //Spacer(modifier = Modifier.height(22.dp))
         Column(modifier = Modifier.fillMaxWidth()) {
             MyButton(
-                text = "Continue with Google",
+                text = stringResource(R.string.with_google),
                 icon = R.drawable.google,
-                background = Color.White,
-                contentColor = darkGray,
+                contentColor = MaterialTheme.colorScheme.primaryContainer,
                 onClickButton = {
                     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                         .requestIdToken(token)
@@ -211,31 +207,6 @@ fun LoginScreen(navController: NavController) {
                 }
             )
             Spacer(modifier = Modifier.height(22.dp))
-//            MyButton(
-//                text = "Continue with facebook",
-//                icon = R.drawable.facebook,
-//                background = Color.White,
-//                contentColor = darkGray,
-//                onClickButton = {}
-//            )
-//            Spacer(modifier = Modifier.height(22.dp))
-//            MyButton(
-//                text = "Continue with Apple",
-//                icon = R.drawable.apple,
-//                background = Color.White,
-//                contentColor = darkGray,
-//                onClickButton = {}
-//            )
         }
     }
-}
-
-
-
-
-
-@Composable
-@Preview
-fun perv() {
-
 }

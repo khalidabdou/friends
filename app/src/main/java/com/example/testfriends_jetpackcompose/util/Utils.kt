@@ -75,7 +75,7 @@ class Utils {
         }
 
         val dynamicLink = Firebase.dynamicLinks.dynamicLink {
-            link = Uri.parse("https://testfriendss.herokuapp.com/ab18")
+            //link = Uri.parse("https://testfriendss.herokuapp.com/ab18")
             domainUriPrefix = "https://testfriends.page.link"
             // Open links with this app on Android
             androidParameters { }
@@ -83,7 +83,7 @@ class Utils {
 
         }
         val shortLinkTask = Firebase.dynamicLinks.shortLinkAsync(ShortDynamicLink.Suffix.SHORT) {
-            link = Uri.parse("https://testfriendss.herokuapp.com/ab18")
+            //link = Uri.parse("https://testfriendss.herokuapp.com/ab18")
             domainUriPrefix = "https://testfriends.page.link"
 
         }.addOnSuccessListener {
@@ -152,10 +152,7 @@ class Utils {
             }
         }
         fun stringToQuestionArrayList(question: String): List<Question> {
-
             var q=question
-
-
             val gson = Gson()
             val list: List<Question> = gson.fromJson(q, object : TypeToken<List<Question>>() {}.type)
 

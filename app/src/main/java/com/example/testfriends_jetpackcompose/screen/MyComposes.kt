@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,15 +20,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.testfriends_jetpackcompose.ui.theme.Purple500
-import com.example.testfriends_jetpackcompose.ui.theme.backgroundWhite
-import com.example.testfriends_jetpackcompose.ui.theme.darkGray
+
 import com.example.testfriends_jetpackcompose.util.backgrounds
 import kotlin.random.Random
 
 @Composable
-fun Avatar(name: String? = null, textColor: Color = backgroundWhite, enableText: Boolean = false) {
-
+fun Avatar(
+    name: String? = null,
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -39,7 +38,7 @@ fun Avatar(name: String? = null, textColor: Color = backgroundWhite, enableText:
                     CircleShape
                 )
                 .background(
-                    if (name == null) backgroundWhite else backgrounds.colorList[Random.nextInt(
+                    if (name == null) MaterialTheme.colorScheme.background else backgrounds.colorList[Random.nextInt(
                         0,
                         backgrounds.colorList.size
                     )]
@@ -47,25 +46,20 @@ fun Avatar(name: String? = null, textColor: Color = backgroundWhite, enableText:
         ) {
             Text(
                 text = name!!.substring(0, 1).uppercase(),
-                color = textColor,
-                style = MaterialTheme.typography.h1,
+                color = MaterialTheme.colorScheme.background,
+                style = MaterialTheme.typography.titleSmall,
                 textAlign = TextAlign.Center,
             )
-
         }
-        if (enableText)
-            Text(name!!, style = MaterialTheme.typography.h6)
     }
 
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyTextField(
     modifier: Modifier,
     text: String? = "",
-    textStyle: TextStyle,
-    textColor: Color = Color.Black,
-    backgroundColor: Color = Color.White,
     placeholder: String,
     isPassword: Boolean = false,
     icon: ImageVector? = null,
@@ -74,48 +68,24 @@ fun MyTextField(
 ) {
     //var textContent by rememberSaveable { mutableStateOf("") }
     TextField(
-        textStyle = textStyle,
+        textStyle = MaterialTheme.typography.bodyMedium,
         value = text!!,
-        leadingIcon = {
+        trailingIcon = {
             if (icon != null)
                 Icon(
                     imageVector = icon,
                     contentDescription = "",
-                    tint = darkGray,
+                    tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.clickable {
-
+                        onSearch()
                     })
-            else Box(modifier=Modifier.size(0.dp))
-        },
-        trailingIcon = {
-            if (icon != null)
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(2.dp)
-                        .clip(RoundedCornerShape(5.dp))
-                        .background(Purple500)
-                        .clickable {
-                            onSearch()
-                        }
-
-                ) {
-                    Text(
-                        text = "Find",
-                        modifier = Modifier
-                            .width(45.dp)
-                            .align(Alignment.Center)
-
-                    )
-                }
-            else Box(modifier=Modifier.size(0.dp))
+            else Box(modifier = Modifier.size(0.dp))
 
         },
         placeholder = {
             Text(
                 text = placeholder,
-                style = TextStyle(color = Color.Black.copy(0.5f))
+                style = MaterialTheme.typography.bodyLarge
             )
         },
         maxLines = 1,
@@ -129,10 +99,44 @@ fun MyTextField(
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
-            textColor = textColor, backgroundColor = backgroundColor
+            textColor = MaterialTheme.colorScheme.primary,
         ),
         keyboardOptions = KeyboardOptions(keyboardType = if (isPassword) KeyboardType.Password else KeyboardType.Email),
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyTextFieldQuestion(
+    text: String? = "",
+    placeholder: String,
+    modifier: Modifier,
+    onChange: (String) -> Unit,
+) {
+
+    // Box(modifier = Modifier.size(20.dp).clip(CircleShape).background(Color.Green))
+    TextField(
+        textStyle = MaterialTheme.typography.bodyMedium,
+        value = text!!,
+        placeholder = {
+            Text(
+                text = placeholder,
+                style = MaterialTheme.typography.bodyLarge
+            )
+        },
+        maxLines = 1,
+        singleLine = true,
+        onValueChange = {
+            onChange(it)
+        },
+        modifier = modifier,
+        colors = TextFieldDefaults.textFieldColors(
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent,
+            textColor = MaterialTheme.colorScheme.primary,
+        ),
+    )
+
 }
 
 
@@ -141,7 +145,6 @@ fun MyButton(
     text: String,
     icon: Int?,
     progressBar: Boolean = false,
-    background: Color,
     contentColor: Color,
     onClickButton: () -> Unit
 ) {
@@ -153,7 +156,6 @@ fun MyButton(
             .clip(RoundedCornerShape(10.dp)),
         colors = ButtonDefaults.buttonColors(
             contentColor = contentColor,
-            backgroundColor = background
         ),
 
         ) {
@@ -166,9 +168,14 @@ fun MyButton(
                 modifier = Modifier.size(ButtonDefaults.IconSize)
             )
             Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-            Text(text, style = MaterialTheme.typography.h6, color = contentColor)
+            Text(text, style = MaterialTheme.typography.bodyMedium, color = contentColor)
             Spacer(Modifier.weight(1f))
-        } else Text(text, style = MaterialTheme.typography.h6, color = contentColor)
+        } else
+            Text(
+                text,
+                style = MaterialTheme.typography.bodyMedium,
+                color = contentColor
+            )
         if (progressBar)
             CircularProgressIndicator(color = contentColor, modifier = Modifier.size(20.dp))
 
@@ -176,7 +183,7 @@ fun MyButton(
 }
 
 @Composable
-fun CircularProgressIndicatorSample(color: Color = backgroundWhite) {
+fun CircularProgressIndicatorSample(color: Color = MaterialTheme.colorScheme.background) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         CircularProgressIndicator(color = color)
     }
@@ -189,7 +196,7 @@ fun MyText(text: String, style: TextStyle) {
         modifier = Modifier
             .fillMaxWidth(),
         style = style,
-        color = darkGray,
+        color = MaterialTheme.colorScheme.primary,
         textAlign = TextAlign.Center
     )
 }
