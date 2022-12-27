@@ -1,5 +1,6 @@
 package com.example.testfriends_jetpackcompose.di
 
+import com.example.testfriends_jetpackcompose.data.Languages
 import com.example.testfriends_jetpackcompose.data.ListResults
 import com.example.testfriends_jetpackcompose.data.User
 import retrofit2.Response
@@ -42,6 +43,9 @@ interface Api {
     suspend fun getMyResults(
         @Query("id") id: Int,
     ): Response<ListResults?>
+
+    @GET("getLanguages")
+    suspend fun getLanguages(): Response<Languages?>
 
 
 }

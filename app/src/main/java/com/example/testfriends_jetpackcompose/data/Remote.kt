@@ -29,6 +29,6 @@ class Remote @Inject constructor(
 
     suspend fun getResults(id: Int): Response<ListResults?> = api.getMyResults(id)
     suspend fun updateUser(user: User): Response<User?> = api.updateUser(user)
-
+    suspend fun getLanguages(): Response<Languages?> = api.getLanguages()
 
 }

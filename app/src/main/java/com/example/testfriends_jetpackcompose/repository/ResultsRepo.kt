@@ -1,5 +1,6 @@
 package com.example.testfriends_jetpackcompose.repository
 
+import com.example.testfriends_jetpackcompose.data.Languages
 import com.example.testfriends_jetpackcompose.data.ListResults
 import com.example.testfriends_jetpackcompose.data.Remote
 import com.example.testfriends_jetpackcompose.data.User
@@ -25,4 +26,6 @@ class ResultsRepo @Inject constructor(private var remote: Remote) {
         remote.createResults(sender, receiver, answers, token, receiverName)
 
     suspend fun getResults(id: Int): Response<ListResults?> = remote.getResults(id)
+
+    suspend fun getLanguage():Response<Languages?> = remote.getLanguages()
 }

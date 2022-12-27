@@ -12,13 +12,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.testfriends_jetpackcompose.data.*
 import com.example.testfriends_jetpackcompose.repository.ResultsRepo
-import com.example.testfriends_jetpackcompose.util.Constant
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.HandleResponse
 import com.example.testfriends_jetpackcompose.util.NetworkResults
 import com.example.testfriends_jetpackcompose.util.Utils
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -36,17 +34,18 @@ class CreateTestViewModel @Inject constructor(
     private val resultRepo: ResultsRepo,
 ) : AndroidViewModel(application) {
 
-    val questionFromJson = Constant.getJsonDataFromAsset(context = context, "question.json")
+    //val questionFromJson = Constant.getJsonDataFromAsset(context = context, "question.json")
     val gson = Gson()
-    val listPersonType = object : TypeToken<List<Question>>() {}.type
-    var defaultQuestions: List<Question> = gson.fromJson(questionFromJson, listPersonType)
-
+    //val listPersonType = object : TypeToken<List<Question>>() {}.type
+    //var defaultQuestions: List<Question> = gson.fromJson(questionFromJson, listPersonType)
 
     //var user: User? = null
     var dynamicLink = ""
 
-
     var resultsList = mutableStateOf<NetworkResults<ListResults>?>(NetworkResults.Loading())
+        private set
+
+    var languageResponse = mutableStateOf<NetworkResults<Languages>?>(NetworkResults.Loading())
         private set
 
     var resultsByUser = mutableStateOf<ResultTest?>(null)
@@ -56,7 +55,8 @@ class CreateTestViewModel @Inject constructor(
         private set
 
     var index by mutableStateOf(0)
-    var questions: ArrayList<Question> by mutableStateOf(defaultQuestions.toCollection(ArrayList()))
+    var questions: ArrayList<Question> by mutableStateOf(ArrayList())
+    var languages = mutableListOf<Language>()
 
     //add question
     var addedQ = mutableStateOf("")
@@ -107,7 +107,7 @@ class CreateTestViewModel @Inject constructor(
 
     fun addQuestion() {
         val question = Question(
-            id = defaultQuestions.size + 1,
+            id = questions.size + 1,
             question = addedQ.value,
             realAnswer = AnswerElement(realAnswer.value, ""),
             answerSender = null,
@@ -133,6 +133,7 @@ class CreateTestViewModel @Inject constructor(
             val dynamicLink = ME!!.dynamicLink
             if (ME?.inviteId == null || ME?.inviteId == "")
                 ME?.inviteId = Utils.generateId(ME!!.username) + ME!!.id
+
             ME!!.myQuestions = gson.toJson(questions)
 
             //dataStoreRepository.saveUser(Utils.convertUserToJson(ME!!))
@@ -147,6 +148,7 @@ class CreateTestViewModel @Inject constructor(
         }
 
 
+    @RequiresApi(Build.VERSION_CODES.M)
     fun getResults() = viewModelScope.launch(Dispatchers.IO) {
         if (!hasConnection) {
             resultsList.value = NetworkResults.Error("No Internet Connection")
@@ -159,23 +161,50 @@ class CreateTestViewModel @Inject constructor(
         }
     }
 
-    private fun handleResults(response: Response<ListResults?>?): NetworkResults<ListResults> {
-        when {
-            response == null -> return NetworkResults.Error("No Data Found")
-            response.body() == null -> return NetworkResults.Error("No Data Found")
+    fun setQuestion(language: Language) {
+        questions =
+            Utils.stringToQuestionArrayList(language.questions).toCollection(ArrayList<Question>())
+    }
+
+    fun setQuestion() {
+        ME!!.myQuestions.let {
+                questions = Utils.stringToQuestionArrayList(ME!!.myQuestions).toCollection(ArrayList())
+        }
+
+
+    }
+
+
+    fun getLanguages() = viewModelScope.launch(Dispatchers.IO) {
+        if (languageResponse.value is NetworkResults.Loading || languageResponse.value is NetworkResults.Error) {
+            languageResponse.value = NetworkResults.Loading()
+            val languagesList = resultRepo.getLanguage()
+            languageResponse.value = handleResults(languagesList)
+            languages = languageResponse.value!!.data!!.listLanguages.toMutableList()
+            Log.d("lab", "sfdf")
+
+            Log.d("lab", "${languageResponse?.value?.data?.listLanguages}")
+        }
+    }
+
+    private fun <T> handleResults(response: Response<T?>?): NetworkResults<T> {
+        return when {
+            response == null -> NetworkResults.Error("No Data Found")
+            response.body() == null -> NetworkResults.Error("No Data Found")
             response.message().toString()
-                .contains("timeout") -> return NetworkResults.Error("Timeout")
-            response.code() == 402 -> return NetworkResults.Error("Api Key Limited.")
+                .contains("timeout") -> NetworkResults.Error("Timeout")
+            response.code() == 402 -> NetworkResults.Error("Api Key Limited.")
             response.isSuccessful -> {
-                val list = response.body()
-                return NetworkResults.Success(list!!)
+                val data = response.body()
+                NetworkResults.Success(data!!)
             }
             else -> {
                 Log.d("user", response.message())
-                return NetworkResults.Error(response.message())
+                NetworkResults.Error(response.message())
             }
         }
     }
+
 
     fun challenge(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -203,13 +232,13 @@ class CreateTestViewModel @Inject constructor(
         }
     }
 
-    fun deleteQuestiom(indexAt:Int) {
+    fun deleteQuestiom(indexAt: Int) {
         questions.removeAt(indexAt)
         //index=questions.size
     }
 
     fun checkIsNotEmpty(): Boolean {
-        return !(addedQ.value==""||realAnswer.value==""||wrong1.value==""||wrong2.value==""||wrong3.value=="")
+        return !(addedQ.value == "" || realAnswer.value == "" || wrong1.value == "" || wrong2.value == "" || wrong3.value == "")
     }
 
 

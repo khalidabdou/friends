@@ -3,8 +3,11 @@ package com.example.testfriends_jetpackcompose.screen
 
 import android.app.Activity
 import android.content.Context
+import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -61,6 +64,7 @@ import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 import com.example.testfriends_jetpackcompose.viewmodel.ResultsViewModel
 
 
+@RequiresApi(Build.VERSION_CODES.M)
 @Composable
 fun HomeScreen(
     navController: NavHostController, createTestViewModel: CreateTestViewModel,
@@ -80,6 +84,7 @@ fun HomeScreen(
 
 
     Surface(color = MaterialTheme.colorScheme.background) {
+        //Log.d("abc",ME.toString())
         NavigationDrawer(context = activity as Context)
         var navigateClick by remember { mutableStateOf(false) }
         val offSetAnim by animateDpAsState(
@@ -114,6 +119,12 @@ fun HomeScreen(
                     ME!!,
                     viewModelresults.search.value,
                     onShare = {
+                        if (ME!!.myQuestions==null){
+                            Toast.makeText(activity,"Please Create Your Quiz",Toast.LENGTH_LONG).show()
+                            return@AppBar
+                        }
+                        createTestViewModel.setQuestion()
+                        createTestViewModel.index=0
                         navController.navigate(Screen.Create.route)
                     },
                     onDrawer = {
@@ -138,6 +149,8 @@ fun HomeScreen(
                     FloatingActionButton(
                         containerColor = MaterialTheme.colorScheme.secondary, onClick = {
 
+                            openDialogLanguage.value = true
+                            return@FloatingActionButton
                             createTestViewModel.cleanAnswers()
                             navController.navigate(Screen.Create.route)
                         }) {
@@ -151,7 +164,6 @@ fun HomeScreen(
                 else
                     FloatingActionButton(
                         containerColor = MaterialTheme.colorScheme.secondary, onClick = {
-
                             Utils.shareChallenge(
                                 context = activity as Context,
                                 createTestViewModel.dynamicLink
@@ -209,7 +221,7 @@ fun HomeScreen(
                     }
                     is NetworkResults.Success -> {
                         val SENDER = answerTestViewModel.sender.value!!.data
-                        if (SENDER!!.myQuestions.isNullOrEmpty()) {
+                        if (SENDER!!.myQuestions.isEmpty()) {
                             Toast.makeText(
                                 LocalContext.current,
                                 "${SENDER!!.username}  ${stringResource(R.string.have_no_answers)} ",
@@ -232,6 +244,7 @@ fun HomeScreen(
                         }, onConfirm = {
                         })
                     }
+                    else -> {}
                 }
             }
 
@@ -244,10 +257,36 @@ fun HomeScreen(
                         Text("Select a language")
                     },
                     text = {
-                        LanguageRadioGroup(Language.LANGUAGES) {
-                            selectedLanguage.value = it
-                            openDialogLanguage.value = false
+                        when (createTestViewModel.languageResponse.value) {
+                            is NetworkResults.Error -> {
+                                Toast.makeText(
+                                    LocalContext.current,
+                                    stringResource(R.string.user_not_found),
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                                openDialogLanguage.value = false
+                            }
+                            is NetworkResults.Success -> {
+                                LanguageRadioGroup(createTestViewModel.languages) {
+                                    selectedLanguage.value = it
+                                    createTestViewModel.setQuestion(it)
+                                    openDialogLanguage.value = false
+                                    navController.navigate(Screen.Create.route)
+                                }
+                            }
+                            is NetworkResults.Loading -> {
+                                createTestViewModel.getLanguages()
+                                Box(
+                                    modifier = Modifier.fillMaxWidth().height(315.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicatorSample(color = MaterialTheme.colorScheme.primary)
+                                }
+                            }
+                            else -> {}
                         }
+
                     },
                     confirmButton = {
                     },

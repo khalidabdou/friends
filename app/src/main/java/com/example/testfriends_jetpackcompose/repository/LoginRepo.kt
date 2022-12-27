@@ -1,5 +1,6 @@
 package com.example.testfriends_jetpackcompose.repository
 
+import com.example.testfriends_jetpackcompose.data.Languages
 import com.example.testfriends_jetpackcompose.data.Remote
 import com.example.testfriends_jetpackcompose.data.User
 import retrofit2.Response
@@ -17,6 +18,8 @@ class LoginRepo @Inject constructor(private val remote: Remote) {
     }
 
     suspend fun getUser(email: String): Response<User?> = remote.getUser(id = null, email = email)
+
+    suspend fun getLanguages():Response<Languages?> = remote.getLanguages()
 
 
 }
