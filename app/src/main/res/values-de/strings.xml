@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Freundschaftstest</string>
+
+    <string name="share_text">💪🏽 Finde heraus, wie stark deine Freundschaft 🤝 wirklich ist, indem du meine Fragen 🧐 auf www.example.com 🌐 beantwortest oder mit meinem Einladungscode 🔑 teilnimmst. 🎉 </string>
+    <string name="user_not_found">Benutzer nicht gefunden</string>
+    <string name="have_no_answers">Dieser Benutzer hat keinen Test</string>
+    <string name="profile">Profil</string>
+    <string name="welcome">Willkommen</string>
+    <string name="step1">📲 Tippen Sie auf die Schaltfläche unten</string>
+    <string name="step2">💭 Beantworte Fragen über dich selbst.</string>
+    <string name="step3">🔗 Ihr Quiz-Link wird erstellt.</string>
+    <string name="step4">📩 Senden Sie den Link an Ihre Freunde.</string>
+    <string name="step5">🏃‍️ Kommen Sie zurück, um die Ergebnisse zu sehen.</string>
+    <string name="create_an_acount">Ein Konto erstellen</string>
+    <string name="already_have_an_ccount">Haben Sie bereits ein Konto</string>
+    <string name="with_google">Mit Google fortfahren</string>
+    <string name="results">Ergebnisse</string>
+    <string name="challenge">Herausforderung</string>
+    <string name="add_question">Frage hinzufügen</string>
+    <string name="done">Fertig</string>
+    <string name="empty">leerer Bereich</string>
+    <string name="add">Hinzufügen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="your_question">Deine Frage</string>
+    <string name="real_answer">Echte Antwort</string>
+    <string name="chose1">falsche Wahl 1</string>
+    <string name="chose2">falsche Wahl 2</string>
+    <string name="chose3">falsche Wahl 3</string>
+    <string name="share">Teilen</string>
+    <string name="copy">Kopieren</string>
+    <string name="want_challenge">Hier ist der von **** erstellte Quiz. Nehmen Sie die Herausforderung an und beantworten Sie Fragen, um herauszufinden, wie gut Sie Ihren Freund wirklich kennen!</string>
+
+    <string name="welcome_title1">Beste Freunde-Quiz 🌟</string>
+
+    <string name="welcome_desc1">Erstelle ein Quiz für Freunde, um herauszufinden, wie gut sie dich kennen!🤔 Erstelle Quizfragen über dich selbst💭. Du kannst unsere Beispiele verwenden oder deine eigenen Fragen und Antworten schreiben📝. Denke nicht zu lange darüber nach, welche Antwort du wählen sollst🤯. Wähle einfach diejenige, die dich am genauesten beschreibt🤔. Sei ehrlich👍🏼!</string>
+
+    <string name="welcome_title2">Freundschaftsquiz für Whatsapp 💬</string>
+    <string name="welcome_desc2">Nachdem du alle Fragen beantwortet hast, erhältst du einen Link zu deinem Freundschaftsquiz. Teile ihn mit deinen Freunden auf Whatsapp, Messenger oder per E-Mail, um herauszufinden, wie gut deine Freunde dich wirklich kennen 😉! Wer ist bereit, die Herausforderung anzunehmen und wer wird die höchste Punktzahl bekommen?</string>
+</resources>

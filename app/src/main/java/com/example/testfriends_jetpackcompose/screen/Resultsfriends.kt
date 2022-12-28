@@ -79,6 +79,9 @@ fun ResultsFriends(resultTest: List<ResultTest>,paddingValues: PaddingValues,
             items(resultTest.size) {
                 ItemResults(resultTest[it], onClick = { onClick(it) })
             }
+            item {
+                Spacer(modifier = Modifier.height(100.dp))
+            }
         }
 }
 
@@ -143,12 +146,8 @@ fun ItemResults(item: ResultTest, onClick: (ResultTest) -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
-            .padding(5.dp)
-            .border(
-                width = 0.5.dp,
-                color = MaterialTheme.colorScheme.primary.copy(0.5f),
-                shape = RoundedCornerShape(10.dp)
-            )
+            .padding(5.dp).clip(RoundedCornerShape(10.dp))
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .clickable {
                 onClick(item)
             }
@@ -165,7 +164,7 @@ fun ItemResults(item: ResultTest, onClick: (ResultTest) -> Unit) {
 
             Text(
                 text = "${item.ReceiverName}",
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.titleMedium
             )
         }
@@ -179,7 +178,7 @@ fun ItemResults(item: ResultTest, onClick: (ResultTest) -> Unit) {
             val results = questions.filter { q -> q.realAnswer.text == q.answerSender }.size
             Text(
                 text = "$results/${questions.size}",
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.bodyMedium
             )
         }

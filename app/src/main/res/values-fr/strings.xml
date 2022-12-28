@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Test d\'amitié</string>
+
+    <string name="share_text">💪🏽 Découvrez à quel point votre amitié 🤝 est réellement forte en répondant à mes questions 🧐 sur www.example.com 🌐 ou en utilisant mon code d\'invitation 🔑 pour vous joindre au divertissement 🎉. </string>
+    <string name="user_not_found">utilisateur non trouvé</string>
+    <string name="have_no_answers">Cet utilisateur n\'a pas de test</string>
+    <string name="profile">Profil</string>
+    <string name="welcome">Bienvenue</string>
+    <string name="step1">📲 Appuyez sur le bouton ci-dessous</string>
+    <string name="step2">💭 Répondez à des questions sur vous-même.</string>
+    <string name="step3">🔗 Votre lien de questionnaire sera créé.</string>
+    <string name="step4">📩 Envoyez le lien à vos amis.</string>
+    <string name="step5">🏃‍♂️ Revenez voir leurs résultats.</string>
+    <string name="create_an_acount">Créer un compte</string>
+    <string name="already_have_an_ccount">Vous avez déjà un compte</string>
+    <string name="with_google">Continuer avec Google</string>
+    <string name="results">Résultats</string>
+    <string name="challenge">Défi</string>
+    <string name="add_question">Ajouter une question</string>
+    <string name="done">Terminé</string>
+    <string name="empty">champ vide</string>
+    <string name="add">Ajouter</string>
+    <string name="cancel">annuler</string>
+    <string name="your_question">Votre question</string>
+    <string name="real_answer">Vraie réponse</string>
+    <string name="chose1">mauvais choix 1</string>
+    <string name="chose2">mauvais choix 2</string>
+    <string name="chose3">mauvais choix 3</string>
+    <string name="share">Partager</string>
+    <string name="copy">Copier</string>
+    <string name="want_challenge">Voici le questionnaire créé par ****. Acceptez le défi et répondez aux questions pour savoir à quel point vous connaissez vraiment votre ami !</string>
+
+    <string name="welcome_title1">Meilleur Quiz d\'amis 🌟</string>
+    <string name="welcome_desc1">Faites un quiz pour vos amis pour vérifier à quel point ils vous connaissent ! 🤔 Créez des questions de quiz sur vous-même 💭. Vous pouvez utiliser nos exemples ou écrire vos propres questions et réponses 📝. Ne pensez pas trop longtemps à quelle réponse choisir 🤯. Choisissez simplement celle qui semble vous décrire le plus précisément 🤔. Soyez honnête 👍🏼!</string>
+
+    <string name="welcome_title2">Quiz d\'amitié pour Whatsapp 💬</string>
+    <string name="welcome_desc2">Après avoir répondu à toutes les questions, vous obtiendrez un lien vers votre quiz d\'amitié. Partagez-le avec vos amis sur Whatsapp, Messenger ou par email pour vérifier à quel point vos amis vous connaissent vraiment 😉! Qui est prêt à relever le défi et qui obtiendra le meilleur score ?</string>
+
+    <string name="welcome_title3">Quiz pour s\'amuser 😂!</string>
+    <string name="welcome_desc3">C\'est censé être amusant 😄! Ne prenez pas trop au sérieux les résultats 😵! Si vos amis obtiennent un faible nombre de points 💯, cela ne signifie pas que votre lien est faible 😕.</string>
+    <string name="repet">Répéter la réponse</string>
+    <string name="share_it">Partagez-le </string>
+    <string name="start">Oui, démarrer le test</string>
+    <string name="do_you_know">Saviez-vous </string>
+    <string name="delete">Question supprimée</string>
+    <string name="answer">réponse aux questions</string>
+    <string name="start_answer">Commencer à répondre</string>
+</resources>

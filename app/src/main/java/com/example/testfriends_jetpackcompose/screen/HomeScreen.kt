@@ -4,7 +4,6 @@ package com.example.testfriends_jetpackcompose.screen
 import android.app.Activity
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
@@ -75,6 +74,7 @@ fun HomeScreen(
     //var user = viewModelresults.userAuth
     val openDialog = remember { mutableStateOf(false) }
     val openDialogLanguage = remember { mutableStateOf(false) }
+    val openDialogRate = remember { mutableStateOf(false) }
     val selectedLanguage = remember { mutableStateOf(Language.LANGUAGES[0]) }
 
     createTestViewModel.getResults()
@@ -119,12 +119,14 @@ fun HomeScreen(
                     ME!!,
                     viewModelresults.search.value,
                     onShare = {
-                        if (ME!!.myQuestions==null){
-                            Toast.makeText(activity,"Please Create Your Quiz",Toast.LENGTH_LONG).show()
+                        if (ME!!.myQuestions == null) {
+                            Toast.makeText(activity, "Please Create Your Quiz", Toast.LENGTH_LONG)
+                                .show()
                             return@AppBar
                         }
+                        createTestViewModel.isLanguageSelected.value = false
                         createTestViewModel.setQuestion()
-                        createTestViewModel.index=0
+                        createTestViewModel.index = 0
                         navController.navigate(Screen.Create.route)
                     },
                     onDrawer = {
@@ -249,58 +251,26 @@ fun HomeScreen(
             }
 
             if (openDialogLanguage.value)
-                AlertDialog(
-                    properties = DialogProperties(
-                        dismissOnClickOutside = true
-                    ),
-                    title = {
-                        Text("Select a language")
-                    },
-                    text = {
-                        when (createTestViewModel.languageResponse.value) {
-                            is NetworkResults.Error -> {
-                                Toast.makeText(
-                                    LocalContext.current,
-                                    stringResource(R.string.user_not_found),
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-                                openDialogLanguage.value = false
-                            }
-                            is NetworkResults.Success -> {
-                                LanguageRadioGroup(createTestViewModel.languages) {
-                                    selectedLanguage.value = it
-                                    createTestViewModel.setQuestion(it)
-                                    openDialogLanguage.value = false
-                                    navController.navigate(Screen.Create.route)
-                                }
-                            }
-                            is NetworkResults.Loading -> {
-                                createTestViewModel.getLanguages()
-                                Box(
-                                    modifier = Modifier.fillMaxWidth().height(315.dp),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    CircularProgressIndicatorSample(color = MaterialTheme.colorScheme.primary)
-                                }
-                            }
-                            else -> {}
-                        }
+                LanguagesDialog(createTestViewModel, onDismiss = {
+                    openDialogLanguage.value=false
+                },
+                onSelect = {
+                    selectedLanguage.value = it
+                    createTestViewModel.setQuestion(it)
+                    openDialogLanguage.value = false
+                    navController.navigate(Screen.Create.route)
+                })
 
-                    },
-                    confirmButton = {
-                    },
-                    dismissButton = {
-                        Button(onClick = { openDialogLanguage.value = false }) {
-                            Text(text = "Cancel")
-                        }
-                    },
-                    onDismissRequest = {}
-                )
+            if (openDialogRate.value)
+                RateDialog(activity, onDismiss = {
+                    openDialogRate.value = false
+                })
+
         }
     }
     BackHandler {
-        activity?.finish()
+        openDialogRate.value = true
+        //activity?.finish()
     }
 }
 
@@ -319,7 +289,7 @@ fun LanguageRadioGroup(languages: List<Language>, onSelectedChange: (Language) -
                     .height(50.dp)
                     .padding(6.dp)
                     .clip(RoundedCornerShape(10.dp))
-                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .background(MaterialTheme.colorScheme.primary)
                     .clickable {
                         onSelectedChange(languages[it])
                     }
@@ -333,7 +303,7 @@ fun LanguageRadioGroup(languages: List<Language>, onSelectedChange: (Language) -
                         .clip(CircleShape)
                 )
                 Spacer(modifier = Modifier.width(10.dp))
-                Text(text = languages[it].label)
+                Text(text = languages[it].label, color = MaterialTheme.colorScheme.onPrimary)
             }
 
         }
@@ -564,7 +534,7 @@ fun NavigationDrawer(context: Context) {
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = "tap to copy your link\n ${ME!!.dynamicLink}",
+                        text = "tap to copy your link",
                         color = MaterialTheme.colorScheme.primary,
                         style = MaterialTheme.typography.titleMedium
                     )

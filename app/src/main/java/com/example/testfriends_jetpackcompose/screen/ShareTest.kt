@@ -1,6 +1,5 @@
 package com.example.testfriends_jetpackcompose.screen
 
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -25,8 +24,8 @@ import com.example.testfriends_jetpackcompose.data.AnswerElement
 import com.example.testfriends_jetpackcompose.data.Question
 import com.example.testfriends_jetpackcompose.util.Constant
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
-import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.util.Utils.Companion.copyTextToClipboard
+import com.example.testfriends_jetpackcompose.util.Utils.Companion.generateSharingLink
 import com.example.testfriends_jetpackcompose.util.Utils.Companion.shareChallenge
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 
@@ -37,16 +36,61 @@ fun ShareTest(viewModel: CreateTestViewModel) {
     val context = LocalContext.current
     //val dataStoreRepository = DataStoreRepository(context = LocalContext.current)
     var scaffoldState = rememberScaffoldState()
-    val openDialog = remember { mutableStateOf(false) }
-    val done = remember { mutableStateOf(false) }
+    val openDialogAddQuestion = remember { mutableStateOf(false) }
+    val openShareDialog = remember { mutableStateOf(false) }
 
     var username = ME!!.username
-
-
     var shortLink by remember { mutableStateOf("") }
 
 
+//    LaunchedEffect{
+//        generateSharingLink(
+//            deepLink = "${Constant.PREFIX}/${ME!!.inviteId}".toUri()
+//        ) { generatedLink ->
+//            shortLink =
+//                generatedLink
+//            viewModel.saveDynamicLink(shortLink)
+//        }
+//    }
+
+    LaunchedEffect(openShareDialog) {
+        //Toast.makeText(context,ME!!.inviteId,Toast.LENGTH_SHORT).show()
+        generateSharingLink(
+            deepLink = "${Constant.PREFIX}/${ME!!.inviteId}".toUri()
+        ) { generatedLink ->
+            shortLink =
+                generatedLink
+            viewModel.saveDynamicLink(shortLink)
+        }
+    }
+
     Scaffold(modifier = Modifier.background(MaterialTheme.colorScheme.background),
+        floatingActionButton = {
+            Button(
+                onClick = {
+                    viewModel.updateMyQuestions()
+                    openShareDialog.value=true
+                },
+                contentPadding = PaddingValues(
+                    start = 20.dp,
+                    top = 12.dp,
+                    end = 20.dp,
+                    bottom = 12.dp
+                ),
+
+                ) {
+                Icon(
+                    imageVector = Icons.Default.Done,
+                    contentDescription = "",
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text(
+                    stringResource(R.string.done),
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
+        },
         topBar = {
             Row(
                 modifier = Modifier
@@ -58,7 +102,7 @@ fun ShareTest(viewModel: CreateTestViewModel) {
                 Text(text = "", modifier = Modifier.weight(1f))
                 Button(
                     onClick = {
-                        openDialog.value = true
+                        openDialogAddQuestion.value = true
                     },
                     contentPadding = PaddingValues(
                         start = 20.dp,
@@ -66,8 +110,7 @@ fun ShareTest(viewModel: CreateTestViewModel) {
                         end = 20.dp,
                         bottom = 12.dp
                     ),
-
-                    ) {
+                ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_create),
                         contentDescription = "",
@@ -84,10 +127,10 @@ fun ShareTest(viewModel: CreateTestViewModel) {
     ) {
         Column(modifier = Modifier.padding(it)) {
             LazyColumn(modifier = Modifier.weight(5f)) {
-                items(viewModel.questions.size) {
+                items(viewModel.questions.filter { q -> q.realAnswer.text != "" }.size) {
                     ItemAnswer(
                         index = it,
-                        question = viewModel.questions[it],
+                        question = viewModel.questions.filter { q -> q.realAnswer.text != "" }[it],
                         username = username
                     ) {
                         viewModel.deleteQuestiom(it)
@@ -95,94 +138,27 @@ fun ShareTest(viewModel: CreateTestViewModel) {
                     }
                 }
             }
-            if (done.value)
-                ShareBox(
-                    text = shortLink,
-                    onShare = {
-                        shareChallenge(context = context, shortLink)
-                    },
-                    onCopyText = {
-                        ME!!.dynamicLink = shortLink
-                        viewModel.updateMyQuestions()
-                        copyTextToClipboard(shortLink, context = context)
-                    }
-                ) else {
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    Button(
-                        onClick = {
-                            Utils.generateSharingLink(
-                                deepLink = "${Constant.PREFIX}/${ME!!.inviteId}".toUri()
-                            ) { generatedLink ->
-                                shortLink =
-                                    generatedLink
-                                viewModel.saveDynamicLink(shortLink)
-                                viewModel.updateMyQuestions()
-                            }
-                            done.value = true
-                        },
-                        contentPadding = PaddingValues(
-                            start = 20.dp,
-                            top = 12.dp,
-                            end = 20.dp,
-                            bottom = 12.dp
-                        ),
+            if (openShareDialog.value)
+                ShareTestDialog(link = shortLink, onShare = {
+                    shareChallenge(context = context, shortLink)
+                    openShareDialog.value=false
+                }, onCopy = {
+                    ME!!.dynamicLink = shortLink
+                    viewModel.updateMyQuestions()
+                    copyTextToClipboard(shortLink, context = context)
+                    openShareDialog.value=false
+                })
 
-                        ) {
-                        Icon(
-                            imageVector = Icons.Default.Done,
-                            contentDescription = "",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(
-                            stringResource(R.string.done),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                }
-
-            }
         }
+
     }
 
-    if (openDialog.value) {
-        AlertDialog(
-            onDismissRequest = {}, title = {
-
-            },
-            text = {
-                AddQuestion(viewModel)
-            },
-            confirmButton = {
-                Button(
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
-                    onClick = {
-                        if (!viewModel.checkIsNotEmpty()) {
-                            Toast.makeText(context, context.resources.getString(R.string.empty), Toast.LENGTH_SHORT).show()
-                            return@Button
-                        }
-                        viewModel.addQuestion()
-                        viewModel.resetQuestion()
-                        openDialog.value = false
-                    }) {
-                    Text(
-                        stringResource(R.string.add),
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
-            },
-            dismissButton = {
-                Button(
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-                    onClick = {
-                        openDialog.value = false
-                    }) {
-                    androidx.compose.material.Text(
-                        stringResource(R.string.cancel),
-                        color = MaterialTheme.colorScheme.onErrorContainer
-                    )
-                }
-            })
+    if (openDialogAddQuestion.value) {
+        AddQuestionDialog(viewModel, context, onAdd = {
+            openDialogAddQuestion.value = false
+        }, onDismiss = {
+            openDialogAddQuestion.value = false
+        })
     }
 }
 

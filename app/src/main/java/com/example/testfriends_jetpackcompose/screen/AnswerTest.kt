@@ -8,6 +8,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -17,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -36,8 +39,8 @@ import com.example.testfriends_jetpackcompose.viewmodel.AnswerTestViewModel
 fun AnswerTestMain(navHostController: NavHostController, viewModel: AnswerTestViewModel) {
     var index = viewModel.index
 
-    if (viewModel.sender.value?.data==null && SENDER!=null){
-        viewModel.sender.value?.data= SENDER
+    if (viewModel.sender.value?.data == null && SENDER != null) {
+        viewModel.sender.value?.data = SENDER
     }
     val sender = viewModel.sender.value!!.data!!
     val questions = Utils.stringToQuestionArrayList(sender.myQuestions)
@@ -233,7 +236,7 @@ fun ActionBar(index: String) {
         }
 
         Text(
-            text = "answer for questions ",
+            text = stringResource(R.string.answer),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.secondary
         )
@@ -282,14 +285,9 @@ fun CardAnswer(
                     MaterialTheme.colorScheme.secondary
                 )
                 .clickable {
-
-
                     onClickAnswer(answer)
-
-
                 }
         ) {
-
             AsyncImage(
                 model = imgUrl, contentDescription = null,
                 modifier = Modifier

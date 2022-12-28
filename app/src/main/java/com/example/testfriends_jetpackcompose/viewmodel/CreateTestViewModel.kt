@@ -54,9 +54,11 @@ class CreateTestViewModel @Inject constructor(
     var result by mutableStateOf(0)
         private set
 
+
     var index by mutableStateOf(0)
     var questions: ArrayList<Question> by mutableStateOf(ArrayList())
     var languages = mutableListOf<Language>()
+    var isLanguageSelected = mutableStateOf(false)
 
     //add question
     var addedQ = mutableStateOf("")
@@ -134,7 +136,7 @@ class CreateTestViewModel @Inject constructor(
             if (ME?.inviteId == null || ME?.inviteId == "")
                 ME?.inviteId = Utils.generateId(ME!!.username) + ME!!.id
 
-            ME!!.myQuestions = gson.toJson(questions)
+            ME!!.myQuestions = gson.toJson(questions.filter { q -> q.realAnswer.text != "" })
 
             //dataStoreRepository.saveUser(Utils.convertUserToJson(ME!!))
             val response = resultRepo.updateMyQuestions(ME!!)
@@ -162,13 +164,16 @@ class CreateTestViewModel @Inject constructor(
     }
 
     fun setQuestion(language: Language) {
+
         questions =
-            Utils.stringToQuestionArrayList(language.questions).toCollection(ArrayList<Question>())
+            Utils.stringToQuestionArrayList(language.questions).toCollection(ArrayList())
+        Log.d("Question", questions.toString())
     }
 
     fun setQuestion() {
         ME!!.myQuestions.let {
-                questions = Utils.stringToQuestionArrayList(ME!!.myQuestions).toCollection(ArrayList())
+            questions = Utils.stringToQuestionArrayList(ME!!.myQuestions).toCollection(ArrayList())
+            Log.d("Question", questions.toString())
         }
 
 

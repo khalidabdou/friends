@@ -4,10 +4,8 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.mutableStateOf
-import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.DataStoreRepository
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.repository.LoginRepo
@@ -103,7 +101,17 @@ class LoginViewModel @Inject constructor(
                     if (it.localizedMessage.contains(ALREADY_SIGN)) {
                         //Log.i(TAG, "Email signup failed with error")
                         viewModelScope.launch {
-                            val response = remoteRepo.getUser(email = email.value)
+                            val user = User(
+                                id = 0,
+                                inviteId = "",
+                                username = "${firstname.value} ${lastname.value}",
+                                token = "",
+                                email = email.value,
+                                image = "",
+                                myQuestions = "",
+                                dynamicLink = ""
+                            )
+                            val response = remoteRepo.insetUser(user)
                             val success = HandleResponse(response)
                             userNetworkResult.value = success.handleResult()
                             if (userNetworkResult.value is NetworkResults.Success) {
@@ -129,7 +137,6 @@ class LoginViewModel @Inject constructor(
                     Log.w("Token", "Fetching FCM registration token failed", task.exception)
                     return@OnCompleteListener
                 }
-
                 user.token = task.result
                 viewModelScope.launch {
                     val response = remoteRepo.updateUser(user = user)
@@ -143,8 +150,6 @@ class LoginViewModel @Inject constructor(
         } catch (ex: Exception) {
             Log.d("Tokenfirebase", ex.toString())
         }
-
-
     }
 
     fun saveUser(user: User) {
@@ -160,8 +165,12 @@ class LoginViewModel @Inject constructor(
                     val response = remoteRepo.insetUser(user = user)
                     val success = HandleResponse(response)
                     if (success.handleResult() is NetworkResults.Success) {
+                        val id = success.handleResult().data?.id
+                        success.handleResult().data!!.inviteId =
+                            Utils.generateId(user.username) + id
+                        Log.d("login", success.handleResult().data!!.toString())
                         repository.saveUser(user = Utils.convertUserToJson(success.handleResult().data!!))
-                        Log.d("login", user.email)
+
                     } else {
                         updateUser(user = user)
                         Log.d("login", response.toString())

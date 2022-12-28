@@ -15,51 +15,5 @@ import androidx.compose.ui.text.style.TextAlign
 import com.example.testfriends_jetpackcompose.data.User
 
 
-@Composable
-fun ChallengeDialog(user: User?, onConfirm: (Boolean) -> Unit?, onClick: (Boolean) -> Unit) {
-    AlertDialog(
-        onDismissRequest = {}, title = {
-            if (user != null) {
-                Text(
-                    text = "Do you know ${user.username}?",
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center
-                )
-            }
-        },
-        text = {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                if (user == null)
-                    CircularProgressIndicatorSample()
-            }
-
-        },
-        confirmButton = {
-            if (user != null)
-                Button(
-                    onClick = {
-                        onConfirm(true)
-                        onClick(false)
-                    }) {
-                    Text("Yes start Test",color=MaterialTheme.colorScheme.background)
-                }
-        },
-        dismissButton = {
-            Button(
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-                onClick = {
-                    onClick(false)
-                }) {
-                Text("cancel",color=MaterialTheme.colorScheme.onErrorContainer)
-            }
-        })
-
-}
-
 
 

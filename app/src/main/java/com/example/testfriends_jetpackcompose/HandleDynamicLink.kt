@@ -133,13 +133,13 @@ fun challenge(user: User, onStartClick: () -> Unit) {
         Spacer(modifier = Modifier.height(50.dp))
         Text(
             textAlign = TextAlign.Center,
-            text = stringResource(id = R.string.want_challenge),
+            text = stringResource(id = R.string.want_challenge).replace("****", user.username),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.secondary,
             modifier = Modifier.weight(1f)
         )
         MyButton(
-            text = "Start Answering",
+            text = stringResource(R.string.start_answer),
             icon = null,
             contentColor = MaterialTheme.colorScheme.onPrimary,
             onClickButton = { onStartClick() }

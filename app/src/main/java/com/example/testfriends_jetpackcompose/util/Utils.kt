@@ -16,7 +16,6 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.example.testfriends_jetpackcompose.R
-import com.example.testfriends_jetpackcompose.data.AnswerElement
 import com.example.testfriends_jetpackcompose.data.Question
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
@@ -125,8 +124,15 @@ class Utils {
         }
 
         fun shareChallenge(context: Context, link: String) {
-            val textShare =
-                context.getString(R.string.share_text) + " " + link + " Or Use my invitation code " + ME!!.inviteId
+            var textShare =
+                context.getString(R.string.share_text).replace(
+                    "www.example.com",
+                    link
+                )
+            textShare=textShare.replace("www.example.com",
+                link)
+            textShare+="*"+ ME!!.inviteId + "*"
+
             val shareIntent = Intent()
             shareIntent.action = Intent.ACTION_SEND
             shareIntent.type = "text/plain"
@@ -151,12 +157,21 @@ class Utils {
                 else -> false
             }
         }
+
         fun stringToQuestionArrayList(question: String): List<Question> {
-            var q=question
+            var q = question
             val gson = Gson()
-            val list: List<Question> = gson.fromJson(q, object : TypeToken<List<Question>>() {}.type)
+            val list: List<Question> =
+                gson.fromJson(q, object : TypeToken<List<Question>>() {}.type)
 
             return list
+        }
+
+        fun openStore(context: Context) {
+            val appPackageName = context.packageName // Replace with your own app package name
+            val playStoreUrl = "https://play.google.com/store/apps/details?id=$appPackageName"
+            val marketIntent = Intent(Intent.ACTION_VIEW, Uri.parse(playStoreUrl))
+            context.startActivity(marketIntent)
         }
 
 

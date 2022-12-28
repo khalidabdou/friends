@@ -1,5 +1,6 @@
 package com.example.testfriends_jetpackcompose.screen
 
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,9 +8,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -35,7 +40,8 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
     var questions = viewModel.questions
     var username = ME!!.username
 
-    if (!ME!!.myQuestions.isNullOrEmpty()) {
+
+    if (!viewModel.isLanguageSelected.value && !ME!!.myQuestions.isEmpty()) {
         questions = Utils.stringToQuestionArrayList(ME!!.myQuestions).toCollection(ArrayList())
     }
 
@@ -45,6 +51,7 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
             navHostController.navigate(Screen.ShareTest.route)
         }
     }
+
     val scaffoldState = rememberScaffoldState()
     Scaffold(scaffoldState = scaffoldState,
         topBar = {
@@ -59,20 +66,42 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
             verticalArrangement = Arrangement.Center
         ) {
             Box {
-                Box(
+                Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(150.dp)
                         .padding(10.dp)
                         .clip(RoundedCornerShape(10.dp)),
-                    Alignment.Center
+                    verticalAlignment = Alignment.CenterVertically
+
                 ) {
-                    androidx.compose.material3.Text(
+                    Text(
                         text = questions[index].question.replace("****", username),
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onBackground,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.weight(1f)
                     )
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "",
+                        tint = MaterialTheme.colorScheme.error,
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .clickable {
+                                Toast
+                                    .makeText(context, context.getString(R.string.delete), Toast.LENGTH_SHORT)
+                                    .show()
+                                setRealAnswer(
+                                    AnswerElement(
+                                        img = "",
+                                        text = ""
+                                    )
+                                )
+                                //navHostController.navigate(Screen.ShareTest.route)
+                            }
+                    )
+
                 }
             }
             Row(
@@ -163,7 +192,7 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
                             //Log.d("Answer", questions[index].realAnswer.text + " index$index")
                             if (questions[index].realAnswer.text != "")
                                 if (viewModel.incrementIndex()) {
-                                    navHostController.navigate(Screen.FinalScreen.route)
+                                    navHostController.navigate(Screen.ShareTest.route)
                                 }
                         }
                 ) {
@@ -171,7 +200,7 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
                         painter = painterResource(id = R.drawable.ic_next),
                         contentDescription = "",
                         tint = MaterialTheme.colorScheme.onBackground
-                        )
+                    )
                 }
             }
         }

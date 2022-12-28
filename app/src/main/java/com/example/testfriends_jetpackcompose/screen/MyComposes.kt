@@ -1,6 +1,7 @@
 package com.example.testfriends_jetpackcompose.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -21,9 +22,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
-import com.example.testfriends_jetpackcompose.util.backgrounds
-import kotlin.random.Random
-
 @Composable
 fun Avatar(
     name: String? = null,
@@ -38,15 +36,14 @@ fun Avatar(
                     CircleShape
                 )
                 .background(
-                    if (name == null) MaterialTheme.colorScheme.background else backgrounds.colorList[Random.nextInt(
-                        0,
-                        backgrounds.colorList.size
-                    )]
-                ), contentAlignment = Alignment.Center
+                    MaterialTheme.colorScheme.secondary
+                )
+                .border(1.dp, MaterialTheme.colorScheme.onSecondary, CircleShape),
+            contentAlignment = Alignment.Center
         ) {
             Text(
                 text = name!!.substring(0, 1).uppercase(),
-                color = MaterialTheme.colorScheme.background,
+                color = MaterialTheme.colorScheme.onSecondary,
                 style = MaterialTheme.typography.titleSmall,
                 textAlign = TextAlign.Center,
             )

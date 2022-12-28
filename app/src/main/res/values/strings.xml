@@ -3,7 +3,7 @@
 
     <string name="app_name">Test Friendship</string>
 
-    <string name="share_text">Test Friendship : Answer My Questions,  </string>
+    <string name="share_text">💪🏽 Find out how strong your friendship 🤝 really is by answering my questions 🧐 at www.example.com 🌐 or using my invitation code 🔑 to join the fun 🎉. </string>
     <string name="user_not_found">user not found</string>
     <string name="have_no_answers">This user has no test</string>
     <string name="profile">Profile</string>
@@ -30,7 +30,7 @@
     <string name="chose3">wrong chose 3</string>
     <string name="share">Share</string>
     <string name="copy">Copy</string>
-    <string name="want_challenge">Here is the quiz created by abdou. Accept the challenge and answer 9 questions to find out how well you really know your friend!</string>
+    <string name="want_challenge">Here is the quiz created by ****. Accept the challenge and answer questions to find out how well you really know your friend!</string>
 
     <string name="welcome_title1">Best Friends Quiz 🌟</string>
     <string name="welcome_desc1">Make a quiz for friends to check how well they know you!🤔 Create quiz questions about yourself💭. You can use our examples or write your own questions and answers📝. Don\'t think too long about which answer to choose🤯. Just select the one that seems to describe you most accurately🤔. Be honest👍🏼!</string>
@@ -40,7 +40,13 @@
 
     <string name="welcome_title3">Quiz for fun 😂!</string>
     <string name="welcome_desc3">It\'s supposed to be fun 😄! Don\'t take the results too seriously 😵! If your friends score a low number of points 💯 it doesn\'t mean that your bond is weak 😕. It might mean that your questions were really tricky or still there is a lot to find out about each other and strengthen your friendship!</string>
-
+    <string name="repet">Repeat answer</string>
+    <string name="share_it">\"Share it \"</string>
+    <string name="start">Yes start Test</string>
+    <string name="do_you_know">"Do you know "</string>
+    <string name="delete">Question deleted</string>
+    <string name="answer">answer for questions</string>
+    <string name="start_answer">Start Answering</string>
 
 
 </resources>
