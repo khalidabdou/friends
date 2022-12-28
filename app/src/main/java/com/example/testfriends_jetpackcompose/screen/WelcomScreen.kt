@@ -114,7 +114,8 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
     ) {
         Box(
             modifier = Modifier.fillMaxSize(0.4f),
-            contentAlignment = Alignment.Center) {
+            contentAlignment = Alignment.Center
+        ) {
             Icon(
                 modifier = Modifier
                     .size(70.dp),

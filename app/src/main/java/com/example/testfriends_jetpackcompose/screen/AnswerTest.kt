@@ -8,8 +8,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -270,9 +268,10 @@ fun CardAnswer(
 ) {
 
 
-    var imgUrl = "${Constant.BASE_URL}english/$index/${answer.img}"
+    var imgUrl :Any = answer.img.toString()
     if (answer.img == "")
-        imgUrl = "${Constant.BASE_URL}english/3/4.png"
+        imgUrl = "https://cdn-icons-png.flaticon.com/512/8239/8239138.png"
+
     Column(
         modifier = Modifier
     ) {

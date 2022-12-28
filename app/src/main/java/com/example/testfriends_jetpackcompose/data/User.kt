@@ -19,6 +19,6 @@ data class User(
     @SerializedName("myQuestions", alternate = ["myQuetions"])
     var myQuestions: String,
     @SerializedName("dynamicLink")
-    var dynamicLink :String?
+    var dynamicLink: String?
 )
 

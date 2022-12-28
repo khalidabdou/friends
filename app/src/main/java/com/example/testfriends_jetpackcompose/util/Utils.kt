@@ -129,9 +129,11 @@ class Utils {
                     "www.example.com",
                     link
                 )
-            textShare=textShare.replace("www.example.com",
-                link)
-            textShare+="*"+ ME!!.inviteId + "*"
+            textShare = textShare.replace(
+                "www.example.com",
+                link
+            )
+            textShare += "*" + ME!!.inviteId + "*"
 
             val shareIntent = Intent()
             shareIntent.action = Intent.ACTION_SEND

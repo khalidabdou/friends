@@ -76,10 +76,10 @@ class AnswerTestViewModel @Inject constructor(
         }
     }
 
-    fun createResults() =
+    private fun createResults() =
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d("SENDERID", sender.value!!.data.toString())
-            val sender=sender.value!!.data
+            //Log.d("SENDERID", sender.value!!.data.toString())
+            val sender = sender.value!!.data
             //result = Utils.compareResults(SENDER!!.myQuestions, myAnswers)
             val res = gson.toJson(questions.toList())
             resultRepo.createResults(

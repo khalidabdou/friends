@@ -51,7 +51,7 @@ class HandleDynamicLink : ComponentActivity() {
                 FirebaseDynamicLinks.getInstance()
                     .getDynamicLink(intent)
                     .addOnSuccessListener(this) { pendingDynamicLinkData ->
-                        var deepLink: Uri? = null
+                        var deepLink: Uri?
                         if (pendingDynamicLinkData != null) {
                             deepLink = pendingDynamicLinkData.link
                             if (deepLink != null) {

@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Color
 
 class backgrounds {
 
-    companion object{
+    companion object {
         val linearGradientBrush = Brush.linearGradient(
             colors = listOf(
                 Color(0xFFAD5389),

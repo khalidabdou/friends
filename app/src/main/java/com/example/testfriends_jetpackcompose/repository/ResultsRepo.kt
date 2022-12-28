@@ -27,5 +27,5 @@ class ResultsRepo @Inject constructor(private var remote: Remote) {
 
     suspend fun getResults(id: Int): Response<ListResults?> = remote.getResults(id)
 
-    suspend fun getLanguage():Response<Languages?> = remote.getLanguages()
+    suspend fun getLanguage(): Response<Languages?> = remote.getLanguages()
 }

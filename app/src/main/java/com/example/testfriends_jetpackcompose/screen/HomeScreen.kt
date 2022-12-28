@@ -46,7 +46,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
@@ -120,7 +119,11 @@ fun HomeScreen(
                     viewModelresults.search.value,
                     onShare = {
                         if (ME!!.myQuestions == null) {
-                            Toast.makeText(activity, "Please Create Your Quiz", Toast.LENGTH_LONG)
+                            Toast.makeText(
+                                activity,
+                                activity.getString(R.string.create_your_quiz),
+                                Toast.LENGTH_LONG
+                            )
                                 .show()
                             return@AppBar
                         }
@@ -252,14 +255,14 @@ fun HomeScreen(
 
             if (openDialogLanguage.value)
                 LanguagesDialog(createTestViewModel, onDismiss = {
-                    openDialogLanguage.value=false
-                },
-                onSelect = {
-                    selectedLanguage.value = it
-                    createTestViewModel.setQuestion(it)
                     openDialogLanguage.value = false
-                    navController.navigate(Screen.Create.route)
-                })
+                },
+                    onSelect = {
+                        selectedLanguage.value = it
+                        createTestViewModel.setQuestion(it)
+                        openDialogLanguage.value = false
+                        navController.navigate(Screen.Create.route)
+                    })
 
             if (openDialogRate.value)
                 RateDialog(activity, onDismiss = {
@@ -382,30 +385,7 @@ fun AppBar(
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
-                //language
-//                Row(
-//                    modifier = Modifier
-//                        .padding(6.dp)
-//                        .clip(RoundedCornerShape(6.dp))
-//                        .clickable {
-//                            onLanguageChange()
-//                        },
-//                    verticalAlignment = Alignment.CenterVertically
-//                ) {
-//                    AsyncImage(
-//                        model = language.image,
-//                        contentDescription = "",
-//                        modifier = Modifier
-//                            .size(25.dp)
-//                            .clip(CircleShape)
-//
-//                    )
-//                    Spacer(modifier = Modifier.width(6.dp))
-//                    Text(
-//                        text = language.label, style = MaterialTheme.typography.bodySmall,
-//                        color = MaterialTheme.colorScheme.primary
-//                    )
-//                }
+
 
             }
             Spacer(modifier = Modifier.height(20.dp))

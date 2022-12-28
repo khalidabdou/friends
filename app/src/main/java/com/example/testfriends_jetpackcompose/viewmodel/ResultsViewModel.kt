@@ -25,6 +25,7 @@ class ResultsViewModel @Inject constructor(
     fun setSearchText(text: String) {
         search.value = text
     }
+
     fun challenge(id: String) {
         viewModelScope.launch(Dispatchers.IO) {
             Log.d("user", "begin")
@@ -32,8 +33,8 @@ class ResultsViewModel @Inject constructor(
                 return@launch
             challenge.value = NetworkResults.Loading()
             val response = resultsRepo.challenge(id)
-            val success= HandleResponse(response)
-            challenge.value=success.handleResult()
+            val success = HandleResponse(response)
+            challenge.value = success.handleResult()
 
             //challenge.value = handleUser(response)
         }

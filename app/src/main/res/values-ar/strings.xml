@@ -47,4 +47,12 @@
     <string name="delete">تم حذف السؤال</string>
     <string name="answer">إجابة للأسئلة</string>
     <string name="start_answer">ابدأ الإجابة</string>
+
+    <string name="create_your_quiz">يرجى إنشاء الاختبار الخاص بك</string>
+    <string name="first_name">الاسم الأول</string>
+    <string name="last_name">الاسم الأخير</string>
+    <string name="email">عنوان البريد الإلكتروني</string>
+    <string name="password">كلمة المرور</string>
+    <string name="select_language">اختيار لغة</string>
+
 </resources>

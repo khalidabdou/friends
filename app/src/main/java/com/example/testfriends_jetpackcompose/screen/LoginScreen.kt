@@ -1,7 +1,6 @@
 package com.example.testfriends_jetpackcompose.screen
 
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -12,7 +11,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -21,16 +19,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.*
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.testfriends_jetpackcompose.R
 import com.example.testfriends_jetpackcompose.data.User
-import com.example.testfriends_jetpackcompose.util.Constant
 import com.example.testfriends_jetpackcompose.util.NetworkResults
-import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.viewmodel.LoginViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -45,8 +39,6 @@ fun LoginScreen(navController: NavController) {
 
     val context = LocalContext.current
     val token = stringResource(R.string.default_web_client_id)
-
-
 
 
     val launcher =
@@ -98,12 +90,15 @@ fun LoginScreen(navController: NavController) {
             .alpha(alphaAnim.value)
     ) {
         //Spacer(modifier = Modifier.height(60.dp))
-        MyText(text = stringResource(R.string.create_an_acount), style = MaterialTheme.typography.titleLarge)
+        MyText(
+            text = stringResource(R.string.create_an_acount),
+            style = MaterialTheme.typography.titleLarge
+        )
         //Spacer(modifier = Modifier.height(60.dp))
         Column(modifier = Modifier.fillMaxWidth()) {
             Row(horizontalArrangement = Arrangement.SpaceBetween) {
                 MyTextField(
-                    placeholder = "First name",
+                    placeholder = stringResource(R.string.first_name),
                     isPassword = false,
                     text = firstName.value,
                     onChange = {
@@ -114,11 +109,11 @@ fun LoginScreen(navController: NavController) {
                         .clip(RoundedCornerShape(10.dp))
                         .weight(1f)
                         .background(Color.White),
-                     onSearch = {}
+                    onSearch = {}
                 )
                 Spacer(modifier = Modifier.width(5.dp))
                 MyTextField(
-                    placeholder = "Last name",
+                    placeholder = stringResource(R.string.last_name),
                     isPassword = false,
                     text = lastName.value,
                     onChange = {
@@ -129,12 +124,12 @@ fun LoginScreen(navController: NavController) {
                         .clip(RoundedCornerShape(10.dp))
                         .background(Color.White)
                         .weight(1f),
-                     onSearch = {}
+                    onSearch = {}
                 )
             }
             Spacer(modifier = Modifier.height(22.dp))
             MyTextField(
-                placeholder = "Email address",
+                placeholder = stringResource(R.string.email),
                 isPassword = false,
                 text = email.value,
                 onChange = {
@@ -145,11 +140,11 @@ fun LoginScreen(navController: NavController) {
                     .height(50.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(Color.White),
-               onSearch = {}
+                onSearch = {}
             )
             Spacer(modifier = Modifier.height(22.dp))
             MyTextField(
-                placeholder = "password",
+                placeholder = stringResource(R.string.password),
                 isPassword = true,
                 text = password.value,
                 onChange = {
@@ -166,7 +161,7 @@ fun LoginScreen(navController: NavController) {
         MyButton(
             text = stringResource(R.string.create_an_acount),
             icon = null,
-            progressBar= authState.userNetworkResult.value is NetworkResults.Loading,
+            progressBar = authState.userNetworkResult.value is NetworkResults.Loading,
             contentColor = MaterialTheme.colorScheme.primaryContainer,
             onClickButton = {
                 authState.handleSignUp()
@@ -183,7 +178,10 @@ fun LoginScreen(navController: NavController) {
             }
         )
         //Spacer(modifier = Modifier.height(30.dp))
-        MyText(text = stringResource(R.string.already_have_an_ccount), style = MaterialTheme.typography.bodyLarge)
+        MyText(
+            text = stringResource(R.string.already_have_an_ccount),
+            style = MaterialTheme.typography.bodyLarge
+        )
         //Spacer(modifier = Modifier.height(30.dp))
         Spacer(
             modifier = Modifier

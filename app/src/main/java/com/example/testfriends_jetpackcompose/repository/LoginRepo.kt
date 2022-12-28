@@ -19,7 +19,7 @@ class LoginRepo @Inject constructor(private val remote: Remote) {
 
     suspend fun getUser(email: String): Response<User?> = remote.getUser(id = null, email = email)
 
-    suspend fun getLanguages():Response<Languages?> = remote.getLanguages()
+    suspend fun getLanguages(): Response<Languages?> = remote.getLanguages()
 
 
 }

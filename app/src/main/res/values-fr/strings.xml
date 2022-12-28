@@ -39,6 +39,7 @@
 
     <string name="welcome_title3">Quiz pour s\'amuser 😂!</string>
     <string name="welcome_desc3">C\'est censé être amusant 😄! Ne prenez pas trop au sérieux les résultats 😵! Si vos amis obtiennent un faible nombre de points 💯, cela ne signifie pas que votre lien est faible 😕.</string>
+
     <string name="repet">Répéter la réponse</string>
     <string name="share_it">Partagez-le </string>
     <string name="start">Oui, démarrer le test</string>
@@ -46,4 +47,13 @@
     <string name="delete">Question supprimée</string>
     <string name="answer">réponse aux questions</string>
     <string name="start_answer">Commencer à répondre</string>
+
+    <string name="create_your_quiz">Veuillez créer votre quiz</string>
+    <string name="first_name">Prénom</string>
+    <string name="last_name">Nom de famille</string>
+    <string name="email">Adresse email</string>
+    <string name="password">mot de passe</string>
+    <string name="select_language">Sélectionnez une langue</string>
+
+
 </resources>

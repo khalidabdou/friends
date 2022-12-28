@@ -22,7 +22,7 @@
     <string name="done">Done</string>
     <string name="empty">empty field</string>
     <string name="add">Add</string>
-    <string name="cancel">cancel</string>
+    <string name="cancel">Cancel</string>
     <string name="your_question">Your Question</string>
     <string name="real_answer">Real Answer</string>
     <string name="chose1">wrong chose 1</string>
@@ -40,6 +40,7 @@
 
     <string name="welcome_title3">Quiz for fun 😂!</string>
     <string name="welcome_desc3">It\'s supposed to be fun 😄! Don\'t take the results too seriously 😵! If your friends score a low number of points 💯 it doesn\'t mean that your bond is weak 😕. It might mean that your questions were really tricky or still there is a lot to find out about each other and strengthen your friendship!</string>
+
     <string name="repet">Repeat answer</string>
     <string name="share_it">\"Share it \"</string>
     <string name="start">Yes start Test</string>
@@ -47,6 +48,13 @@
     <string name="delete">Question deleted</string>
     <string name="answer">answer for questions</string>
     <string name="start_answer">Start Answering</string>
+
+    <string name="create_your_quiz">Please Create Your Quiz</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="email">Email address</string>
+    <string name="password">password</string>
+    <string name="select_language">Select a language</string>
 
 
 </resources>

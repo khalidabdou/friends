@@ -37,7 +37,8 @@ class MainActivity : ComponentActivity() {
                 //val screen by splashViewModel.startDestination
                 val navController = rememberNavController()
                 val viewModel: CreateTestViewModel = hiltViewModel()
-                val viewModel2: AnswerTestViewModel = ViewModelProvider(this).get(AnswerTestViewModel::class.java)
+                val viewModel2: AnswerTestViewModel =
+                    ViewModelProvider(this).get(AnswerTestViewModel::class.java)
                 //var startDestination = splashViewModel.startDestination.value
                 SetupNavGraph(
                     navController = navController,

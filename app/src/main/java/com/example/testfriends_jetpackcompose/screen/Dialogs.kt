@@ -133,7 +133,7 @@ fun LanguagesDialog(
             dismissOnClickOutside = true
         ),
         title = {
-            Text("Select a language")
+            Text(stringResource(R.string.select_language))
         },
         text = {
             when (createTestViewModel.languageResponse.value) {
@@ -159,7 +159,7 @@ fun LanguagesDialog(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(315.dp),
+                            .height(290.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         CircularProgressIndicatorSample(color = MaterialTheme.colorScheme.primary)

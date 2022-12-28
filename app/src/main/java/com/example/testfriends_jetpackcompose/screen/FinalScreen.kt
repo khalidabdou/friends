@@ -39,6 +39,8 @@ fun FinalScreen(navHostController: NavHostController, viewModel: AnswerTestViewM
     val questions = viewModel.questions
     val sender = viewModel.sender.value!!.data!!
     val openDialog = remember { mutableStateOf(false) }
+    val results = questions.filter { q -> q.realAnswer.text == q.answerSender }.size
+
     Scaffold(
         scaffoldState = scaffoldState,
     ) {
@@ -70,6 +72,11 @@ fun FinalScreen(navHostController: NavHostController, viewModel: AnswerTestViewM
                         style = MaterialTheme.typography.titleMedium
                     )
                     Spacer(modifier = Modifier.height(7.dp))
+                    Text(
+                        text = "$results/${questions.size}",
+                        color = MaterialTheme.colorScheme.onSecondary,
+                        style = MaterialTheme.typography.titleLarge
+                    )
 
                 }
             }

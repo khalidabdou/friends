@@ -108,7 +108,7 @@ fun ResultsScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding( 6.dp)
+                            .padding(6.dp)
                             .background(MaterialTheme.colorScheme.background),
                         verticalAlignment = Alignment.CenterVertically
                     ) {

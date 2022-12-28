@@ -37,4 +37,23 @@
 
     <string name="welcome_title2">Freundschaftsquiz für Whatsapp 💬</string>
     <string name="welcome_desc2">Nachdem du alle Fragen beantwortet hast, erhältst du einen Link zu deinem Freundschaftsquiz. Teile ihn mit deinen Freunden auf Whatsapp, Messenger oder per E-Mail, um herauszufinden, wie gut deine Freunde dich wirklich kennen 😉! Wer ist bereit, die Herausforderung anzunehmen und wer wird die höchste Punktzahl bekommen?</string>
+
+    <string name="welcome_title3">Quiz zum Spaß 😂!</string>
+    <string name="welcome_desc3">Es soll Spaß machen 😄! Nehmen Sie die Ergebnisse nicht allzu ernst 😵! Wenn deine Freunde nur wenige Punkte 💯 erzielen, bedeutet das nicht, dass deine Freundschaft schwach ist 😕. Es könnte bedeuten, dass deine Fragen wirklich knifflig waren oder es noch viel gibt, das du über einander herausfinden und eure Freundschaft stärken könntest!</string>
+
+    <string name="repet">Antwort wiederholen</string>
+    <string name="share_it">Teile es</string>
+    <string name="start">Ja, starte den Test</string>
+    <string name="do_you_know">Weißt du</string>
+    <string name="delete">Frage gelöscht</string>
+    <string name="answer">Antwort für Fragen</string>
+    <string name="start_answer">Beginnen Sie mit der Beantwortung</string>
+
+    <string name="create_your_quiz">Bitte erstelle dein Quiz</string>
+    <string name="first_name">Vorname</string>
+    <string name="last_name">Nachname</string>
+    <string name="email">E-Mail-Adresse</string>
+    <string name="password">Passwort</string>
+    <string name="select_language">Wählen Sie eine Sprache</string>
+
 </resources>

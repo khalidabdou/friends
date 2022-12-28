@@ -1,38 +1,23 @@
 package com.example.testfriends_jetpackcompose.screen
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.testfriends_jetpackcompose.R
@@ -42,9 +27,11 @@ import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
 import com.example.testfriends_jetpackcompose.util.Utils
 
 @Composable
-fun ResultsFriends(resultTest: List<ResultTest>,paddingValues: PaddingValues,
-                   onClick: (ResultTest) -> Unit) {
-    if (resultTest.isNullOrEmpty()) {
+fun ResultsFriends(
+    resultTest: List<ResultTest>, paddingValues: PaddingValues,
+    onClick: (ResultTest) -> Unit
+) {
+    if (resultTest.isEmpty()) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -53,19 +40,18 @@ fun ResultsFriends(resultTest: List<ResultTest>,paddingValues: PaddingValues,
         ) {
             item {
 
-                    Step(text = stringResource(R.string.step1))
-                    Step(text = stringResource(R.string.step2))
-                    Step(text = stringResource(R.string.step3))
-                    Step(text = stringResource(R.string.step4))
-                    Step(text = stringResource(R.string.step5))
-
+                Step(text = stringResource(R.string.step1))
+                Step(text = stringResource(R.string.step2))
+                Step(text = stringResource(R.string.step3))
+                Step(text = stringResource(R.string.step4))
+                Step(text = stringResource(R.string.step5))
             }
         }
     } else
         LazyColumn(
             Modifier
                 .fillMaxSize()
-                .padding(20.dp)
+                .padding(15.dp)
         ) {
             item {
                 Text(
@@ -92,7 +78,7 @@ fun Step(text: String, color: Color = MaterialTheme.colorScheme.primary) {
         text = text,
         color = color,
         textAlign = TextAlign.Start,
-        modifier = Modifier.padding(top=20.dp, start = 20.dp)
+        modifier = Modifier.padding(top = 20.dp, start = 20.dp)
     )
 }
 
@@ -118,35 +104,14 @@ fun User(user: User) {
 
 
 @Composable
-fun BoxButton(icon: Int, background: Color = White, height: Int, onClick: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .width(40.dp)
-            .height(height.dp)
-            .clip(RoundedCornerShape(5.dp))
-            .background(background)
-            .clickable {
-                onClick()
-            }
-    ) {
-        Image(
-            painter = painterResource(id = icon),
-            contentDescription = "",
-            modifier = Modifier
-                .padding(7.dp)
-                .align(Alignment.Center)
-        )
-    }
-}
-
-@Composable
 fun ItemResults(item: ResultTest, onClick: (ResultTest) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
-            .padding(5.dp).clip(RoundedCornerShape(10.dp))
+            .padding(5.dp)
+            .clip(RoundedCornerShape(10.dp))
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .clickable {
                 onClick(item)

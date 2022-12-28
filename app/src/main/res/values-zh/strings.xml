@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">测试友谊</string>
+
+    <string name="share_text">💪🏽 通过在 www.example.com 🌐 上回答我的问题 🧐 或使用我的邀请码 🔑 参加乐趣 🎉，了解你们之间的友谊 🤝 真正有多强。</string>
+    <string name="user_not_found">找不到用户</string>
+    <string name="have_no_answers">此用户没有测试</string>
+    <string name="profile">简介</string>
+    <string name="welcome">欢迎</string>
+    <string name="step1">📲 点击下面的按钮</string>
+    <string name="step2">💭 回答关于你自己的问题。</string>
+    <string name="step3">🔗 将会创建你的测验链接。</string>
+    <string name="step4">📩 发送链接给你的朋友。</string>
+    <string name="step5">🏃‍️ 回来看看他们的结果。</string>
+    <string name="create_an_acount">创建帐户</string>
+    <string name="already_have_an_ccount">已经有帐户了</string>
+    <string name="with_google">用 Google 继续</string>
+    <string name="results">结果</string>
+    <string name="challenge">挑战</string>
+    <string name="add_question">添加问题</string>
+    <string name="done">完成</string>
+    <string name="empty">空字段</string>
+    <string name="add">添加</string>
+    <string name="cancel">取消</string>
+    <string name="your_question">你的问题</string>
+    <string name="real_answer">真实答案</string>
+    <string name="chose1">错误的选择 1</string>
+    <string name="chose2">错误的选择 2</string>
+    <string name="chose3">错误的选择 3</string>
+    <string name="share">分享</string>
+    <string name="copy">复制</string>
+    <string name="want_challenge">这是由****创建的测验。接受挑战并回答问题，了解你真正了解你的朋友有多少！</string>
+    <string name="welcome_title1">最佳朋友测验 🌟</string>
+    <string name="welcome_desc1">为朋友建立测验，看看他们对你了解多少！ 🤔 创建关于你自己的测验问题 💭。你可以使用我们的示例或写自己的问题和答案 📝。不要在选择答案时考虑太久 🤯。只需选择最能描述你的答案 🤔。请诚实 👍🏼！</string>
+
+    <string name="welcome_title2">Whatsapp友谊测验 💬</string>
+    <string name="welcome_desc2">在回答所有问题之后，您将获得一个指向友谊测验的链接。 在Whatsapp，Messenger或电子邮件上与您的朋友分享它，以检查您的朋友对您的了解程度😉！ 谁准备接受挑战并获得最高分数？</string>
+    <string name="welcome_title3">玩笑测验 😂！</string>
+    <string name="welcome_desc3">这是为了好玩 😄！不要太认真地看结果 😵！如果你的朋友得分很低 💯，这不意味着你们的感情很弱 😕。这可能意味着你的问题很棘手，或者你们仍有很多东西要了解并加强友谊！</string>
+
+    <string name="repet">重复答案</string>
+    <string name="share_it">“分享”</string>
+    <string name="start">是的，开始测试</string>
+    <string name="do_you_know">“你知道”</string>
+    <string name="delete">问题已删除</string>
+    <string name="answer">问题的答案</string>
+    <string name="start_answer">开始回答</string>
+
+    <string name="create_your_quiz">请创建你的测验</string>
+    <string name="first_name">名字</string>
+    <string name="last_name">姓氏</string>
+    <string name="email">电子邮件地址</string>
+    <string name="password">密码</string>
+    <string name="select_language">选择语言</string>
+</resources>

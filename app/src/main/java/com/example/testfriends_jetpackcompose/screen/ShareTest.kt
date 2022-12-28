@@ -69,7 +69,7 @@ fun ShareTest(viewModel: CreateTestViewModel) {
             Button(
                 onClick = {
                     viewModel.updateMyQuestions()
-                    openShareDialog.value=true
+                    openShareDialog.value = true
                 },
                 contentPadding = PaddingValues(
                     start = 20.dp,
@@ -137,16 +137,19 @@ fun ShareTest(viewModel: CreateTestViewModel) {
                         viewModel.questions = viewModel.questions
                     }
                 }
+                item {
+                    Spacer(modifier = Modifier.height(100.dp))
+                }
             }
             if (openShareDialog.value)
                 ShareTestDialog(link = shortLink, onShare = {
                     shareChallenge(context = context, shortLink)
-                    openShareDialog.value=false
+                    openShareDialog.value = false
                 }, onCopy = {
                     ME!!.dynamicLink = shortLink
                     viewModel.updateMyQuestions()
                     copyTextToClipboard(shortLink, context = context)
-                    openShareDialog.value=false
+                    openShareDialog.value = false
                 })
 
         }
@@ -271,88 +274,9 @@ fun ItemAnswer(index: Int, question: Question, username: String, onDelete: (Int)
                 height = 60.dp,
                 imageSize = 20.dp,
                 onClickAnswer = {})
-//            Icon(
-//                imageVector = Icons.Default.Delete,
-//                tint = MaterialTheme.colorScheme.error,
-//                contentDescription = "Delete",
-//                modifier = Modifier.clickable {
-//                    onDelete(index)
-//                })
+
         }
 
     }
 }
 
-
-@Composable
-fun ShareBox(text: String, onShare: () -> Unit, onCopyText: () -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
-
-
-    ) {
-        Row(modifier = Modifier.padding(5.dp)) {
-            Column {
-                Text(text = text, color = MaterialTheme.colorScheme.primary)
-                Spacer(modifier = Modifier.height(5.dp))
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Button(
-                        onClick = {
-                            onShare()
-                        },
-                        contentPadding = PaddingValues(
-                            start = 20.dp,
-                            top = 12.dp,
-                            end = 20.dp,
-                            bottom = 12.dp
-                        ),
-
-                        ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.share),
-                            contentDescription = "",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(
-                            stringResource(R.string.share),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                    Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                    Button(
-                        onClick = {
-                            onCopyText()
-                        },
-                        contentPadding = PaddingValues(
-                            start = 20.dp,
-                            top = 12.dp,
-                            end = 20.dp,
-                            bottom = 12.dp
-                        ),
-
-
-                        ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_copy),
-                            contentDescription = "",
-                            modifier = Modifier.size(ButtonDefaults.IconSize)
-                        )
-                        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                        Text(
-                            stringResource(R.string.copy),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-
-                }
-            }
-        }
-    }
-}
