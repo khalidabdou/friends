@@ -42,7 +42,7 @@
     <string name="welcome_desc3">It\'s supposed to be fun 😄! Don\'t take the results too seriously 😵! If your friends score a low number of points 💯 it doesn\'t mean that your bond is weak 😕. It might mean that your questions were really tricky or still there is a lot to find out about each other and strengthen your friendship!</string>
 
     <string name="repet">Repeat answer</string>
-    <string name="share_it">\"Share it \"</string>
+    <string name="share_it">Share it</string>
     <string name="start">Yes start Test</string>
     <string name="do_you_know">"Do you know "</string>
     <string name="delete">Question deleted</string>
@@ -55,6 +55,5 @@
     <string name="email">Email address</string>
     <string name="password">password</string>
     <string name="select_language">Select a language</string>
-
 
 </resources>

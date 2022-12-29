@@ -27,7 +27,10 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.material3.*
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -279,12 +282,14 @@ fun HomeScreen(
 
 @Composable
 fun LanguageRadioGroup(languages: List<Language>, onSelectedChange: (Language) -> Unit) {
+    val size = languages.filter { lang -> lang.questions != "" }.size
+    val languagesList=languages.filter { lang -> lang.questions != "" }
     LazyColumn(
         modifier = Modifier
             .padding(10.dp)
             .height(300.dp)
     ) {
-        items(languages.size) {
+        items(size) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -294,11 +299,11 @@ fun LanguageRadioGroup(languages: List<Language>, onSelectedChange: (Language) -
                     .clip(RoundedCornerShape(10.dp))
                     .background(MaterialTheme.colorScheme.primary)
                     .clickable {
-                        onSelectedChange(languages[it])
+                        onSelectedChange(languagesList[it])
                     }
             ) {
                 AsyncImage(
-                    model = languages[it].image,
+                    model = languagesList[it].image,
                     contentDescription = "",
                     modifier = Modifier
                         .size(30.dp)
@@ -306,7 +311,7 @@ fun LanguageRadioGroup(languages: List<Language>, onSelectedChange: (Language) -
                         .clip(CircleShape)
                 )
                 Spacer(modifier = Modifier.width(10.dp))
-                Text(text = languages[it].label, color = MaterialTheme.colorScheme.onPrimary)
+                Text(text = languagesList[it].label, color = MaterialTheme.colorScheme.onPrimary)
             }
 
         }
@@ -460,68 +465,5 @@ fun Modifier.dashedBorder(width: Dp, radius: Dp, color: Color) =
         }
     }
 
-@Composable
-fun NavigationDrawer(context: Context) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primaryContainer)
-    ) {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp)
-        ) {
-            item {
-                Step(
-                    text = stringResource(R.string.step1),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Step(
-                    text = stringResource(R.string.step2),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Step(
-                    text = stringResource(R.string.step3),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Step(
-                    text = stringResource(R.string.step4),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-                Step(
-                    text = stringResource(R.string.step5),
-                    color = MaterialTheme.colorScheme.onBackground
-                )
-            }
-            item {
-                Box(
-                    Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                        .padding(10.dp)
-                        .dashedBorder(
-                            width = 2.dp,
-                            color = MaterialTheme.colorScheme.onBackground,
-                            radius = 6.dp
-                        )
-                        .clickable {
-                            Utils.copyTextToClipboard(
-                                text = "${ME!!.dynamicLink}",
-                                context = context
-                            )
-                        },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "tap to copy your link",
-                        color = MaterialTheme.colorScheme.primary,
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                }
-            }
-        }
-    }
 
-}
 

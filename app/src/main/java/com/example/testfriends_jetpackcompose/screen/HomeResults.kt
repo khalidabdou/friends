@@ -63,7 +63,7 @@ fun ResultsFriends(
             }
 
             items(resultTest.size) {
-                ItemResults(resultTest[it], onClick = { onClick(it) })
+                ResultsList(resultTest[it], onClick = { onClick(it) })
             }
             item {
                 Spacer(modifier = Modifier.height(100.dp))
@@ -102,9 +102,8 @@ fun User(user: User) {
     }
 }
 
-
 @Composable
-fun ItemResults(item: ResultTest, onClick: (ResultTest) -> Unit) {
+fun ResultsList(item: ResultTest, onClick: (ResultTest) -> Unit) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
