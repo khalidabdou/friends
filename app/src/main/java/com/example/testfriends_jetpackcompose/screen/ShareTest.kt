@@ -43,15 +43,6 @@ fun ShareTest(viewModel: CreateTestViewModel) {
     var shortLink by remember { mutableStateOf("") }
 
 
-//    LaunchedEffect{
-//        generateSharingLink(
-//            deepLink = "${Constant.PREFIX}/${ME!!.inviteId}".toUri()
-//        ) { generatedLink ->
-//            shortLink =
-//                generatedLink
-//            viewModel.saveDynamicLink(shortLink)
-//        }
-//    }
 
     LaunchedEffect(openShareDialog) {
         //Toast.makeText(context,ME!!.inviteId,Toast.LENGTH_SHORT).show()
@@ -133,7 +124,7 @@ fun ShareTest(viewModel: CreateTestViewModel) {
                         question = viewModel.questions.filter { q -> q.realAnswer.text != "" }[it],
                         username = username
                     ) {
-                        viewModel.deleteQuestiom(it)
+                        viewModel.deleteQuestion(it)
                         viewModel.questions = viewModel.questions
                     }
                 }
@@ -151,7 +142,6 @@ fun ShareTest(viewModel: CreateTestViewModel) {
                     copyTextToClipboard(shortLink, context = context)
                     openShareDialog.value = false
                 })
-
         }
 
     }

@@ -42,7 +42,7 @@ fun AnswerTestMain(navHostController: NavHostController, viewModel: AnswerTestVi
     }
     val sender = viewModel.sender.value!!.data!!
     val questions = Utils.stringToQuestionArrayList(sender.myQuestions)
-    if (viewModel.questions.isNullOrEmpty()) {
+    if (viewModel.questions.isEmpty()) {
         viewModel.questions = questions.toMutableStateList()
     }
 
@@ -50,9 +50,7 @@ fun AnswerTestMain(navHostController: NavHostController, viewModel: AnswerTestVi
     //Toast.makeText(context, "reql", Toast.LENGTH_LONG).show()
     fun setRealAnswer(answer: AnswerElement) {
         viewModel.setAnswer(answer = answer)
-        //questions[index].answerSender = answer
         if (viewModel.incrementIndex()) {
-            //Log.d("ANSWER", "${questions[index]}")
             navHostController.navigate(Screen.FinalScreen.route)
         }
     }

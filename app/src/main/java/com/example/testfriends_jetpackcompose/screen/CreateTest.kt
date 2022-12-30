@@ -35,9 +35,9 @@ import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 @Composable
 fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewModel) {
     val context = LocalContext.current
-    var index = viewModel.index
+    val index = viewModel.index
     var questions = viewModel.questions
-    var username = ME!!.username
+    val username = ME!!.username
 
 
     if (!viewModel.isLanguageSelected.value && !ME!!.myQuestions.isEmpty()) {

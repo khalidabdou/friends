@@ -139,10 +139,8 @@ fun FinalScreen(navHostController: NavHostController, viewModel: AnswerTestViewM
     }
 
     BackHandler {
-        SENDER = null
-        navHostController.navigate(Screen.Home.route) {
-            navHostController.popBackStack()
-        }
+        //SENDER = null
+        navHostController.navigate(Screen.Home.route)
     }
 }
 

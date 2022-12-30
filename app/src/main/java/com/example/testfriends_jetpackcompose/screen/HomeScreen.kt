@@ -4,6 +4,7 @@ package com.example.testfriends_jetpackcompose.screen
 import android.app.Activity
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
@@ -58,6 +59,7 @@ import com.example.testfriends_jetpackcompose.data.ListResults
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.navigation.Screen
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
+import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
 import com.example.testfriends_jetpackcompose.util.NetworkResults
 import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.viewmodel.AnswerTestViewModel
@@ -80,7 +82,7 @@ fun HomeScreen(
     val selectedLanguage = remember { mutableStateOf(Language.LANGUAGES[0]) }
 
     createTestViewModel.getResults()
-    createTestViewModel.shareDynamcLink()
+    //createTestViewModel.shareDynamcLink()
     var scaffoldState = rememberScaffoldState()
     val activity = (LocalContext.current as? Activity)
 
@@ -153,10 +155,10 @@ fun HomeScreen(
                 )
             },
             floatingActionButton = {
-                if (createTestViewModel.dynamicLink == "")
+                if (ME!!.dynamicLink == null || ME!!.myQuestions == null || ME!!.myQuestions == "null")
                     FloatingActionButton(
                         containerColor = MaterialTheme.colorScheme.secondary, onClick = {
-
+                            createTestViewModel.index=0
                             openDialogLanguage.value = true
                             return@FloatingActionButton
                             createTestViewModel.cleanAnswers()
@@ -169,12 +171,13 @@ fun HomeScreen(
                             tint = MaterialTheme.colorScheme.onSecondary
                         )
                     }
-                else
+                else{
+                    //Log.d("QUESTION",ME.toString())
                     FloatingActionButton(
                         containerColor = MaterialTheme.colorScheme.secondary, onClick = {
                             Utils.shareChallenge(
                                 context = activity as Context,
-                                createTestViewModel.dynamicLink
+                                ME!!.dynamicLink!!
                             )
                         }) {
                         Icon(
@@ -184,6 +187,8 @@ fun HomeScreen(
                             tint = MaterialTheme.colorScheme.onSecondary
                         )
                     }
+                }
+
             }
         ) {
             when (createTestViewModel.resultsList.value) {
@@ -261,6 +266,7 @@ fun HomeScreen(
                     openDialogLanguage.value = false
                 },
                     onSelect = {
+
                         selectedLanguage.value = it
                         createTestViewModel.setQuestion(it)
                         openDialogLanguage.value = false

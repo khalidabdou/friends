@@ -1,5 +1,7 @@
 package com.example.testfriends_jetpackcompose.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -11,6 +13,7 @@ import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 
+@RequiresApi(Build.VERSION_CODES.M)
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
 @Composable
@@ -52,6 +55,9 @@ fun SetupNavGraph(
 
         composable(route = Screen.Answer.route) {
             AnswerTestMain(navHostController = navController, viewModel = viewModel2)
+        }
+        composable(route = Screen.Test.route) {
+            Test()
         }
 
     }

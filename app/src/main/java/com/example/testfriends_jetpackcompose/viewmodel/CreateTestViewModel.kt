@@ -40,7 +40,7 @@ class CreateTestViewModel @Inject constructor(
     //var defaultQuestions: List<Question> = gson.fromJson(questionFromJson, listPersonType)
 
     //var user: User? = null
-    var dynamicLink = ""
+
 
     var resultsList = mutableStateOf<NetworkResults<ListResults>?>(NetworkResults.Loading())
         private set
@@ -231,13 +231,13 @@ class CreateTestViewModel @Inject constructor(
         local.saveDynamicLink(dynamicLink)
     }
 
-    fun shareDynamcLink() = viewModelScope.launch {
-        local.getDynamicLink().collect { link ->
-            dynamicLink = link
-        }
-    }
+//    fun shareDynamicLink() = viewModelScope.launch {
+//        local.getDynamicLink().collect { link ->
+//            dynamicLink = link
+//        }
+//    }
 
-    fun deleteQuestiom(indexAt: Int) {
+    fun deleteQuestion(indexAt: Int) {
         questions.removeAt(indexAt)
         //index=questions.size
     }
