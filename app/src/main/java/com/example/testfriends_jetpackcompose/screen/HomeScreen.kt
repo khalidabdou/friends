@@ -4,7 +4,6 @@ package com.example.testfriends_jetpackcompose.screen
 import android.app.Activity
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
@@ -26,12 +25,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -59,9 +54,7 @@ import com.example.testfriends_jetpackcompose.data.ListResults
 import com.example.testfriends_jetpackcompose.data.User
 import com.example.testfriends_jetpackcompose.navigation.Screen
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
-import com.example.testfriends_jetpackcompose.util.Constant.Companion.SENDER
 import com.example.testfriends_jetpackcompose.util.NetworkResults
-import com.example.testfriends_jetpackcompose.util.Utils
 import com.example.testfriends_jetpackcompose.viewmodel.AnswerTestViewModel
 import com.example.testfriends_jetpackcompose.viewmodel.CreateTestViewModel
 import com.example.testfriends_jetpackcompose.viewmodel.ResultsViewModel
@@ -155,39 +148,21 @@ fun HomeScreen(
                 )
             },
             floatingActionButton = {
-                if (ME!!.dynamicLink == null || ME!!.myQuestions == null || ME!!.myQuestions == "null")
-                    FloatingActionButton(
-                        containerColor = MaterialTheme.colorScheme.secondary, onClick = {
-                            createTestViewModel.index=0
-                            openDialogLanguage.value = true
-                            return@FloatingActionButton
-                            createTestViewModel.cleanAnswers()
-                            navController.navigate(Screen.Create.route)
-                        }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_create),
-                            contentDescription = "",
-                            modifier = Modifier.size(25.dp),
-                            tint = MaterialTheme.colorScheme.onSecondary
-                        )
-                    }
-                else{
-                    //Log.d("QUESTION",ME.toString())
-                    FloatingActionButton(
-                        containerColor = MaterialTheme.colorScheme.secondary, onClick = {
-                            Utils.shareChallenge(
-                                context = activity as Context,
-                                ME!!.dynamicLink!!
-                            )
-                        }) {
-                        Icon(
-                            imageVector = Icons.Default.Share,
-                            contentDescription = "",
-                            modifier = Modifier.size(25.dp),
-                            tint = MaterialTheme.colorScheme.onSecondary
-                        )
-                    }
+
+                Button(onClick = {
+                    createTestViewModel.index = 0
+                    openDialogLanguage.value = true
+                }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_create),
+                        contentDescription = "",
+                        modifier = Modifier.size(20.dp),
+                        tint = MaterialTheme.colorScheme.onSecondary
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                    Text(text = "Create Questions")
                 }
+
 
             }
         ) {
@@ -237,7 +212,7 @@ fun HomeScreen(
                         if (SENDER!!.myQuestions.isEmpty()) {
                             Toast.makeText(
                                 LocalContext.current,
-                                "${SENDER!!.username}  ${stringResource(R.string.have_no_answers)} ",
+                                "${SENDER.username}  ${stringResource(R.string.have_no_answers)} ",
                                 Toast.LENGTH_SHORT
                             )
                                 .show()
