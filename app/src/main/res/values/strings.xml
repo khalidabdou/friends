@@ -55,5 +55,7 @@
     <string name="email">Email address</string>
     <string name="password">password</string>
     <string name="select_language">Select a language</string>
+    <string name="admob_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
+
 
 </resources>

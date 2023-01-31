@@ -20,6 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import com.example.testfriends_jetpackcompose.R
+import com.example.testfriends_jetpackcompose.admob.AdvertViewAdmob
+import com.example.testfriends_jetpackcompose.admob.showInterstitialAfterClick
 import com.example.testfriends_jetpackcompose.data.AnswerElement
 import com.example.testfriends_jetpackcompose.data.Question
 import com.example.testfriends_jetpackcompose.util.Constant
@@ -55,6 +57,9 @@ fun ShareTest(viewModel: CreateTestViewModel) {
         }
 
     }
+    LaunchedEffect(key1 = Unit, block = {
+        showInterstitialAfterClick(context)
+    })
 
     Scaffold(modifier = Modifier.background(MaterialTheme.colorScheme.background),
         floatingActionButton = {
@@ -115,6 +120,9 @@ fun ShareTest(viewModel: CreateTestViewModel) {
                     )
                 }
             }
+        },
+        bottomBar = {
+            AdvertViewAdmob()
         }
     ) {
         Column(modifier = Modifier.padding(it)) {

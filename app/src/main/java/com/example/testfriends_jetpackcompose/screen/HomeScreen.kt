@@ -49,6 +49,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.testfriends_jetpackcompose.R
+import com.example.testfriends_jetpackcompose.admob.AdvertViewAdmob
 import com.example.testfriends_jetpackcompose.data.Language
 import com.example.testfriends_jetpackcompose.data.ListResults
 import com.example.testfriends_jetpackcompose.data.User
@@ -164,6 +165,9 @@ fun HomeScreen(
                 }
 
 
+            },
+            bottomBar = {
+                AdvertViewAdmob()
             }
         ) {
             when (createTestViewModel.resultsList.value) {

@@ -16,6 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TestFriends_JetPackCompose"
         android:usesCleartextTraffic="true">
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_id" />
+
         <activity
             android:name=".HandleDynamicLink"
             android:exported="true"
@@ -23,9 +27,13 @@
             android:theme="@style/Theme.TestFriends_JetPackCompose.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:host="testfriends.page.link" android:scheme="http"/>
+
+                <data
+                    android:host="testfriends.page.link"
+                    android:scheme="http" />
                 <data
                     android:host="testfriends.page.link"
                     android:scheme="https" />

@@ -57,7 +57,7 @@ fun SetupNavGraph(
             AnswerTestMain(navHostController = navController, viewModel = viewModel2)
         }
         composable(route = Screen.Test.route) {
-            Test()
+
         }
 
     }

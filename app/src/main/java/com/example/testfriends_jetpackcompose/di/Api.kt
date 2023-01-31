@@ -1,8 +1,8 @@
 package com.example.testfriends_jetpackcompose.di
 
+import com.compose.androidtoanime.data.Ads
 import com.example.testfriends_jetpackcompose.data.Languages
 import com.example.testfriends_jetpackcompose.data.ListResults
-import com.example.testfriends_jetpackcompose.data.ResultTest
 import com.example.testfriends_jetpackcompose.data.User
 import retrofit2.Response
 import retrofit2.http.*
@@ -49,7 +49,12 @@ interface Api {
     suspend fun getLanguages(): Response<Languages?>
 
     @DELETE("deleteResult")
-    suspend fun deleteResult(@Query("id") id:Int): Response<Int?>
+    suspend fun deleteResult(@Query("id") id: Int): Response<Int?>
 
+
+    //ads
+    @GET("/api/ads")
+    suspend fun getAds(
+    ): Response<Ads?>
 
 }

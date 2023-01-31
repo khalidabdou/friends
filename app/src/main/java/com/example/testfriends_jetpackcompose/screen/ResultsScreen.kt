@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.testfriends_jetpackcompose.R
+import com.example.testfriends_jetpackcompose.admob.AdvertViewAdmob
 import com.example.testfriends_jetpackcompose.data.ResultTest
 import com.example.testfriends_jetpackcompose.navigation.Screen
 import com.example.testfriends_jetpackcompose.util.NetworkResults
@@ -46,6 +47,9 @@ fun ResultsScreen(
     val lazyListState = rememberLazyListState()
     Scaffold(
         scaffoldState = scaffoldState,
+        bottomBar = {
+            AdvertViewAdmob()
+        }
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

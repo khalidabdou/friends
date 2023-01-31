@@ -8,6 +8,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
+import com.example.testfriends_jetpackcompose.admob.loadInterstitial
 import com.example.testfriends_jetpackcompose.navigation.SetupNavGraph
 import com.example.testfriends_jetpackcompose.ui.theme.TestFriends_JetPackComposeTheme
 import com.example.testfriends_jetpackcompose.viewmodel.AnswerTestViewModel
@@ -27,7 +28,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        //installSplashScreen()
 
         installSplashScreen().setKeepOnScreenCondition {
             !splashViewModel.isLoading.value
@@ -35,19 +36,20 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             TestFriends_JetPackComposeTheme {
-
                 //val screen by splashViewModel.startDestination
                 val navController = rememberNavController()
                 val viewModel: CreateTestViewModel = hiltViewModel()
                 val viewModel2: AnswerTestViewModel =
                     ViewModelProvider(this).get(AnswerTestViewModel::class.java)
                 //var startDestination = splashViewModel.startDestination.value
+                loadInterstitial(this)
                 SetupNavGraph(
                     navController = navController,
                     startDestination = splashViewModel.startDestination.value,
                     viewModel,
                     viewModel2
                 )
+
             }
         }
     }

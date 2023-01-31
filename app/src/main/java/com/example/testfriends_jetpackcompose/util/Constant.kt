@@ -1,6 +1,7 @@
 package com.example.testfriends_jetpackcompose.util
 
 import android.content.Context
+import com.example.testfriends_jetpackcompose.admob.applovin
 import com.example.testfriends_jetpackcompose.data.User
 import java.io.IOException
 
@@ -15,7 +16,7 @@ class Constant {
 
         var ME: User? = null
         var SENDER: User? = null
-
+        val applovinClass = applovin()
 
         fun getJsonDataFromAsset(context: Context, fileName: String): String? {
             val jsonString: String

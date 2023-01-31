@@ -25,6 +25,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.testfriends_jetpackcompose.R
+import com.example.testfriends_jetpackcompose.admob.showInterstitialAfterClick
 import com.example.testfriends_jetpackcompose.data.AnswerElement
 import com.example.testfriends_jetpackcompose.navigation.Screen
 import com.example.testfriends_jetpackcompose.util.Constant.Companion.ME
@@ -45,6 +46,7 @@ fun TestMain(navHostController: NavHostController, viewModel: CreateTestViewMode
     }
 
     fun setRealAnswer(answer: AnswerElement) {
+        showInterstitialAfterClick(context)
         viewModel.setAnswerRealAnswer(answer)
         if (viewModel.incrementIndex()) {
             navHostController.navigate(Screen.ShareTest.route)
